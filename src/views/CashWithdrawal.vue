@@ -84,6 +84,10 @@ export default {
      * 提现
      */
     withdraw() {
+      if (this.price < 100) {
+        this.$ui.Toast("最小提现金额为100TRX");
+        return;
+      }
       this.$ui.Indicator.open({
         text: "加载中...",
         spinnerType: "snake"
@@ -193,6 +197,7 @@ export default {
     .price {
       margin-left: 30px;
       line-height: 60px;
+      display: flex;
       span {
         font-size: 42px;
         font-family: PingFangSC-Medium;
@@ -200,6 +205,7 @@ export default {
         color: #333333;
       }
       input {
+        flex: 1;
         margin-left: 20px;
         border: 0;
         font-size: 22px;

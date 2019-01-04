@@ -53,7 +53,7 @@ export default {
     loadMore() {
       if (this.next == -1) return;
       this.loading = true;
-      this.requestData();
+      this.getInviteList();
     },
     /**
      *
@@ -75,14 +75,21 @@ export default {
     getInviteList() {
       this.$axios({
         method: "get",
-        url: "/blockchain/v1/invitation/record/list"
+        url: "/blockchain/v1/invitation/record/list",
+        data: {
+          next: this.next
+        }
       })
         .then(response => {
+          this.loading = false;
           if (response.data.status) {
-            this.list = response.data.data.data;
+            this.next = response.data.data.next;
+            this.list = this.list.concat(response.data.data.data);
           }
         })
-        .catch(response => {});
+        .catch(response => {
+          this.loading = false;
+        });
     }
   }
 };

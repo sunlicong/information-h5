@@ -11,10 +11,10 @@ import VueClipboard from 'vue-clipboard2'
 import 'lib-flexible'
 import 'mint-ui/lib/style.css'
 
-import 'muse-ui/lib/styles/base.less'
-import { LoadMore } from 'muse-ui'
-import 'muse-ui/lib/styles/theme.less'
-Vue.use(LoadMore)
+import MuseUI from 'muse-ui'
+import 'muse-ui/dist/muse-ui.css'
+
+Vue.use(MuseUI)
 
 Vue.prototype.$store = store
 Vue.prototype.$ui = MintUI

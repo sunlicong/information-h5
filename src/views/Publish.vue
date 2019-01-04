@@ -3,7 +3,7 @@
     <div class="publish">
       <div class="item">
         <div class="title">文章标题</div>
-        <input type="text" placeholder="最多50个字" v-model="title">
+        <input type="text" placeholder="最多50个字" maxlength="50" v-model="title">
       </div>
       <div class="item">
         <div class="title">添加文章链接</div>

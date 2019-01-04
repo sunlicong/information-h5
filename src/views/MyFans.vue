@@ -19,6 +19,7 @@ export default {
   name: "MyFans",
   data() {
     return {
+      loading: false,
       list: [],
       next: 0
     };

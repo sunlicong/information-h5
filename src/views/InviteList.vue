@@ -11,13 +11,15 @@
     <div v-if="list.length" class="height-120">
       <div class="left margin-left-30">被邀请人</div>
     </div>
-    <div class="height-120" v-for="item in list" @click="goProfile(item.uid)">
-      <img class="cover" :src="item.photo">
-      <div class="left">
-        <div class="nick">{{item.nick}}</div>
-        <div class="time">{{$formatDate(item.inviterDate/1000,4)}}</div>
+    <mu-load-more :loading="loading" @load="loadMore">
+      <div class="height-120" v-for="item in list" @click="goProfile(item.uid)">
+        <img class="cover" :src="item.photo">
+        <div class="left">
+          <div class="nick">{{item.nick}}</div>
+          <div class="time">{{$formatDate(item.inviterDate/1000,4)}}</div>
+        </div>
       </div>
-    </div>
+    </mu-load-more>
     <div v-if="list.length==0" class="non">
       <img src="~@/assets/image/img_non.png">
       <div>暂时还没有数据哦～</div>
@@ -37,7 +39,7 @@ export default {
     };
   },
   mounted() {
-    this.requestData()
+    this.requestData();
   },
   methods: {
     goProfile(uid) {
@@ -54,7 +56,7 @@ export default {
       this.requestData();
     },
     /**
-     * 
+     *
      */
     requestData() {
       this.$axios({
@@ -65,13 +67,12 @@ export default {
           if (response.data.status) {
             this.award = response.data.data.award;
             this.count = response.data.data.count;
-            this.getInviteList()
+            this.getInviteList();
           }
         })
-        .catch(response => {
-        });
+        .catch(response => {});
     },
-    getInviteList(){
+    getInviteList() {
       this.$axios({
         method: "get",
         url: "/blockchain/v1/invitation/record/list"
@@ -81,14 +82,12 @@ export default {
             this.list = response.data.data.data;
           }
         })
-        .catch(response => {
-        });
+        .catch(response => {});
     }
   }
 };
 </script>
 <style lang="less" scoped>
-
 .top {
   width: 100%;
   height: 374px;

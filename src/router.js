@@ -31,6 +31,14 @@ const router = new Router({
         }
       },
         {
+          path: '/Wallet',
+          name: 'Wallet',
+          component: resolve => require(['@/views/Wallet'], resolve),
+          meta: {
+            pageTitle: '我的钱包'
+          }
+        },
+        {
           path: '/Mine',
           name: 'Mine',
           component: resolve => require(['@/views/Mine'], resolve),
@@ -86,14 +94,6 @@ const router = new Router({
       component: resolve => require(['@/views/PublishSuccess'], resolve),
       meta: {
         pageTitle: '发布成功'
-      }
-    },
-    {
-      path: '/Wallet',
-      name: 'Wallet',
-      component: resolve => require(['@/views/Wallet'], resolve),
-      meta: {
-        pageTitle: '我的钱包'
       }
     },
     {

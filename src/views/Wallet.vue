@@ -12,6 +12,18 @@
         </div>
       </div>
     </div>
+    <div @click="itemClick('trx')" class="height-120">
+      <div class="left">
+        <img class="icon" src="~@/assets/image/icon_trx.png" alt>
+        <div class="margin-left-20">TRX</div>
+      </div>
+      <div class="right">
+        <div class="right_text">
+          <div class="balance_num">{{trx?trx:'0.00'}}</div>
+        </div>
+        <img class="arrow" src="~@/assets/image/arrows_right.png">
+      </div>
+    </div>
     <div @click="itemClick('db')" class="height-120">
       <div class="left">
         <img class="icon" src="~@/assets/image/icon_db.png" alt>
@@ -44,18 +56,6 @@
       <div class="right">
         <div class="right_text">
           <div class="balance_num">{{candy?candy:'0.00'}}</div>
-        </div>
-        <img class="arrow" src="~@/assets/image/arrows_right.png">
-      </div>
-    </div>
-    <div @click="itemClick('trx')" class="height-120">
-      <div class="left">
-        <img class="icon" src="~@/assets/image/icon_trx.png" alt>
-        <div class="margin-left-20">TRX</div>
-      </div>
-      <div class="right">
-        <div class="right_text">
-          <div class="balance_num">{{trx?trx:'0.00'}}</div>
         </div>
         <img class="arrow" src="~@/assets/image/arrows_right.png">
       </div>

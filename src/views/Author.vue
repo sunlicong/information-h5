@@ -7,8 +7,9 @@ export default {
   name: "Author",
   mounted() {
     var code = this.$route.query.code;
+    var inviter = this.$route.query.inviter || "";
     if (code) {
-      this.getToken(code);
+      this.getToken(code,inviter);
     } else {
       this.authorize();
     }
@@ -25,12 +26,11 @@ export default {
         inviter +
         "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
     },
-    getToken(code) {
+    getToken(code,inviter) {
       this.$ui.Indicator.open({
         text: "加载中...",
         spinnerType: "snake"
       });
-      var inviter = this.$getCookie("inviter");
       this.$axios({
         method: "post",
         url: "/blockchain/v1/account/wechat/token",

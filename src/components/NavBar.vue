@@ -9,6 +9,13 @@
         </div>
       </li>
       <li class="nav_list">
+        <div @click="goWallet()" to="/Wallet" class="nav">
+          <img src="~@/assets/image/wallet_s.png" v-if="$route.path=='/Wallet'">
+          <img src="~@/assets/image/wallet_n.png" v-else>
+          <p>钱包</p>
+        </div>
+      </li>
+      <li class="nav_list">
         <div @click="goMine()" to="/Mine" class="nav">
           <img src="~@/assets/image/me_s.png" v-if="$route.path=='/Mine'">
           <img src="~@/assets/image/me_n.png" v-else>
@@ -32,6 +39,11 @@ export default {
         path: "/Home"
       });
     },
+    goWallet() {
+      this.$router.push({
+        path: "/Wallet"
+      });
+    },
     goMine() {
       this.$router.push({
         path: "/Mine"
@@ -52,7 +64,7 @@ export default {
   z-index: 10;
 }
 .NavBar .nav_list {
-  width: 50%;
+  width: 33.33%;
   float: left;
   height: 98px;
   padding: 10px 0;

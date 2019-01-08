@@ -39,6 +39,7 @@ axios.interceptors.response.use(
       if (response.data.code == 20002 || response.data.code == 11001 || response.data.code == 20003) {
         loginOut()
         if (viewPort().isWeixin) {
+          setCookie('beforeLoginUrl', router.app.$route.fullPath)
           router.push({ path: '/Author' })
         }
       } else if (response.data.code != 30101 && response.data.code != 30105 && response.data.code != 50003) {

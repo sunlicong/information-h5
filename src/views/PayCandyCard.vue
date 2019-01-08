@@ -28,7 +28,7 @@
         >
           <img v-if="selectCandy==index" class="box_bg" src="~@/assets/image/icon_select_box.png">
           <div class="text1">
-            <span>{{item.price}}</span>
+            <span>{{item.count}}</span>
             <span class="text2">糖果</span>
           </div>
           <!-- <div>赠送5糖果</div> -->
@@ -240,7 +240,7 @@ export default {
           this.$ui.Indicator.close();
           this.popupPayVisible = false;
           if (response.data.status) {
-            this.$ui.Toast("购买成功,糖果稍后到账");
+            this.$ui.Toast("已发起购买糖果转账，链上检测到账后，糖果将实时到账");
             this.getCandyList();
           } else if (response.data.code == 30105) {
             this.$ui

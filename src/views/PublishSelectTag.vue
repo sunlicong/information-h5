@@ -37,7 +37,7 @@ export default {
   mounted() {},
   methods: {
     save() {
-      this.$router.push({
+      this.$router.replace({
         path: "/Publish",
         query: {
           title: this.$route.query.title || "",

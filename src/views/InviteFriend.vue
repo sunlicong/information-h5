@@ -9,7 +9,7 @@
           <div class="view1">每邀请1位好友</div>
           <div class="view2">
             <span>立得</span>
-            <span class="text3">50</span>
+            <span class="text3">{{invitingWard}}</span>
             <span class="text2">点钻</span>
           </div>
           <div class="view3">后续还有更多关联收益</div>
@@ -22,10 +22,10 @@
           <div class="card2_text2">
             <div class="card2_text3">
               <span>好友可得额外</span>
-              <span class="card2_text4">20</span>
+              <span class="card2_text4">{{invitedWard}}</span>
               <span>点钻</span>
             </div>
-            <div class="card2_text5">未邀请用户10点钻</div>
+            <div class="card2_text5">未邀请用户{{registerWard}}点钻</div>
           </div>
         </div>
       </div>
@@ -39,7 +39,7 @@
       </div>
       <div class="tip1">
         <img src="~@/assets/image/invite_img_2.png" class="tip_img" mode="aspectFit">
-        <div class="tip_text">好友获得20点钻</div>
+        <div class="tip_text">好友获得{{invitedWard}}点钻</div>
       </div>
       <div class="tip1">
         <img src="~@/assets/image/invite_img_3.png" class="tip_img" mode="aspectFit">
@@ -58,14 +58,46 @@ export default {
   name: "InviteFriend",
   data() {
     return {
-      isShowShareMode: false
+      isShowShareMode: false,
+      invitingWard: 0,
+      invitedWard: 0,
+      registerWard: 0
     };
   },
-  mounted() {},
+  created() {
+    this.requestData();
+    this.share();
+  },
   methods: {
-    share(){
-      this.isShowShareMode = true
-      var link = location.protocol + "//" + window.location.host + "/dayu/Home?inviter=" + this.$store.state.user.uid || ""
+    requestData() {
+      this.$ui.Indicator.open({
+        text: "加载中...",
+        spinnerType: "snake"
+      });
+      this.$axios({
+        method: "get",
+        url: "/blockchain/v1/settings/queryRegisterSettings"
+      })
+        .then(response => {
+          this.$ui.Indicator.close();
+          if (response.data.status) {
+            this.invitingWard = response.data.data.invitingWard;
+            this.invitedWard = response.data.data.invitedWard;
+            this.registerWard = response.data.data.registerWard;
+          }
+        })
+        .catch(response => {
+          this.$ui.Indicator.close();
+        });
+    },
+    share() {
+      this.isShowShareMode = true;
+      var link =
+        location.protocol +
+          "//" +
+          window.location.host +
+          "/dayu/Home?inviter=" +
+          this.$store.state.user.uid || "";
       this.$weChat.init({
         link: link,
         title: "送你大鱼股份，天天有分红，快来领取！",
@@ -77,14 +109,13 @@ export default {
           require("../assets/image/share_index_card.png")
       });
     },
-    hiddenShareDialog(){
-      this.isShowShareMode = false
+    hiddenShareDialog() {
+      this.isShowShareMode = false;
     }
   }
 };
 </script>
 <style lang="less" scoped>
-
 .bg {
   position: absolute;
   width: 100%;
@@ -109,7 +140,7 @@ export default {
     height: 327px;
     .card_img1 {
       position: absolute;
-      width:  600px;
+      width: 600px;
       height: 327px;
     }
     .card1_text {
@@ -270,7 +301,7 @@ export default {
     margin-left: 445px;
   }
 }
-.dialog_share_mode_box{
+.dialog_share_mode_box {
   background: none;
   width: 705px;
   height: 1027px;

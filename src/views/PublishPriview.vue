@@ -83,7 +83,7 @@ export default {
           this.$ui.Indicator.close();
           if (response.data.status) {
             this.data = response.data.data;
-            this.$router.push({
+            this.$router.replace({
               path: "/PublishSuccess",
               query: {
                 contentId: response.data.data.contentId,

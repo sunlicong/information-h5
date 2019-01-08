@@ -98,10 +98,11 @@
       <img class="mining" @click="pay()" src="~@/assets/image/icon_send_pay.png">
     </div>
     <mt-popup class="dialog_box" v-model="popupVisible" position="bottom">
+      <div class="top_tip">赞赏者得产出点钻的60%，更有机会获得每周奖励池</div>
       <div class="box_list">
         <div class="card" v-for="(item,index) in candyList" @click="selectCandy(index)">
-          <div class="card_view" :class="selectCandyIndex==index?'select':''">
-            <img class="bg" :src="getCandyUrl(index)">
+          <div class="card_view">
+            <img class="bg" :class="selectCandyIndex==index?'select':''" :src="getCandyUrl(index)">
           </div>
           <div class="candyCount">{{item.candyCount}}糖果</div>
         </div>
@@ -788,27 +789,38 @@ export default {
 }
 .dialog_box {
   width: 100%;
-  height: 340px;
+  height: 430px;
   background: #ffffff;
+  .top_tip{
+    margin-top: 30px;
+    margin-left: 30px;
+    font-size:28px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:#2D3232;
+    line-height:42px;
+  }
   .box_list {
     margin-top: 20px;
+    margin-bottom: 30px;
+    margin-left: 20px;
     width: 100%;
-    height: 200px;
+    height: 192px;
     white-space: nowrap;
     .card {
       margin-left: 10px;
       width: 165px;
-      height: 195px;
+      height: 192px;
       display: inline-block;
       position: relative;
       .card_view {
-        width: 166px;
-        height: 195px;
-        padding: 2px;
+        width: 165px;
+        height: 192px;
+        overflow: hidden;
       }
       .bg {
-        width: 160px;
-        height: 190px;
+        width: 165px;
+        height: 192px;
         position: absolute;
       }
       .select {
@@ -832,6 +844,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    border-top: 1px solid #f4f4f4;
     .left {
       display: flex;
       align-items: center;

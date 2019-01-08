@@ -27,7 +27,6 @@ export default {
   name: "PublishSuccess",
   data() {
     return {
-      isBackMine: false,
       isShowShareMode: false,
       contentId: this.$route.query.contentId || "",
       title: this.$route.query.title || "",
@@ -37,14 +36,8 @@ export default {
   mounted() {
     this.setShareInfo()
   },
-  destroyed() {
-    if(!this.isBackMine){
-      this.$router.go(-2);
-    }
-  },
   methods: {
     goMine() {
-      this.isBackMine = true
       this.$router.push({
         path: "/Mine"
       });

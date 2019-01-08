@@ -62,7 +62,10 @@ export default {
     getBanner() {
       this.$axios({
         method: "get",
-        url: "/blockchain/v1/home/tips"
+        url: "/blockchain/v1/home/tips",
+        data: {
+          type: 3// 2-小程序 3-公众号
+        }
       }).then(response => {
         if (response.data.status) {
           this.banner = response.data.data;

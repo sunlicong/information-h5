@@ -5,32 +5,33 @@
 import { baseUrl, appId } from "../utils/config.js";
 export default {
   name: "Author",
-  mounted() {
+  created() {
+    this.$ui.Indicator.open({
+      text: "加载中...",
+      spinnerType: "snake"
+    });
     var code = this.$route.query.code;
-    var inviter = this.$route.query.inviter || "";
     if (code) {
-      this.getToken(code,inviter);
+      this.getToken(code);
     } else {
       this.authorize();
     }
   },
   methods: {
     authorize() {
-      var inviter = this.$getCookie("inviter");
       window.location.href =
         "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" +
         appId +
         "&redirect_uri=" +
         baseUrl +
-        "/dayu/Author?inviter=" +
-        inviter +
-        "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
+        "/dayu/Author&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
     },
-    getToken(code,inviter) {
-      this.$ui.Indicator.open({
-        text: "加载中...",
-        spinnerType: "snake"
-      });
+    getToken(code) {
+      var inviter = this.$getCookie("inviter") || "";
+      var n = inviter.indexOf(",");
+      if (n > -1) {
+        inviter = inviter.slice(0, n);
+      }
       this.$axios({
         method: "post",
         url: "/blockchain/v1/account/wechat/token",
@@ -54,9 +55,9 @@ export default {
     goBeforUrl() {
       var url = this.$getCookie("beforeLoginUrl") || "/Home";
       if (!url || url.indexOf("/Author") != -1) {
-        this.$router.push("/Home");
+        this.$router.replace("/Home");
       } else {
-        this.$router.push(url);
+        this.$router.replace(url);
         this.$setCookie("beforeLoginUrl", "");
       }
     }

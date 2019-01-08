@@ -38,8 +38,8 @@ module.exports = {
     proxy: {
       '/blockchain': {
         // 目标 API 地址
-        // target: 'http://10.207.2.37:8181/',
-        target: 'https://bigfish.51kupai.com/',
+        target: 'http://10.207.2.37:8181/',
+        // target: 'https://bigfish.51kupai.com/',
         // 如果要代理 websockets
         ws: true,
         // 将主机标头的原点更改为目标URL

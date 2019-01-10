@@ -36,6 +36,7 @@
       </div>
     </div>
     <div class="bottom">
+      <img v-if="selectContent.firstBuy==1" class="activity_img" src="~@/assets/image/icon_everyday_one.png">
       <div class="bottom_left">
         <span>{{selectContent.price}}</span>
         <span class="yuan">元</span>
@@ -73,7 +74,7 @@
     <mt-popup class="dialog_box" v-model="selectPayTypePop" position="bottom">
       <div class="title_view">
         <div class="left" @click="cancelSelect()">
-          <img src="~@/assets/image/icon_back.png" alt="">
+          <img src="~@/assets/image/icon_back.png" alt>
         </div>
         <div class="title">选择支付方式</div>
         <div class="right"></div>
@@ -86,7 +87,7 @@
           <div class="balance">余额：{{item.balance}}TRX</div>
         </div>
         <div class="right">
-          <img src="~@/assets/image/icon_duihao.png" alt="">
+          <img src="~@/assets/image/icon_duihao.png" alt>
         </div>
       </div>
     </mt-popup>
@@ -101,14 +102,15 @@ export default {
       selectContent: {
         count: 0,
         giveCount: 0,
-        price: 0
+        price: 0,
+        firstBuy: 0,
       },
       trxNum: 0,
       selectCandy: 0,
       candyList: [],
       popupPayVisible: false, //购买弹框
       selectPayTypePop: false, //支付方式弹框
-      payChannelList: [],//支付方式列表
+      payChannelList: [] //支付方式列表
     };
   },
   mounted() {
@@ -151,7 +153,7 @@ export default {
       this.selectContent = this.candyList[index];
     },
     /**
-     * 购买
+     * 打开购买弹框 获取支付方式列表
      */
     buy() {
       this.$ui.Indicator.open({
@@ -180,8 +182,8 @@ export default {
     /**
      * 打开选择支付列表弹框
      */
-    selectPayList(){
-      this.selectPayTypePop = true
+    selectPayList() {
+      this.selectPayTypePop = true;
     },
     /**
      * 取消
@@ -240,7 +242,9 @@ export default {
           this.$ui.Indicator.close();
           this.popupPayVisible = false;
           if (response.data.status) {
-            this.$ui.Toast("已发起购买糖果转账，链上检测到账后，糖果将实时到账");
+            this.$ui.Toast(
+              "已发起购买糖果转账，链上检测到账后，糖果将实时到账"
+            );
             this.getCandyList();
           } else if (response.data.code == 30105) {
             this.$ui
@@ -265,12 +269,52 @@ export default {
           this.popupPayVisible = false;
           this.$ui.Indicator.close();
         });
+    },
+    /**
+     * 微信支付
+     */
+    buyCardByWx() {
+      if (typeof WeixinJSBridge == "undefined") {
+        if (document.addEventListener) {
+          document.addEventListener(
+            "WeixinJSBridgeReady",
+            onBridgeReady,
+            false
+          );
+        } else if (document.attachEvent) {
+          document.attachEvent("WeixinJSBridgeReady", onBridgeReady);
+          document.attachEvent("onWeixinJSBridgeReady", onBridgeReady);
+        }
+      } else {
+        this.onBridgeReady();
+      }
+    },
+    onBridgeReady() {
+      var that = this
+      WeixinJSBridge.invoke(
+        "getBrandWCPayRequest",
+        {
+          appId: "wx57eaaa1d6bf1befb", //公众号名称，由商户传入
+          timeStamp: "1546509098", //时间戳，自1970年以来的秒数
+          nonceStr: "SSGlYGkpwI6QeSqE", //随机串
+          package: "prepay_id=wx03175210410430079a1ba5f90450099015",
+          signType: "MD5", //微信签名方式：
+          paySign: "A42E853C349E8EBF1BD05FA4F70831EA" //微信签名
+        },
+        function(res) {
+          that.$ui.Toast(res.err_msg)
+          if (res.err_msg == "get_brand_wcpay_request:ok") {
+            // 使用以上方式判断前端返回,微信团队郑重提示：
+            //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+          }
+        }
+      );
     }
   }
 };
 </script>
 <style lang="less" scoped>
-.PayCandyCard{
+.PayCandyCard {
   padding-bottom: 130px;
 }
 .top {
@@ -294,7 +338,7 @@ export default {
       font-size: 28px;
       color: #a3aeba;
     }
-  
+
     .arrow {
       width: 12px;
       height: 21px;
@@ -397,13 +441,20 @@ export default {
   background: #fff;
   display: flex;
   align-items: center;
+  .activity_img{
+    position: absolute;
+    width: 212px;
+    height: 60px;
+    left: 50px;
+    top: 0;
+  }
   .bottom_left {
     margin-left: 30px;
     flex: 1;
     text-align: left;
     font-size: 48px;
     color: #ff6700;
-    font-weight:600;
+    font-weight: 600;
     .yuan {
       font-size: 24px;
       color: #ff6700;
@@ -438,7 +489,7 @@ export default {
       font-family: PingFangSC-Regular;
       font-weight: 400;
       color: #2a2e3f;
-      img{
+      img {
         width: 21px;
         height: 31px;
       }
@@ -525,41 +576,41 @@ export default {
       }
     }
   }
-  .payItem{
+  .payItem {
     width: 100%;
     height: 108px;
     border-bottom: 1px solid #dedede;
     display: flex;
     align-items: center;
-    .icon{
+    .icon {
       margin-left: 30px;
       width: 60px;
       height: 60px;
     }
-    .info{
+    .info {
       margin-left: 15px;
       flex: 1;
-      .name{
+      .name {
         margin-top: 13px;
         height: 40px;
-        font-size:28px;
-        font-family:PingFangSC-Regular;
-        font-weight:400;
-        color:#2A2E3F;
-        line-height:40px;
+        font-size: 28px;
+        font-family: PingFangSC-Regular;
+        font-weight: 400;
+        color: #2a2e3f;
+        line-height: 40px;
       }
-      .balance{
+      .balance {
         margin-top: 10px;
-        font-size:24px;
-        font-family:PingFangSC-Regular;
-        font-weight:400;
-        color:#A3AEBA;
-        line-height:33px;
+        font-size: 24px;
+        font-family: PingFangSC-Regular;
+        font-weight: 400;
+        color: #a3aeba;
+        line-height: 33px;
       }
     }
-    .right{
+    .right {
       margin-right: 40px;
-      img{
+      img {
         width: 30px;
         height: 25px;
       }

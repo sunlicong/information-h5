@@ -11,7 +11,7 @@
       </div>
       <div class="content">
         <div>
-          <span>备注</span>
+          <span>备注：</span>
           <span>{{userWithDrawAddress.remark}}</span>
         </div>
         <div class="address">{{userWithDrawAddress.withdrawAddress}}</div>

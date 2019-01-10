@@ -16,13 +16,13 @@
     <mu-load-more :loading="loading" @load="loadMore">
       <div class="height-120" v-for="item in list">
         <div class="left">
-          <div class="title">{{getTypeName(item.type)}}</div>
+          <div class="title">{{getTypeName(item.type)}}{{item.status==50?'中':''}}</div>
           <div class="time">{{$formatDate(item.time/1000,3)}}</div>
         </div>
         <div class="right">
           <div
             class="num"
-          >{{item.type==2||item.type==5||item.type==18||item.type==20||item.type==21||item.type==24?'-':'+'}}{{item.count}}{{formType==1?'点钻':'元'}}</div>
+          >{{item.type==2||item.type==5||item.type==18||item.type==20||item.type==21||item.type==22||item.type==24?'-':'+'}}{{item.count}}{{formType==1?'点钻':'元'}}</div>
         </div>
       </div>
     </mu-load-more>
@@ -148,6 +148,7 @@ export default {
         case 21:
           name = "手续费";
           break;
+        case 22:
         case 24:
           name = "购买糖果卡";
           break;

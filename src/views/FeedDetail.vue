@@ -602,10 +602,8 @@ export default {
   margin-left: 30px;
   margin-right: 30px;
   font-size: 32px;
-  // font-family: PingFangSC-Regular;
-  // font-weight: 400;
   color: #051426;
-  // line-height: 50px;
+  overflow: hidden;
   strong {
     font-size: 36px;
   }

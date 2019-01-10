@@ -7,7 +7,7 @@
     <mu-load-more :loading="loading" @load="loadMore">
       <div class="height-120" v-for="item in list">
         <div class="left margin-left-30">
-          <div class="title">{{getTypeName(item.type)}}</div>
+          <div class="title">{{getTypeName(item.type)}}{{item.status==50?'中':''}}</div>
           <div class="time">{{$formatDate(item.time/1000,3)}}</div>
         </div>
         <div class="right">
@@ -124,6 +124,7 @@ export default {
         case 21:
           name = "手续费";
           break;
+        case 22:
         case 24:
           name = "购买糖果卡";
           break;

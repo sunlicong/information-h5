@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from './store'
-import wx from 'weixin-js-sdk'
 import { getCookie, setCookie, viewPort } from './utils/common.js'
 
 Vue.use(Router)
@@ -247,17 +246,14 @@ router.beforeEach((to, from, next) => {
   if (to.meta.pageTitle) {
     document.title = to.meta.pageTitle
   }
-  // 判断是否小程序 miniprogram
-  wx.miniProgram.getEnv(function (res) {
-    if (res.miniprogram) {
-      next()
-    } else if (!getCookie('_token') && to.path != '/Author') {
-      setCookie('inviter', to.query.inviter || '')
-      setCookie('beforeLoginUrl', to.fullPath)
-      next('/Author')
-    } else {
-      next()
-    }
-  })
+  if (!viewPort().isWeixin || viewPort().isMiniprogram) {
+    next()
+  } else if (!getCookie('_token') && to.path != '/Author') {
+    setCookie('inviter', to.query.inviter || '')
+    setCookie('beforeLoginUrl', to.fullPath)
+    next('/Author')
+  } else {
+    next()
+  }
 })
 export default router

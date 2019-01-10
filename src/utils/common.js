@@ -1,4 +1,5 @@
 import { imgBaseUrl } from './config.js'
+import wx from 'weixin-js-sdk'
 /**
  * loginOut 退出登录
  * 删除本地cookie
@@ -35,6 +36,11 @@ export function getCookie (name) {
     */
 export function viewPort () {
   var u = navigator.userAgent.toLowerCase()
+  var wechatInfo = u.match(/MicroMessenger\/([\d\.]+)/i)
+  var isMiniprogram = window.__wxjs_environment === 'miniprogram'
+  if (u.indexOf('android') > -1) {
+    isMiniprogram = /miniProgram/i.test(u)
+  }
   return {
     isWeixin: u.indexOf('micromessenger') > -1,
     isWeibo: u.indexOf('weibo') > -1,

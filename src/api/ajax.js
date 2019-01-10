@@ -1,7 +1,7 @@
 import axios from 'axios'
 import qs from 'qs'
 import router from '../router'
-import { Toast } from 'mint-ui'
+import { Toast, MessageBox } from 'mint-ui'
 import { setCookie, viewPort, getCookie, loginOut } from '../utils/common.js'
 import { apiUrl } from '../utils/config.js'
 
@@ -41,6 +41,15 @@ axios.interceptors.response.use(
         if (viewPort().isWeixin) {
           setCookie('beforeLoginUrl', router.app.$route.fullPath)
           router.push({ path: '/Author' })
+        } else {
+          MessageBox({
+              title: '提示',
+              message: '请在微信客户端打开链接',
+              showConfirmButton: true,
+              confirmButtonText: '知道了'
+            })
+            .then(action => {
+            })
         }
       } else if (response.data.code != 30101 && response.data.code != 30105 && response.data.code != 50003) {
         Toast(response.data.msg)

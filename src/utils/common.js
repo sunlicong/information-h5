@@ -169,7 +169,7 @@ export default function (Vue, options) {
           if (xsd[1].length < 2) {
             s = s.toString() + '0'
           }else {
-			s = s + ""
+            s = s + ''
             s = s.substring(0, s.indexOf('.') + 3)
           }
         }

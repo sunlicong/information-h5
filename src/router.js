@@ -233,6 +233,14 @@ const router = new Router({
       }
     },
     {
+      path: '/SendRedPack',
+      name: 'SendRedPack',
+      component: resolve => require(['@/views/SendRedPack'], resolve),
+      meta: {
+        pageTitle: '发红包'
+      }
+    },
+    {
       path: '/GetRedPacket',
       name: 'GetRedPacket',
       component: resolve => require(['@/views/GetRedPacket'], resolve),

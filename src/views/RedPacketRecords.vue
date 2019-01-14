@@ -44,7 +44,7 @@
         <div class="get_list">
             <ul>
                 <li>
-                    <img src="http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83epDEhCtkibl8pEHLaCr3XtO6mIbUGtM5uSEsiaorgFibmjc5D0icQAI4Jp0Fia8pExdca7O81zYFiaCcsyQ/132" alt="">
+                    <img class="userAvantar" src="http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83epDEhCtkibl8pEHLaCr3XtO6mIbUGtM5uSEsiaorgFibmjc5D0icQAI4Jp0Fia8pExdca7O81zYFiaCcsyQ/132" alt="">
                     <div class="info">
                         <div class="top">
                             <span>小太阳<img src="../assets/image/pin.png"></span>
@@ -191,6 +191,41 @@ export default {
             em {
                 color: #071628;
                 font-size: .48rem;
+            }
+        }
+    }
+    .get_list {
+        margin: 0 .4rem;
+        padding: .4rem 0;
+        ul>li {
+            width: 100%;
+            height: 1.73rem;
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: center;
+            .userAvantar {
+                width: 1rem;
+                height: 1rem;
+                border-radius: 50%;
+            }
+            .info {
+                flex: 1;
+                display: flex;
+                flex-flow: column nowrap;
+                .top {
+                    display: flex;
+                    flex-flow: row nowrap;
+                    justify-content: space-between;
+                    img {
+                        width: .32rem;
+                        height: .44rem;
+                        margin-left: .2rem;
+                    }
+                    span {
+                        font-size: .43rem;
+                        color: #051426;
+                    }
+                }
             }
         }
     }

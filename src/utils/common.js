@@ -48,14 +48,19 @@ export function viewPort () {
     isIos: !!u.match(/\(i[^;]+;( u;)? cpu.+mac os x/),
     isAndroid: u.indexOf('android') > -1,
     isMac: navigator.platform.toUpperCase().indexOf('MAC') > -1,
-    isWin: navigator.userAgent.indexOf('Windows') > -1
+    isWin: navigator.userAgent.indexOf('Windows') > -1,
+    isMiniprogram:isMiniprogram
   }
+}
+export function wxSdk(){
+  return wx;
 }
 export default function (Vue, options) {
   Vue.prototype.$loginOut = loginOut
   Vue.prototype.$setCookie = setCookie
   Vue.prototype.$getCookie = getCookie
   Vue.prototype.$viewPort = viewPort
+  Vue.prototype.$wxSdk = wxSdk
   /**
    * imgHref 图片地址拼接
    * id 图片id

@@ -13,7 +13,7 @@ let baseUrl = 'http://opentest.51kupai.com'
 let apiUrl = ''
 let imgBaseUrl = ''
 let appId = 'wx57eaaa1d6bf1befb'
-let debug = false; // 是否测试模式
+let debug = true; // 是否测试模式
 if (debug) { // 测试 
   apiUrl = ''
   imgBaseUrl = 'https://ess.jieyunshop.com/'

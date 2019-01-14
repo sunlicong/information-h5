@@ -36,7 +36,11 @@
       </div>
     </div>
     <div class="bottom">
-      <img v-if="selectContent.firstBuy==1" class="activity_img" src="~@/assets/image/icon_everyday_one.png">
+      <img
+        v-if="selectContent.firstBuy==1"
+        class="activity_img"
+        src="~@/assets/image/icon_everyday_one.png"
+      >
       <div class="bottom_left">
         <span>{{selectContent.price}}</span>
         <span class="yuan">元</span>
@@ -52,8 +56,9 @@
       <div class="line"></div>
       <div class="price_view">
         <div class="price">
-          <div class="trx">{{trxNum}}TRX</div>
-          <div class="rmb">≈ ￥{{selectContent.price}}</div>
+          <div v-if="selectPayTypeObj.payChannelType==2" class="yuan">￥{{selectContent.price}}</div>
+          <div v-if="selectPayTypeObj.payChannelType==1" class="trx">{{trxNum}}TRX</div>
+          <div v-if="selectPayTypeObj.payChannelType==1" class="rmb">≈ ￥{{selectContent.price}}</div>
         </div>
         <div class="tip">实时读取交易价格，以最终支付金额为准</div>
       </div>
@@ -64,12 +69,12 @@
       <div class="item" @click="selectPayList">
         <div class="left">支付方式</div>
         <div class="right">
-          <img class="icon" src="~@/assets/image/icon_trx.png" alt>
-          <span>波场TRON</span>
+          <img class="icon" :src="selectPayTypeObj.payChannelPic" alt>
+          <span>{{selectPayTypeObj.payChannelName}}</span>
           <img class="arrow" src="~@/assets/image/arrows_right.png">
         </div>
       </div>
-      <mt-button class="pay" @click="buyCardtoTrx()">确认支付</mt-button>
+      <mt-button class="pay" @click="confirmPay()">确认支付</mt-button>
     </mt-popup>
     <mt-popup class="dialog_box" v-model="selectPayTypePop" position="bottom">
       <div class="title_view">
@@ -80,14 +85,15 @@
         <div class="right"></div>
       </div>
       <div class="line"></div>
-      <div class="payItem" v-for="(item,index) in payChannelList" @click="cancelSelect()">
-        <img class="icon" src="~@/assets/image/icon_trx.png" alt>
+      <div class="payItem" v-for="(item,index) in payChannelList" @click="selectPayType(item)">
+        <img class="icon" :src="item.payChannelPic" alt>
         <div class="info">
-          <div class="name">波场TRON</div>
-          <div class="balance">余额：{{item.balance}}TRX</div>
+          <div class="name">{{item.payChannelName}}</div>
+          <div v-if="item.payChannelType==1" class="balance">余额：{{item.balance}}</div>
+          <div v-if="item.payChannelType==2" class="balance">微信安全支付</div>
         </div>
         <div class="right">
-          <img src="~@/assets/image/icon_duihao.png" alt>
+          <img v-if="item.payChannelType == selectPayTypeObj.payChannelType" src="~@/assets/image/icon_duihao.png" alt>
         </div>
       </div>
     </mt-popup>
@@ -103,14 +109,17 @@ export default {
         count: 0,
         giveCount: 0,
         price: 0,
-        firstBuy: 0,
+        firstBuy: 0
       },
       trxNum: 0,
       selectCandy: 0,
       candyList: [],
       popupPayVisible: false, //购买弹框
       selectPayTypePop: false, //支付方式弹框
-      payChannelList: [] //支付方式列表
+      payChannelList: [], //支付方式列表
+      selectPayTypeObj:{
+        payChannelType: 0, // 1-trx 2-微信
+      }
     };
   },
   mounted() {
@@ -172,6 +181,7 @@ export default {
           if (response.data.status) {
             this.trxNum = response.data.data.coinPrice;
             this.payChannelList = response.data.data.payChannelList;
+            this.selectPayTypeObj = response.data.data.payChannelList[0];
             this.popupPayVisible = true;
           }
         })
@@ -198,6 +208,13 @@ export default {
       this.selectPayTypePop = false;
     },
     /**
+     * 选择支付方式
+     */
+    selectPayType(item){
+      this.selectPayTypeObj = item
+      this.selectPayTypePop = false
+    },
+    /**
      * 购买套餐 人民币
      */
     buyCard() {
@@ -222,6 +239,17 @@ export default {
         .catch(response => {
           this.$ui.Indicator.close();
         });
+    },
+    /**
+     * 确认支付 ，根据选择支付类型判断用不用支付方式
+     * id 1-trx 2-rmb
+     */
+    confirmPay(){
+      if(this.selectPayTypeObj.payChannelType == 1){
+        this.buyCardtoTrx()
+      } else if(this.selectPayTypeObj.payChannelType == 2){
+        this.buyCardByWx()
+      }
     },
     /**
      * 用trx购买套餐
@@ -274,38 +302,60 @@ export default {
      * 微信支付
      */
     buyCardByWx() {
-      if (typeof WeixinJSBridge == "undefined") {
-        if (document.addEventListener) {
-          document.addEventListener(
-            "WeixinJSBridgeReady",
-            onBridgeReady,
-            false
-          );
-        } else if (document.attachEvent) {
-          document.attachEvent("WeixinJSBridgeReady", onBridgeReady);
-          document.attachEvent("onWeixinJSBridgeReady", onBridgeReady);
+      this.$ui.Indicator.open({
+        text: "加载中...",
+        spinnerType: "snake"
+      });
+      this.$axios({
+        method: "get",
+        url: "/blockchain/v1/wxpay/doPay",
+        data: {
+          candyId: this.selectContent.id
         }
-      } else {
-        this.onBridgeReady();
-      }
+      })
+        .then(response => {
+          this.$ui.Indicator.close();
+          this.popupPayVisible = false;
+          if (response.data.status) {
+            // if (typeof WeixinJSBridge == "undefined") {
+            //   if (document.addEventListener) {
+            //     document.addEventListener(
+            //       "WeixinJSBridgeReady",
+            //       onBridgeReady,
+            //       false
+            //     );
+            //   } else if (document.attachEvent) {
+            //     document.attachEvent("WeixinJSBridgeReady", onBridgeReady);
+            //     document.attachEvent("onWeixinJSBridgeReady", onBridgeReady);
+            //   }
+            // } else {
+              this.onBridgeReady(response.data.data);
+            // }
+          }
+        })
+        .catch(response => {
+          this.popupPayVisible = false;
+          this.$ui.Indicator.close();
+        });
     },
-    onBridgeReady() {
-      var that = this
+    onBridgeReady(data) {
+      var that = this;
       WeixinJSBridge.invoke(
         "getBrandWCPayRequest",
         {
-          appId: "wx57eaaa1d6bf1befb", //公众号名称，由商户传入
-          timeStamp: "1546509098", //时间戳，自1970年以来的秒数
-          nonceStr: "SSGlYGkpwI6QeSqE", //随机串
-          package: "prepay_id=wx03175210410430079a1ba5f90450099015",
-          signType: "MD5", //微信签名方式：
-          paySign: "A42E853C349E8EBF1BD05FA4F70831EA" //微信签名
+          appId: data.appId, //公众号名称，由商户传入
+          timeStamp: data.timeStamp, //时间戳，自1970年以来的秒数
+          nonceStr: data.nonceStr, //随机串
+          package: data.package,
+          signType: data.signType, //微信签名方式：
+          paySign: data.paySign //微信签名
         },
         function(res) {
-          that.$ui.Toast(res.err_msg)
           if (res.err_msg == "get_brand_wcpay_request:ok") {
             // 使用以上方式判断前端返回,微信团队郑重提示：
             //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+            that.$ui.Toast("购买成功");
+            that.getCandyList();
           }
         }
       );
@@ -441,7 +491,7 @@ export default {
   background: #fff;
   display: flex;
   align-items: center;
-  .activity_img{
+  .activity_img {
     position: absolute;
     width: 212px;
     height: 60px;
@@ -527,6 +577,9 @@ export default {
       white-space: nowrap;
       overflow: hidden;
       display: flex;
+    }
+    .yuan{
+      width: 100%;
     }
     .trx {
       width: 70%;

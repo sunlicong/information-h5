@@ -22,7 +22,7 @@
                     <img src="~@/assets/image/bottom_packet2.png" class="bottom_packet2"/>
                     <span>去发红包</span>
                 </div>
-                <div>
+                <div @click="transmit()">
                     <img src="~@/assets/image/bottom_packet3.png" class="bottom_packet3"/>
                     <span>继续转发</span>
                 </div>
@@ -47,11 +47,40 @@
                 </div>
             </li>
         </ul>
+         <div class="message">
+            <div class="title">区块信息</div>
+            <div @click="copy()">
+                <span class="key">交易ID：</span>
+                <span class="value">0xoa99…ff62d2</span>
+                <img src="~@/assets/image/copy.png" class="copy"/>
+            </div>
+            <div>
+                <span class="key">区块高度：</span>
+                <span class="value">5602661</span>
+            </div>
+        </div>
     </div>
 </template>
 <script>
+
 export default {
-    
+    name:'GetRedPacket',
+    data(){
+        return {
+           
+        }
+    },
+    methods:{
+        transmit(){
+           this.$router.push({
+                path: "/ShareRedPack"
+            });
+        },
+        copy(){
+            this.$copyText("acy15221608813");
+             this.$ui.Toast("复制成功");
+        }
+    }
 }
 </script>
 <style lang="less" scoped>
@@ -206,7 +235,28 @@ export default {
              }
        }
     }
+   
+    .message {
+        font-size: 28px;
+        padding: 20px 30px;
+    }
+    .title{
     
+        color: #101F30;
+    }
+    .message .key{
+    
+        color: #A3AEBA
+    }
+    .message .value{
+    
+        color: #051426
+    }
+    .copy{
+        width: 25px;
+        height: 25px;
+        margin-left: 10px;
+    }
 </style>
 
 

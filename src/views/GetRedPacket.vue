@@ -1,53 +1,61 @@
 <template>
     <div class="GetRedPacket">
         <div class="header">
-            <img src="https://img.51kupai.com/pic/531-531-6fdcfe60715cfef0c89046fd3474d61a/200" class="head_portrait"/>
+            <img :src="$url(message.photo)" class="head_portrait"/>
             <div class="name_packet">
-                <span>小李飞刀的红包</span>
-                <span>拼</span>
+                <span>{{message.nick}}的红包</span>
+                <span v-if="message.type==1">拼</span>
             </div>
-            <div class="packet_text">重拾信心，坚持留下！领</div>
-            <!-- <div class="money">
-                <span>0.77</span>
-                <span>TRX</span>
-            </div> -->
-            <div class="run_out">你来晚了，红包都被领完了</div>
-            <div class="hint">已存入云钱包，可直接提现</div>
+            <div class="packet_text">{{message.description}}</div>
+            <div class="money"  v-if="message.status==1">
+                <span>{{message.giveOutAmount}}</span>
+                <span v-if="message.assetType==1">糖果</span>
+                <span v-if="message.assetType==2">元</span>
+                <span v-if="message.assetType==3">点钻</span>
+                <span v-if="message.assetType==4">TRX</span>
+            </div>
+            <div class="run_out" v-if="message.status==2||message.status==3">{{message.receive}}</div>
+            <div class="hint" v-if="message.status==1">已存入云钱包，可直接提现</div>
+            <div class="hint" v-if="message.status==2&&message.sendUser">未领取的红包，已返还至云钱包</div>
             <div class="bottom">
-                <div>
+                <div @click="transmit('/WalletItemTrx')">
                     <img src="~@/assets/image/bottom_packet1.png" class="bottom_packet1"/>
-                    <span>去抽龙猪卡</span>
+                    <span>去提现</span>
                 </div>
-                <div>
+                <div @click="transmit('/SendRedPack')">
                     <img src="~@/assets/image/bottom_packet2.png" class="bottom_packet2"/>
                     <span>去发红包</span>
                 </div>
-                <div @click="transmit()">
+                <div @click="transmit('/ShareRedPack')" v-if="message.sendUser">
                     <img src="~@/assets/image/bottom_packet3.png" class="bottom_packet3"/>
                     <span>继续转发</span>
                 </div>
             </div>
         </div>
         <div class="draw">
-            已领取15/17个，共<span>123</span>TRX
+            已领取{{message.receiveCount}}/{{message.count}}个，共<span class="span">{{message.amount}}</span>
+            <span v-if="message.assetType==1">糖果</span>
+            <span v-if="message.assetType==2">元</span>
+            <span v-if="message.assetType==3">点钻</span>
+            <span v-if="message.assetType==4">TRX</span>
         </div>
         <ul class="packet">
-            <li v-for="(item,index) in [1,2,3,4]" :key="index" >
-                <img src="https://img.51kupai.com/pic/531-531-6fdcfe60715cfef0c89046fd3474d61a/200"/>
+            <li v-for="(item,index) in list" :key="index">
+                <img :src="$url(item.photo)" />
                 <div class="center">
                     <div class="center_top">
-                        <span>小太阳</span>
+                        <span>{{item.nick}}</span>
                         <span>拼</span>
                     </div>
-                    <div class="center_bottom">17:54:30</div>
+                    <div class="center_bottom">{{$formatDate(item.receivingTime/1000,3)}}</div>
                 </div>
                 <div class="right">
-                    <div>0.1TRX</div>
-                    <div>手气最佳</div>
+                    <div>{{item.amount}}</div>
+                    <div v-if="item.best==1">手气最佳</div>
                 </div>
             </li>
         </ul>
-         <div class="message">
+         <div class="message"  v-if="message.type==1">
             <div class="title">区块信息</div>
             <div @click="copy()">
                 <span class="key">交易ID：</span>
@@ -67,19 +75,57 @@ export default {
     name:'GetRedPacket',
     data(){
         return {
-           
+            redpackId:this.$route.query.redpackId || 40,
+            message:{},
+            list:[]   
         }
     },
+    mounted() {
+	    this.receiveRedpack();
+	},
     methods:{
-        transmit(){
-           this.$router.push({
-                path: "/ShareRedPack"
+        transmit(url){
+            this.$router.push({
+                path: url
             });
         },
         copy(){
             this.$copyText("acy15221608813");
-             this.$ui.Toast("复制成功");
-        }
+            this.$ui.Toast("复制成功");
+        },
+        receiveRedpack(){
+            this.$axios({
+				method:'post',
+				url:'/blockchain/v1/redpack/receiveRedpack',
+				data:{
+				    redpackId:this.redpackId
+				},
+			}).then((response) => {
+				this.coderUrl=response.data.data.coderUrl;
+			    this.message=response.data.data;
+                this.$ui.Indicator.close();
+                this.getRedpackList();
+			}).catch((response) => {
+                this.$ui.Indicator.close();
+                this.getRedpackList();
+			});
+        },
+        getRedpackList(){
+            this.$axios({
+				method:'get',
+				url:'/blockchain/v1/redpack/getRedpackList',
+				data:{
+                    redpackId:this.redpackId,
+                    next:0,
+                    limit:200
+			    },
+			}).then((response) => {
+				this.list = response.data.data.data;
+				this.$ui.Indicator.close();
+			}).catch((response) => {
+          		this.$ui.Indicator.close();
+			});
+        },
     }
 }
 </script>
@@ -97,6 +143,8 @@ export default {
         .run_out{
             color: #ffffff;
             font-size: 36px;
+            margin-top:60px;
+            margin-bottom:40px
         }
         .name_packet{
             font-size:28px;
@@ -172,7 +220,7 @@ export default {
         padding: 15px 28px;
         color: #A3AEBA;
         font-size: 28px;
-        span{
+        .draw .span{
             color: #D14139;
         }
         border-bottom: 1px solid #F6F6F6
@@ -220,7 +268,8 @@ export default {
                 display: flex;
                  flex-direction: column;
                  justify-content: space-between;
-                 width: 110px;
+                //  width: 110px;
+                align-items:flex-end;
                  color: #051426;
                  font-size: 32px;
                  div:nth-child(2){

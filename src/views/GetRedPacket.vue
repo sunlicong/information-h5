@@ -26,7 +26,7 @@
                     <img src="~@/assets/image/bottom_packet2.png" class="bottom_packet2"/>
                     <span>去发红包</span>
                 </div>
-                <div @click="transmit('/ShareRedPack')" v-if="message.sendUser">
+                <div @click="transmit('/ShareRedPack?redpackId='+redpackId)" v-if="message.sendUser">
                     <img src="~@/assets/image/bottom_packet3.png" class="bottom_packet3"/>
                     <span>继续转发</span>
                 </div>

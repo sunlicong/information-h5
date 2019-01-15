@@ -249,6 +249,14 @@ const router = new Router({
       }
     },
     {
+      path: '/ShareRedPack',
+      name: 'ShareRedPack',
+      component: resolve => require(['@/views/ShareRedPack'], resolve),
+      meta: {
+        pageTitle: '分享'
+      }
+    },
+    {
       path: '/PacketInSend',
       name: 'PacketInSend',
       component: resolve => require(['@/views/PacketInSend'], resolve),

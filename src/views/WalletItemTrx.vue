@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="top">
+    <!-- <div class="top">
       <img src="~@/assets/image/bg_wallet.png" class="top_bg">
       <div class="top_content">
         <div class="balance one_line">
@@ -19,13 +19,19 @@
           <img class="arrow" src="~@/assets/image/icon_next.png">
         </div>
       </div>
+    </div> -->
+
+    <div class="h-220">
+      <div class="fs-70 ml-30">{{ '0.00000' }}</div>
+      <div class="fs-36">≈￥100</div>
     </div>
+
     <div v-if="list.length==0" class="non">
       <img src="~@/assets/image/img_non.png">
       <div>暂时还没有数据哦～</div>
     </div>
     <mu-load-more class="list" :loading="loading" @load="loadMore">
-      <div class="height-120" v-for="item in list">
+      <div class="height-120" v-for="item in list" v-bind:key="item.time">
         <div class="left margin-left-30">
           <div class="title">{{getTypeName(item.type)}}{{item.status==50?'中':''}}</div>
           <div class="time">{{$formatDate(item.time/1000,3)}}</div>
@@ -43,6 +49,7 @@
     </div>
   </div>
 </template>
+
 <script>
 export default {
   name: "WalletItemTrx",
@@ -56,6 +63,9 @@ export default {
     };
   },
   mounted() {
+    // if(this.$route.query.formType == 1){
+    //   document.title = "点钻"
+    // }
     this.$ui.Indicator.open({
       text: "加载中...",
       spinnerType: "snake"
@@ -233,7 +243,39 @@ export default {
   }
 };
 </script>
+
 <style lang="less" scoped>
+
+.h-220 {
+  width: 100%;
+  height: 220px;
+  background-image: url(~@/assets/image/bg_wallet_detail.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 30px;
+  box-sizing: border-box;
+}
+
+.fs-70 {
+  font-family: PingFangSC-Medium;
+  font-size: 70px;
+  line-height: 98px;
+  color: white;
+}
+
+.fs-36 {
+  font-family: PingFangSC-Regular;
+  font-size: 36px;
+  color: white;
+  line-height: 50px;
+}
+
+
+
 .top {
   width: 100%;
   height: 374px;

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="top">
+    <!-- <div class="top">
       <img src="~@/assets/image/bg_wallet.png" class="top_bg">
       <div class="top_content">
         <div class="balance one_line">
@@ -8,7 +8,17 @@
           <span class="yuan">{{formType==1?'点钻':'元'}}</span>
         </div>
       </div>
+    </div> -->
+
+    <div class="h-220">
+      <div class="h-98">
+        <div class="fs-70">{{ num ? num : '0.00' }}</div>
+        <div class="fs-36-m ml-10">{{ formType == 1 ? 'Fcoin' : '元' }}</div>
+      </div>
+      <div v-if="formType == 2" class="h-50"></div>
+      <div v-else class="fs-36">≈￥100</div>
     </div>
+
     <div v-if="list.length==0" class="non">
       <img src="~@/assets/image/img_non.png">
       <div>暂时还没有数据哦～</div>
@@ -26,8 +36,14 @@
         </div>
       </div>
     </mu-load-more>
+
+    <!-- 提现功能开发中 -->
+    <div class="h-100" v-if="formType == 2">
+      <div class="fs-36-m">提现功能开发中</div>
+    </div>
   </div>
 </template>
+
 <script>
 export default {
   name: "WalletItemDetail",
@@ -158,7 +174,75 @@ export default {
   }
 };
 </script>
+
 <style lang="less" scoped>
+
+.ml-10 {
+  margin-left: 10px;
+}
+
+.h-220 {
+  width: 100%;
+  height: 220px;
+  background-image: url(~@/assets/image/bg_wallet_detail.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 30px;
+  box-sizing: border-box;
+}
+
+.h-98 {
+  width: 500px;
+  height: 98px;
+  display: flex;
+  align-items: baseline;
+}
+
+.fs-70 {
+  font-family: PingFangSC-Medium;
+  font-size: 70px;
+  line-height: 98px;
+  color: white;
+}
+
+.fs-36-m {
+  font-family: PingFangSC-Medium;
+  font-size: 36px;
+  line-height: 50px;
+  color: white;
+}
+
+.h-50 {
+  width: 1px;
+  height: 50px;
+  background: transparent;
+}
+
+.fs-36 {
+  font-family: PingFangSC-Regular;
+  font-size: 36px;
+  color: white;
+  line-height: 50px;
+}
+
+.h-100 {
+  width: 100%;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background-color: #d2d2d2;
+}
+
+
+
 .top {
   width: 100%;
   height: 374px;

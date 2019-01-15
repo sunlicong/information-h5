@@ -4,27 +4,28 @@
     <div class="h-374">
       <img src="~@/assets/image/bg_wallet.png" class="h-374-abs">
       <div class="h-374-abs">
-        <div class="fs-28 mt-26 ml-30">总资产折合（CNY）</div>
+        <div class="fs-28 mt-46 ml-30">总资产折合（CNY）</div>
         <div class="h-72 mt-14">
           <div class="fs-28 ml-30">￥</div>
           <div class="fs-72 ml-12">{{ total ? total : '0.00' }}</div>
         </div>
         <div class="h-130 mt-33">
           <!-- 本地钱包 -->
-          <div class="s-330-130">
+          <div
+            v-bind:class="[s_330_130, currentItem == 1 ? border_ff : border_00]"
+            @click="onQianBaoClick(1)"
+          >
             <div class="fs-28-r ml-20 mt-16">本地钱包</div>
             <div class="fs-28-r ml-20 mt-9">¥0.00</div>
           </div>
           <!-- 云钱包 -->
-          <div class="s-330-130">
+          <div
+            v-bind:class="[s_330_130, currentItem == 2 ? border_ff : border_00]"
+            @click="onQianBaoClick(2)"
+          >
             <div class="fs-28-r ml-20 mt-16">云钱包</div>
             <div class="fs-28-r ml-20 mt-9">¥0.00</div>
           </div>
-        </div>
-        <!-- 指示点 -->
-        <div class="h-12 mt-26">
-          <div class="s-12"></div>
-          <div class="s-12 ml-12"></div>
         </div>
       </div>
     </div>
@@ -32,22 +33,22 @@
     <!-- 充值、提现、发红包、发送中的红包 -->
     <div class="h-152">
       <!-- 充值 -->
-      <div class="s-25-152">
+      <div class="s-25-152" @click="onFourTabClick(0)">
         <img src="~@/assets/image/icon_wallet_0.png" class="s-45-51">
         <div class="fs-28-05 mt-14">充值</div>
       </div>
       <!-- 提现 -->
-      <div class="s-25-152">
+      <div class="s-25-152" @click="onFourTabClick(1)">
         <img src="~@/assets/image/icon_wallet_1.png" class="s-43-42">
         <div class="fs-28-05 mt-14">提现</div>
       </div>
       <!-- 发红包 -->
-      <div class="s-25-152">
+      <div class="s-25-152" @click="onFourTabClick(2)">
         <img src="~@/assets/image/icon_wallet_2.png" class="s-41-48">
         <div class="fs-28-05 mt-14">发红包</div>
       </div>
       <!-- 发送中的红包 -->
-      <div class="s-25-152">
+      <div class="s-25-152" @click="onFourTabClick(3)">
         <img src="~@/assets/image/icon_wallet_3.png" class="s-47-51">
         <div class="fs-28-05 mt-14">发送中的红包</div>
       </div>
@@ -76,7 +77,7 @@
     </div>
 
     <!-- Fcion 点钻 -->
-    <div class="h-120 mt-1" @click="itemClick('db')">
+    <div v-if="currentItem == 1" class="h-120 mt-1" @click="itemClick('db')">
       <!-- 图标 -->
       <div class="s-200-120">
         <img src="~@/assets/image/icon_db.png" class="s-50">
@@ -93,7 +94,7 @@
     </div>
 
     <!-- 人民币 -->
-    <div class="h-120 mt-1" @click="itemClick('rmb')">
+    <div v-if="currentItem == 1" class="h-120 mt-1" @click="itemClick('rmb')">
       <!-- 图标 -->
       <div class="s-200-120">
         <img src="~@/assets/image/icon_rmb.png" class="s-50">
@@ -110,7 +111,7 @@
     </div>
 
     <!-- 糖果卡 -->
-    <div class="h-120 mt-1" @click="itemClick('candy')">
+    <div v-if="currentItem == 1" class="h-120 mt-1" @click="itemClick('candy')">
       <!-- 图标 -->
       <div class="s-200-120">
         <img src="~@/assets/image/icon_candy.png" class="s-50">
@@ -125,7 +126,6 @@
         <img src="~@/assets/image/arrows_right.png" class="s-12-21 ml-20">
       </div>
     </div>
-      
   </div>
 </template>
 
@@ -139,7 +139,11 @@ export default {
       token: 0,
       rmb: 0,
       candy: 0,
-      trx: 0
+      trx: 0,
+      currentItem: 1,
+      border_ff: "border-4-ff",
+      border_00: "border-4-00",
+      s_330_130: "s-330-130"
     };
   },
 
@@ -173,9 +177,92 @@ export default {
         });
     },
 
+    /**
+     * 本地钱包，云钱包 点击事件
+     */
+    onQianBaoClick(type) {
+      if (this.currentItem == type) {
+        return;
+      }
+
+      if (type == 1) {
+        // 本地钱包
+        this.currentItem = 1;
+      } else if (type == 2) {
+        // 云钱包
+        this.currentItem = 2;
+      }
+    },
+
+    onFourTabClick(type) {
+      if (type == 0) {
+        // 充值
+        this.$router.push({
+          path: "/Recharge"
+        });
+      } else if (type == 1) {
+        // 提现
+        this.$ui.Indicator.open({
+          text: "加载中...",
+          spinnerType: "snake"
+        });
+        this.$axios({
+          method: "get",
+          url: "/blockchain/v1/wxpay/getWithdrawInfo",
+          data: {
+            coinName: "trx"
+          }
+        })
+          .then(response => {
+            this.$ui.Indicator.close();
+            if (response.data.status) {
+              var userWithDrawAddress = response.data.data.userWithDrawAddress;
+              if (userWithDrawAddress) {
+                this.$router.push({
+                  path: "/CashWithdrawal",
+                  query: {
+                    coinName: "trx"
+                  }
+                });
+              } else {
+                this.$ui
+                  .MessageBox({
+                    title: "添加提现地址",
+                    message: "提现需添加提现地址后可使用",
+                    showCancelButton: true,
+                    showConfirmButton: true,
+                    confirmButtonText: "去添加",
+                    cancelButtonText: "取消"
+                  })
+                  .then(action => {
+                    if (action == "confirm") {
+                      this.$router.push({
+                        path: "/CashAddressAdd"
+                      });
+                    }
+                  });
+              }
+            }
+          })
+          .catch(response => {
+            this.$ui.Indicator.close();
+          });
+      } else if (type == 2) {
+        // 发红包
+        this.$router.push({
+          path: "/SendRedPack"
+        })
+      } else if (type == 3) {
+        // 发送中的红包
+        this.$router.push({
+          path: "/PacketInSend"
+        })
+      }
+    },
+
     itemClick(type) {
       switch (type) {
-        case "db":  // 点钻
+        case "db": // 点钻
           this.$router.push({
             path: "/WalletItemDetail",
             query: {
@@ -210,7 +297,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
 .h-374 {
   width: 100%;
   height: 374px;
@@ -254,16 +340,12 @@ export default {
   margin-top: 20px;
 }
 
-.mt-26 {
-  margin-top: 26px;
+.mt-46 {
+  margin-top: 46px;
 }
 
 .mt-33 {
   margin-top: 33px;
-}
-
-.ml-12 {
-  margin-left: 12px;
 }
 
 .ml-20 {
@@ -305,6 +387,15 @@ export default {
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+  box-sizing: border-box;
+}
+
+.border-4-00 {
+  border: 4px solid #0000;
+}
+
+.border-4-ff {
+  border: 4px solid #fff;
 }
 
 .fs-28-r {
@@ -312,20 +403,6 @@ export default {
   font-size: 28px;
   color: white;
   line-height: 40px;
-}
-
-.h-12 {
-  width: 100%;
-  height: 12px;
-  display: flex;
-  justify-content: center;
-}
-
-.s-12 {
-  width: 12px;
-  height: 12px;
-  border-radius: 12px;
-  background-color: #fff;
 }
 
 .h-152 {
@@ -438,5 +515,4 @@ export default {
   width: 12px;
   height: 21px;
 }
-
 </style>

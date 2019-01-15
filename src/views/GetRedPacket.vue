@@ -1,5 +1,5 @@
 <template>
-    <div class="GetRedPacket">
+    <div class="GetRedPacket"  v-if="isStatus">
         <div class="header">
             <img :src="$url(message.photo)" class="head_portrait"/>
             <div class="name_packet">
@@ -77,10 +77,15 @@ export default {
         return {
             redpackId:this.$route.query.redpackId || 40,
             message:{},
-            list:[]   
+            list:[],
+            isStatus:false
         }
     },
     mounted() {
+         this.$ui.Indicator.open({
+			text: "加载中...",
+			spinnerType: "snake"
+      	});
 	    this.receiveRedpack();
 	},
     methods:{
@@ -105,6 +110,7 @@ export default {
 			    this.message=response.data.data;
                 this.$ui.Indicator.close();
                 this.getRedpackList();
+                this.isStatus = true;
 			}).catch((response) => {
                 this.$ui.Indicator.close();
                 this.getRedpackList();

@@ -40,7 +40,7 @@
             <span v-if="message.assetType==4">TRX</span>
         </div>
         <ul class="packet">
-            <li v-for="(item,index) in list" :key="index">
+            <li v-for="(item,index) in list" :key="index" v-if="message.type==1">
                 <img :src="$url(item.photo)" />
                 <div class="center">
                     <div class="center_top">
@@ -75,7 +75,7 @@ export default {
     name:'GetRedPacket',
     data(){
         return {
-            redpackId:this.$route.query.redpackId || 40,
+            redpackId:this.$route.query.redpackId || 60,
             message:{},
             list:[],
             isStatus:false

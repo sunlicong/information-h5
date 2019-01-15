@@ -59,12 +59,12 @@
             <div class="title">区块信息</div>
             <div @click="copy()">
                 <span class="key">交易ID：</span>
-                <span class="value">0xoa99…ff62d2</span>
+                <span class="value">{{message.txId}}</span>
                 <img src="~@/assets/image/copy.png" class="copy"/>
             </div>
             <div>
                 <span class="key">区块高度：</span>
-                <span class="value">5602661</span>
+                <span class="value">{{message.refBlock}}</span>
             </div>
         </div>
     </div>
@@ -95,7 +95,7 @@ export default {
             });
         },
         copy(){
-            this.$copyText("acy15221608813");
+            this.$copyText(this.message.txId);
             this.$ui.Toast("复制成功");
         },
         receiveRedpack(){

@@ -41,18 +41,32 @@
                 <em>个</em>
             </div>
         </div>
-        <div class="get_list">
+        <div class="get_list" v-if="type === 'get'">
             <ul>
                 <li>
                     <img class="userAvantar" src="http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83epDEhCtkibl8pEHLaCr3XtO6mIbUGtM5uSEsiaorgFibmjc5D0icQAI4Jp0Fia8pExdca7O81zYFiaCcsyQ/132" alt="">
                     <div class="info">
                         <div class="top">
-                            <span>小太阳<img src="../assets/image/pin.png"></span>
+                            <span>小太阳<b>拼</b></span>
                             <span>0.1TRX</span>
                         </div>
                         <div class="bottom">
                             <span>17:54:30</span>
                         </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="send_list" v-if="type === 'send'">
+            <ul>
+                <li>
+                    <div class="top">
+                        <span>普通红包</span>
+                        <span>0.1TRX</span>
+                    </div>
+                    <div class="bottom">
+                        <span>17:54:30</span>
+                        <span>已领完1/2</span>
                     </div>
                 </li>
             </ul>
@@ -216,16 +230,44 @@ export default {
                     display: flex;
                     flex-flow: row nowrap;
                     justify-content: space-between;
-                    img {
-                        width: .32rem;
-                        height: .44rem;
-                        margin-left: .2rem;
-                    }
                     span {
                         font-size: .43rem;
                         color: #051426;
+                        b {
+                            width:27px;
+                            height:31px;
+                            background:rgba(249,131,50,1);
+                            border-radius:1px;
+                            font-size:24px;
+                            font-weight: 400;
+                            color: #fff;
+                            display: inline-block;
+                            text-align: center;
+                            line-height: 31px;
+                            margin-left: 10px;
+                        }
                     }
                 }
+            }
+        }
+    }
+    .send_list {
+        ul {
+            margin: 0 .4rem;
+            padding: .25rem 0;
+            div {
+                display: flex;
+                flex-flow: row nowrap;
+                justify-content: space-between;
+            }
+            .top {
+                font-size: .43rem;
+                color: #051426;
+            }
+            .bottom {
+                margin-top: .1rem;
+                font-size: .37rem;
+                color: #A3AEBA;
             }
         }
     }

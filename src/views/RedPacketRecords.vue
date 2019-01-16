@@ -12,46 +12,49 @@
         </div>
         <div class="content">
             <div class="user">
-                <img src="http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83epDEhCtkibl8pEHLaCr3XtO6mIbUGtM5uSEsiaorgFibmjc5D0icQAI4Jp0Fia8pExdca7O81zYFiaCcsyQ/132" alt="">
-                <p class="one_line">1615q1w6d1561一共收到</p>
+                <img :src="getList.photo">
+                <p class="one_line">{{getList.nick}}</p>
             </div>
             <ul class="money">
                 <li class="trx">
-                    <strong>0.77</strong>
+                    <strong>{{getList.tRXAmountSum}}</strong>
                     <b>TRX</b>
                 </li>
                 <li class="rmb">
-                    <strong>0.10</strong>
+                    <strong>{{getList.amountSum}}</strong>
                     <b>元</b>
                 </li>
             </ul>
             <ul class="totalPacket" v-if="type === 'get'">
                 <li class="getPackets">
                     <span>收到红包</span>
-                    <em>5个</em>
+                    <em>{{getList.receivedCounts}}个</em>
                 </li>
                 <li class="best">
                     <span>手气最佳</span>
-                    <em>1个</em>
+                    <em>{{getList.bestCounts}}个</em>
                 </li>
             </ul>
             <div class="sendPacket" v-if="type === 'send'">
                 <span>发出红包</span>
-                <strong>5</strong>
+                <strong>{{sendList.extendCounts}}</strong>
                 <em>个</em>
             </div>
         </div>
         <div class="get_list" v-if="type === 'get'">
             <ul>
-                <li>
-                    <img class="userAvantar" src="http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83epDEhCtkibl8pEHLaCr3XtO6mIbUGtM5uSEsiaorgFibmjc5D0icQAI4Jp0Fia8pExdca7O81zYFiaCcsyQ/132" alt="">
+                <li v-for="(item,index) in getList.recordDetailVoList" :key="index">
+                    <img class="userAvantar" :src="item.photo" alt="">
                     <div class="info">
                         <div class="top">
-                            <span>小太阳<b>拼</b></span>
-                            <span>0.1TRX</span>
+                            <span>{{item.nick}}<b v-if="item.type === 1">拼</b></span>
+                            <span v-if="item.assetType === 1">{{item.amount}}糖果</span>
+                            <span v-if="item.assetType === 2">{{item.amount}}元</span>
+                            <span v-if="item.assetType === 3">{{item.amount}}点钻</span>
+                            <span v-if="item.assetType === 4">{{item.amount}}TRX</span>
                         </div>
                         <div class="bottom">
-                            <span>17:54:30</span>
+                            <span>{{item.createTime.slice(11,19)}}</span>
                         </div>
                     </div>
                 </li>
@@ -59,14 +62,18 @@
         </div>
         <div class="send_list" v-if="type === 'send'">
             <ul>
-                <li>
+                <li v-for="(item, index) in sendList.recordDetailVoList" :key="index">
                     <div class="top">
-                        <span>普通红包</span>
-                        <span>0.1TRX</span>
+                        <span v-if="item.type === 1">拼手气红包</span>
+                        <span v-if="item.type === 2">普通红包</span>
+                        <span v-if="item.assetType === 1">{{item.amount}}糖果</span>
+                        <span v-if="item.assetType === 2">{{item.amount}}元</span>
+                        <span v-if="item.assetType === 3">{{item.amount}}点钻</span>
+                        <span v-if="item.assetType === 4">{{item.amount}}TRX</span>
                     </div>
                     <div class="bottom">
-                        <span>17:54:30</span>
-                        <span>已领完1/2</span>
+                        <span>{{item.createTime.slice(11,19)}}</span>
+                        <span>已领完{{item.receivedCounts}}</span>
                     </div>
                 </li>
             </ul>
@@ -79,12 +86,45 @@ export default {
     name: 'RedPacketRecords',
     data () {
         return {
-            type: 'get'
+            type: 'get',
+            getList: '',
+            sendList: ''
         }
     },
+    mounted () {
+        this.getUser()
+    },
     methods: {
+        getUser () {
+            if (this.type === 'get') {
+                this.getPacketList()
+            } else {
+                this.sendPacketList()
+            }
+        },
+        getPacketList () {
+            this.$axios({
+                url: '/blockchain/v1/redpack/receivedRecords',
+                method: 'get'
+            })
+            .then(res => {
+                console.log(res.data.data)
+                this.getList = res.data.data
+            })
+        },
+        sendPacketList () {
+            this.$axios({
+                url: '/blockchain/v1/redpack/extendRecords',
+                method: 'get'
+            })
+            .then(res => {
+                console.log(res.data.data)
+                this.sendList = res.data.data
+            })
+        },
         changeType (type) {
             this.type = type
+            this.getUser()
         }
     }
 }
@@ -247,6 +287,11 @@ export default {
                             margin-left: 10px;
                         }
                     }
+                }
+                .top,.bottom {
+                    height: .6rem;
+                    margin-left: .1rem;
+                    align-items: center;
                 }
             }
         }

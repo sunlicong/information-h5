@@ -1,14 +1,18 @@
 <template>
     <div class="PacketInSend">
         <ul>
-            <li>
+            <li v-for="(item,index) in packetList" :key="index">
                 <div class="top">
-                    <span>普通红包</span>
-                    <span>0.1TRX</span>
+                    <span v-if="item.type === 1">拼手气红包</span>
+                    <span v-if="item.type === 2">普通红包</span>
+                    <span v-if="item.assetType === 1">{{item.amount}}糖果</span>
+                    <span v-if="item.assetType === 2">{{item.amount}}元</span>
+                    <span v-if="item.assetType === 3">{{item.amount}}点钻</span>
+                    <span v-if="item.assetType === 4">{{item.amount}}TRX</span>
                 </div>
                 <div class="bottom">
-                    <span>17:54:30</span>
-                    <span>已领完1/2</span>
+                    <span>{{item.createTime.slice(11,19)}}</span>
+                    <span>已领完{{item.receivedCounts}}</span>
                 </div>
             </li>
         </ul>
@@ -20,7 +24,22 @@ export default {
     name: "PacketInSend",
     data () {
         return {
-
+            packetList: ''
+        }
+    },
+    mounted () {
+        this.getPacketList()
+    },
+    methods: {
+        getPacketList () {
+            this.$axios({
+                url: '/blockchain/v1/redpack/extendingRecords',
+                method: 'get'
+            })
+            .then(res => {
+                console.log(res.data.data)
+                this.packetList = res.data.data
+            })
         }
     }
 }

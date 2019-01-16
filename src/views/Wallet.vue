@@ -7,7 +7,7 @@
         <div class="fs-28 mt-46 ml-30">总资产折合（CNY）</div>
         <div class="h-72 mt-14">
           <div class="fs-28 ml-30">￥</div>
-          <div class="fs-72 ml-12">{{ total ? total : '0.00' }}</div>
+          <div class="fs-72 ml-12">{{ userTotal }}</div>
         </div>
         <div class="h-130 mt-33">
           <!-- 本地钱包 -->
@@ -16,7 +16,7 @@
             @click="onQianBaoClick(1)"
           >
             <div class="fs-28-r ml-20 mt-16">本地钱包</div>
-            <div class="fs-28-r ml-20 mt-9">¥0.00</div>
+            <div class="fs-28-r ml-20 mt-9">￥{{ localTotal }}</div>
           </div>
           <!-- 云钱包 -->
           <div
@@ -24,7 +24,9 @@
             @click="onQianBaoClick(2)"
           >
             <div class="fs-28-r ml-20 mt-16">云钱包</div>
-            <div class="fs-28-r ml-20 mt-9">¥0.00</div>
+            <div
+              class="fs-28-r ml-20 mt-9"
+            >{{ cloudTotal.rmbAmount }}</div>
           </div>
         </div>
       </div>
@@ -69,8 +71,8 @@
       <!-- 钱 -->
       <div class="s-300-120">
         <div class="qian-box">
-          <div class="fs-32">{{ trx ? trx : '0.00' }}</div>
-          <div class="fs-24">￥128.00</div>
+          <div class="fs-32">{{ currentItem == 1 ? trx.amount : cloudTrx.amount }}</div>
+          <div class="fs-24">{{ currentItem == 1 ? trx.rmbAmount : cloudTrx.rmbAmount }}</div>
         </div>
         <img src="~@/assets/image/arrows_right.png" class="s-12-21 ml-20">
       </div>
@@ -86,8 +88,8 @@
       <!-- 钱 -->
       <div class="s-300-120">
         <div class="qian-box">
-          <div class="fs-32">{{ token ? token : '0.00' }}</div>
-          <div class="fs-24">￥128.00</div>
+          <div class="fs-32">{{ token.amount }}</div>
+          <div class="fs-24">{{ token.rmbAmount }}</div>
         </div>
         <img src="~@/assets/image/arrows_right.png" class="s-12-21 ml-20">
       </div>
@@ -103,8 +105,8 @@
       <!-- 钱 -->
       <div class="s-300-120">
         <div class="qian-box">
-          <div class="fs-32">{{ rmb ? rmb : '0.00' }}</div>
-          <div class="fs-24">￥128.00</div>
+          <div class="fs-32">{{ rmb.amount }}</div>
+          <div class="fs-24">{{ rmb.rmbAmount }}</div>
         </div>
         <img src="~@/assets/image/arrows_right.png" class="s-12-21 ml-20">
       </div>
@@ -120,8 +122,8 @@
       <!-- 钱 -->
       <div class="s-300-120">
         <div class="qian-box">
-          <div class="fs-32">{{ candy ? candy : '0.00' }}</div>
-          <div class="fs-24">￥128.00</div>
+          <div class="fs-32">{{ candy.amount }}</div>
+          <div class="fs-24">{{ candy.rmbAmount }}</div>
         </div>
         <img src="~@/assets/image/arrows_right.png" class="s-12-21 ml-20">
       </div>
@@ -135,12 +137,15 @@ export default {
 
   data() {
     return {
-      total: 0,
-      token: 0,
-      rmb: 0,
-      candy: 0,
-      trx: 0,
-      currentItem: 1,
+      userTotal: "0.00", // 总资产
+      localTotal: "0.00", // 本地钱包
+      token: {}, // 代币
+      rmb: {}, // 人民币
+      candy: {}, // 糖果
+      trx: {}, // trx 资产
+      cloudTrx: {}, // trx 云资产
+      cloudTotal: "0.00", // 云钱包     amount -- 数量    rmbAmount -- 对应人民币数量
+      currentItem: 1, // 1-本地钱包  2-云钱包
       border_ff: "border-4-ff",
       border_00: "border-4-00",
       s_330_130: "s-330-130"
@@ -159,17 +164,20 @@ export default {
       });
       this.$axios({
         method: "get",
-        url: "/blockchain/v1/wallet/queryWalletOverview"
+        url: "/blockchain/v1/wallet/queryWalletOverviewV2"
       })
         .then(response => {
           this.$ui.Indicator.close();
           if (response.data.status) {
             this.data = response.data.data;
-            this.total = response.data.data.total;
+            this.userTotal = response.data.data.userTotal;
+            this.localTotal = response.data.data.localTotal;
             this.token = response.data.data.token;
             this.rmb = response.data.data.rmb;
             this.candy = response.data.data.candy;
             this.trx = response.data.data.trx;
+            this.cloudTrx = response.data.data.cloudTrx;
+            this.cloudTotal = response.data.data.cloudTotal;
           }
         })
         .catch(response => {
@@ -194,13 +202,13 @@ export default {
       }
     },
 
-    onFourTabClick(type) {
-      if (type == 0) {
+    onFourTabClick(tabType) {
+      if (tabType == 0) {
         // 充值
         this.$router.push({
           path: "/Recharge"
         });
-      } else if (type == 1) {
+      } else if (tabType == 1) {
         // 提现
         this.$ui.Indicator.open({
           text: "加载中...",
@@ -247,16 +255,16 @@ export default {
           .catch(response => {
             this.$ui.Indicator.close();
           });
-      } else if (type == 2) {
+      } else if (tabType == 2) {
         // 发红包
         this.$router.push({
           path: "/SendRedPack"
-        })
-      } else if (type == 3) {
+        });
+      } else if (tabType == 3) {
         // 发送中的红包
         this.$router.push({
           path: "/PacketInSend"
-        })
+        });
       }
     },
 
@@ -287,7 +295,7 @@ export default {
           this.$router.push({
             path: "/WalletItemTrx",
             query: {
-              formType: this.currentItem  // 1-本地钱包  2-云钱包
+              formType: this.currentItem // 1-本地钱包  2-云钱包
             }
           });
           break;

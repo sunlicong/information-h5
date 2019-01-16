@@ -85,14 +85,18 @@ export default {
      * 云钱包转入
      */
     onCloudInClick: function(event) {
-      console.log("云钱包转入");
+      this.$router.push({
+        path: "/WalletCloudInOrOut"
+      });
     },
 
     /**
      * 云钱包转出
      */
     onCloudOutClick: function(event) {
-      console.log("云钱包转出");
+      this.$router.push({
+        path: "/WalletCloudInOrOut"
+      });
     },
 
     loadMore() {
@@ -108,7 +112,8 @@ export default {
         method: "get",
         url: "/blockchain/v1/wallet/queryTRXBillList",
         data: {
-          next: this.next
+          next: this.next,
+          walletType: this.formType,  // 1-本地  2-云
         }
       })
         .then(response => {

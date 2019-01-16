@@ -19,8 +19,7 @@
           <img class="arrow" src="~@/assets/image/icon_next.png">
         </div>
       </div>
-    </div> -->
-
+    </div>-->
     <div class="h-220">
       <div class="fs-70 ml-30">{{ '0.00000' }}</div>
       <div class="fs-36">≈￥100</div>
@@ -43,9 +42,17 @@
         </div>
       </div>
     </mu-load-more>
-    <div class="bottom">
+
+    <!-- 本地钱包 -->
+    <div v-if="formType == 1" class="bottom">
       <mt-button class="button1" @click="recharge()">充值</mt-button>
       <mt-button class="button2" @click="withdrawal()">提现</mt-button>
+    </div>
+
+    <!-- 云钱包 -->
+    <div v-if="formType == 2" class="bottom">
+      <mt-button class="button1" @click="onCloudInClick">转入</mt-button>
+      <mt-button class="button2" @click="onCloudOutClick">转出</mt-button>
     </div>
   </div>
 </template>
@@ -59,13 +66,14 @@ export default {
       next: 0,
       num: 0,
       pedingDrawAmount: 0,
-      list: []
+      list: [],
+      formType: this.$route.query.formType // 1-本地钱包  2-云钱包
     };
   },
   mounted() {
-    // if(this.$route.query.formType == 1){
-    //   document.title = "点钻"
-    // }
+    if (this.formType == 2) {
+      document.title = "云钱包TRX";
+    }
     this.$ui.Indicator.open({
       text: "加载中...",
       spinnerType: "snake"
@@ -73,6 +81,20 @@ export default {
     this.requestData();
   },
   methods: {
+    /**
+     * 云钱包转入
+     */
+    onCloudInClick: function(event) {
+      console.log("云钱包转入");
+    },
+
+    /**
+     * 云钱包转出
+     */
+    onCloudOutClick: function(event) {
+      console.log("云钱包转出");
+    },
+
     loadMore() {
       if (this.next == -1) return;
       this.loading = true;
@@ -202,7 +224,7 @@ export default {
         method: "get",
         url: "/blockchain/v1/wxpay/getWithdrawInfo",
         data: {
-          coinName: 'trx'
+          coinName: "trx"
         }
       })
         .then(response => {
@@ -245,7 +267,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
 .h-220 {
   width: 100%;
   height: 220px;
@@ -273,8 +294,6 @@ export default {
   color: white;
   line-height: 50px;
 }
-
-
 
 .top {
   width: 100%;

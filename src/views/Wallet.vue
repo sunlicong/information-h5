@@ -285,7 +285,10 @@ export default {
           break;
         case "trx": // TRX
           this.$router.push({
-            path: "/WalletItemTrx"
+            path: "/WalletItemTrx",
+            query: {
+              formType: this.currentItem  // 1-本地钱包  2-云钱包
+            }
           });
           break;
         default:

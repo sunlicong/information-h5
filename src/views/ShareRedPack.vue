@@ -3,7 +3,7 @@
 		<img  :src="$url(coderUrl)" class="share_img"/>
 		<div class="bottom_btn">
 			<div @click="showShare(true)">分享给好友</div>
-			<div>生成海报</div>
+			<div>长按上图保存图片</div>
 		</div>
 		<mt-popup class="dialog_share_mode_box" v-model="isShowShareMode" position="top">
       		<img @click="showShare(false)" src="~@/assets/image/share_mode_img.png">
@@ -15,7 +15,7 @@ export default {
 	name: "ShareRedPack",
     data() {
         return {
-			redpackId:this.$route.query.redpackId,//服务ID
+			redpackId:this.$route.query.redpackId || 29,//服务ID
 			isShowShareMode: false, //分享弹框
 			height:window.screen.height,
 			coderUrl:'',
@@ -40,13 +40,13 @@ export default {
 					pathUrlChat:link,
 					pathUrlApplet:'/pages/getRedPacket/getRedPacket?redpackId='+this.redpackId
 				},
-			}).then(response => {
-				this.coderUrl=res.data.coderUrl;
+			}).then((response) => {
+				this.coderUrl=response.data.data.coderUrl;
 				this.isStatus = true;
 				this.$ui.Indicator.close();
-			}).catch(response => {
-          
-        	});
+			}).catch((response) => {
+          		this.$ui.Indicator.close();
+			});
 		},
 		showShare(e) {
 			this.isShowShareMode = e;

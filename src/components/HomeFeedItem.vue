@@ -74,8 +74,8 @@ export default {
     display: flex;
     .feed_title {
       flex: 1;
-      line-height: 50px;
-      font-size: 36px;
+      line-height: 48px;
+      font-size: 34px;
       color: #051426;
     }
     img {
@@ -92,8 +92,8 @@ export default {
       margin-top: 30px;
       margin-right: 30px;
       span {
-        line-height: 50px;
-        font-size: 36px;
+        line-height: 48px;
+        font-size: 34px;
         color: #051426;
         padding-top: 7px;
       }
@@ -127,8 +127,10 @@ export default {
   }
 }
 .bottom_tag {
-  height: 78px;
-  line-height: 78px;
+  margin-top: 16px;
+  margin-bottom: 27px;
+  height: 30px;
+  line-height: 30px;
   display: flex;
   font-size: 22px;
   color: #a3aeba;
@@ -137,18 +139,18 @@ export default {
   }
   .shang {
     margin-left: 40px;
-    line-height: 78px;
+    line-height: 30px;
     img {
-      width: 34px;
-      height: 34px;
+      width: 32px;
+      height: 32px;
     }
   }
   .zan{
     margin-left: 40px;
-    line-height: 78px;
+    line-height: 30px;
     img {
-      width: 30px;
-      height: 30px;
+      width: 28px;
+      height: 28px;
     }
   }
 }

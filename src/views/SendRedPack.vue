@@ -29,7 +29,7 @@
         <span>红包个数</span>
       </div>
       <div class="right">
-        <input type="tel" placeholder="0" v-model="redCount">
+        <input type="tel" placeholder="0" maxlength="3" v-model="redCount">
         <span>个</span>
       </div>
     </div>
@@ -49,11 +49,11 @@
     <div class="tab">
       <div class="item">
         <img class="icon" src="~@/assets/image/icon_tab_redpack.png">
-        <div>发红包</div>
+        <div class="colorAC2C38">发红包</div>
       </div>
-      <div class="item">
+      <div class="item" @click="goRecords()">
         <img class="icon" src="~@/assets/image/icon_tab_history.png">
-        <div>红包记录</div>
+        <div class="colorA3AEBA">红包记录</div>
       </div>
     </div>
     <!-- 顶部选择类型 -->
@@ -92,7 +92,10 @@
         <div class="right">
           <img class="icon" :src="walletTypeObj.pic" alt>
           <span>{{currentPayType.assetName}}</span>
-          <span class="type">{{walletTypeObj.name=="local"?"本地钱包":"云钱包"}}</span>
+          <span
+            v-if="currentPayType.type!='RMB'"
+            class="type"
+          >{{walletTypeObj.name=="local"?"本地钱包":"云钱包"}}</span>
           <img class="arrow" src="~@/assets/image/arrows_right.png">
         </div>
       </div>
@@ -129,7 +132,7 @@
         <div class="info">
           <div class="name">
             <span>{{currentPayType.assetName}}</span>
-            <span class="type">{{item.name=="local"?"本地钱包":"云钱包"}}</span>
+            <span v-if="currentPayType.type!='RMB'" class="type">{{item.name=="local"?"本地钱包":"云钱包"}}</span>
           </div>
           <div class="balance">余额：{{item.amount}}TRX</div>
         </div>
@@ -202,16 +205,27 @@ export default {
     /**
      * 校验
      */
-    checkSubmit(){
-        if(this.money<1){
-            that.$ui.Toast("红包总金额不能小于1");
-            return
-        }
-        if(this.redCount<1){
-            that.$ui.Toast("请输入红包个数");
-            return
-        }
-        this.popupPayVisible = true
+    checkSubmit() {
+      if (this.money < 1) {
+        this.$ui.Toast("红包总金额不能小于1");
+        return;
+      }
+      if (this.redCount < 1) {
+        this.$ui.Toast("请输入红包个数");
+        return;
+      }
+      if (this.redCount > 500) {
+        this.$ui.Toast("一次最多可发500个");
+        return;
+      }
+      if (
+        this.currentPayType.type == "RMB" &&
+        this.money / this.redCount < 0.01
+      ) {
+        this.$ui.Toast("单个红包不金额不可低于0.01元");
+        return;
+      }
+      this.popupPayVisible = true;
     },
     /**
      * 选择资产
@@ -255,7 +269,7 @@ export default {
         data: {
           amount: this.money,
           count: this.redCount,
-          description: this.description,
+          description: this.description || "恭喜发财，大吉大利！",
           type: this.redType + 1, //红包类型 1 拼手气 2普通
           assetType: assetType,
           walletType: this.walletTypeObj.name == "local" ? 1 : 2
@@ -266,9 +280,9 @@ export default {
           if (response.data.status) {
             //1:TRX  2微信支付
             if (response.data.data.payChannel == 1) {
-                that.$ui.Toast("支付成功");
+              this.shareRedPack(response.data.data.redPacketId);
             } else if (response.data.data.payChannel == 2) {
-                this.onBridgeReady(response.data.data)
+              this.onBridgeReady(response.data.data);
             }
           }
         })
@@ -295,11 +309,27 @@ export default {
           if (res.err_msg == "get_brand_wcpay_request:ok") {
             // 使用以上方式判断前端返回,微信团队郑重提示：
             //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
-            that.$ui.Toast("支付成功");
-
+            that.shareRedPack(data.redPacketId);
           }
         }
       );
+    },
+    /**
+     * 成功后进分享
+     */
+    shareRedPack(id) {
+      this.$router.push({
+        path: "/ShareRedPack",
+        query: { redpackId: id }
+      });
+    },
+    /**
+     * 红包记录
+     */
+    goRecords() {
+      this.$router.push({
+        path: "/RedPacketRecords"
+      });
     }
   }
 };
@@ -316,6 +346,12 @@ export default {
 }
 .marginT50 {
   margin-top: 50px;
+}
+.colorAC2C38 {
+  color: #ac2c38;
+}
+.colorA3AEBA {
+  color: #a3aeba;
 }
 .height98 {
   margin-left: 30px;
@@ -439,12 +475,6 @@ export default {
     .icon {
       width: 75px;
       height: 75px;
-    }
-    .colorAC2C38 {
-      color: #ac2c38;
-    }
-    .color051426 {
-      color: #051426;
     }
   }
 }

@@ -22,6 +22,10 @@ body{
     user-select:none;
 
 }
+#app{
+    width: 100%;
+    overflow: hidden;
+}
 input,
 select,
 textarea{

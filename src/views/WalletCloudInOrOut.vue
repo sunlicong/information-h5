@@ -70,27 +70,51 @@ export default {
      */
     onCloudInClick: function(event) {
       if (this.money) {
-        this.$ui.Indicator.open({
-          text: "正在转入",
-          spinnerType: "snake"
-        });
+        if (Number(this.money) > Number(this.cloudTrx)) {
+          this.$ui.Toast({
+            message: "可转入余额不足",
+            position: "middle",
+            duration: 1500
+          });
+        } else if (Number(this.money) == 0) {
+          this.$ui.Toast({
+            message: "请输入大于 0 的金额",
+            position: "middle",
+            duration: 1500
+          });
+        } else {
+          this.$ui.Indicator.open({
+            text: "正在转入",
+            spinnerType: "snake"
+          });
 
-        this.$axios({
-          method: "get",
-          url: "/blockchain/v1/wallet/transferCloudWallet",
-          data: {
-            amount: this.money
-          }
-        })
-          .then(response => {
-            this.$ui.Indicator.close();
-            if (response.data.status) {
-              // this.cloudTrx = response.data.data.cloudTrx.amount;
+          this.$axios({
+            method: "get",
+            url: "/blockchain/v1/wallet/transferCloudWallet",
+            data: {
+              amount: this.money
             }
           })
-          .catch(response => {
-            this.$ui.Indicator.close();
-          });
+            .then(response => {
+              this.$ui.Indicator.close();
+              // 成功转入
+              if (response.data.status) {
+                this.$ui.Toast({
+                  message: "已发起转入请求",
+                  position: "middle",
+                  duration: 1500
+                });
+              } else if (response.data.code == 30117) {
+                this.$ui.MessageBox({
+                  title: "转入云钱包",
+                  message: "本地钱包 TRX 余额不足本次手续费，请修改转入金额"
+                });
+              }
+            })
+            .catch(response => {
+              this.$ui.Indicator.close();
+            });
+        }
       } else {
         this.$ui.Toast({
           message: "请输入转入金额",
@@ -103,7 +127,61 @@ export default {
     /**
      * 转出到本地钱包
      */
-    onCloudOutClick: function(event) {},
+    onCloudOutClick: function(event) {
+      if (this.money) {
+        if (Number(this.money) > Number(this.cloudTrx)) {
+          this.$ui.Toast({
+            message: "可转出余额不足",
+            position: "middle",
+            duration: 1500
+          });
+        } else if (Number(this.money) == 0) {
+          this.$ui.Toast({
+            message: "请输入大于 0 的金额",
+            position: "middle",
+            duration: 1500
+          });
+        } else {
+          this.$ui.Indicator.open({
+            text: "正在转出",
+            spinnerType: "snake"
+          });
+
+          this.$axios({
+            method: "get",
+            url: "/blockchain/v1/wallet/transferLocalWallet",
+            data: {
+              amount: this.money
+            }
+          })
+            .then(response => {
+              this.$ui.Indicator.close();
+              // 成功转出
+              if (response.data.status) {
+                this.$ui.Toast({
+                  message: "已发起转出请求",
+                  position: "middle",
+                  duration: 1500
+                });
+              } else if (response.data.code == 30117) {
+                this.$ui.MessageBox({
+                  title: "云钱包转出",
+                  message: "云钱包 TRX 余额不足本次手续费，请修改转出金额"
+                });
+              }
+            })
+            .catch(response => {
+              this.$ui.Indicator.close();
+            });
+        }
+      } else {
+        this.$ui.Toast({
+          message: "请输入转出金额",
+          position: "middle",
+          duration: 1500
+        });
+      }
+    },
 
     /**
      * 获取trx明细

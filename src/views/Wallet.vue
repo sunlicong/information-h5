@@ -144,7 +144,7 @@ export default {
       candy: {}, // 糖果
       trx: {}, // trx 资产
       cloudTrx: {}, // trx 云资产
-      cloudTotal: "0.00", // 云钱包     amount -- 数量    rmbAmount -- 对应人民币数量
+      cloudTotal: {"rmbAmount" : "￥0.00"}, // 云钱包     amount -- 数量    rmbAmount -- 对应人民币数量
       currentItem: 1, // 1-本地钱包  2-云钱包
       border_ff: "border-4-ff",
       border_00: "border-4-00",

@@ -16,11 +16,11 @@
             <div class="hint" v-if="message.status==1">已存入云钱包，可直接提现</div>
             <div class="hint" v-if="message.status==2&&message.sendUser">未领取的红包，已返还至云钱包</div>
             <div class="bottom">
-                <div @click="transmit('/WalletItemTrx')">
+                <div @click="transmit('WalletItemTrx')">
                     <img src="~@/assets/image/bottom_packet1.png" class="bottom_packet1"/>
                     <span>去提现</span>
                 </div>
-                <div @click="transmit('/SendRedPack')">
+                <div @click="transmit('SendRedPack')">
                     <img src="~@/assets/image/bottom_packet2.png" class="bottom_packet2"/>
                     <span>去发红包</span>
                 </div>
@@ -89,9 +89,7 @@ export default {
             if(url == 'ShareRedPack'){
                 window.location.href =  location.protocol + "//" + window.location.host+"/dayu/ShareRedPack?redpackId="+this.redpackId
             }else{
-                this.$router.push({
-                    path: url
-                });
+                window.location.href =  location.protocol + "//" + window.location.host+"/dayu/"+url
             }
             
         },

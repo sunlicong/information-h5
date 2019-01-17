@@ -206,10 +206,10 @@ export default {
      * 校验
      */
     checkSubmit() {
-      if (this.money < 1) {
-        this.$ui.Toast("红包总金额不能小于1");
-        return;
-      }
+      // if (this.money < 1) {
+      //   this.$ui.Toast("红包总金额不能小于1");
+      //   return;
+      // }
       if (this.redCount < 1) {
         this.$ui.Toast("请输入红包个数");
         return;

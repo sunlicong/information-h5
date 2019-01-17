@@ -337,10 +337,7 @@ export default {
      * 成功后进分享
      */
     shareRedPack(id) {
-      this.$router.push({
-        path: "/ShareRedPack",
-        query: { redpackId: id }
-      });
+       window.location.href =  location.protocol + "//" + window.location.host+"/dayu/ShareRedPack?redpackId="+id;
     },
     /**
      * 红包记录

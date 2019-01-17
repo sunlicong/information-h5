@@ -1,5 +1,5 @@
 <template>
-    <div class="ShareRedPack" v-if="isStatus">
+    <div class="ShareRedPack" v-if="isStatus" :style="{'height':height+'px'}">
 		<img  :src="$url(coderUrl)" class="share_img"/>
 		<div class="bottom_btn">
 			<div @click="showShare(true)">分享给好友</div>

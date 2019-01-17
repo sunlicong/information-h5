@@ -282,7 +282,26 @@ export default {
             if (response.data.data.payChannel == 1) {
               this.shareRedPack(response.data.data.redPacketId);
             } else if (response.data.data.payChannel == 2) {
-              this.onBridgeReady(response.data.data);
+              if (typeof WeixinJSBridge == "undefined") {
+                if (document.addEventListener) {
+                  document.addEventListener(
+                    "WeixinJSBridgeReady",
+                    () => {
+                      this.onBridgeReady(response.data.data);
+                    },
+                    false
+                  );
+                } else if (document.attachEvent) {
+                  document.attachEvent("WeixinJSBridgeReady", () => {
+                    this.onBridgeReady(response.data.data);
+                  });
+                  document.attachEvent("onWeixinJSBridgeReady", () => {
+                    this.onBridgeReady(response.data.data);
+                  });
+                }
+              } else {
+                this.onBridgeReady(response.data.data);
+              }
             }
           }
         })

@@ -48,10 +48,8 @@
                     <div class="info">
                         <div class="top">
                             <span>{{item.nick}}<b v-if="item.type === 1">拼</b></span>
-                            <span v-if="item.assetType === 1">{{item.amount}}糖果</span>
+                            <span v-if="item.assetType === 1">{{item.amount}}TRX</span>
                             <span v-if="item.assetType === 2">{{item.amount}}元</span>
-                            <span v-if="item.assetType === 3">{{item.amount}}点钻</span>
-                            <span v-if="item.assetType === 4">{{item.amount}}TRX</span>
                         </div>
                         <div class="bottom">
                             <span>{{item.createTime.slice(11,19)}}</span>
@@ -66,10 +64,8 @@
                     <div class="top">
                         <span v-if="item.type === 1">拼手气红包</span>
                         <span v-if="item.type === 2">普通红包</span>
-                        <span v-if="item.assetType === 1">{{item.amount}}糖果</span>
+                        <span v-if="item.assetType === 1">{{item.amount}}TRX</span>
                         <span v-if="item.assetType === 2">{{item.amount}}元</span>
-                        <span v-if="item.assetType === 3">{{item.amount}}点钻</span>
-                        <span v-if="item.assetType === 4">{{item.amount}}TRX</span>
                     </div>
                     <div class="bottom">
                         <span>{{item.createTime.slice(11,19)}}</span>

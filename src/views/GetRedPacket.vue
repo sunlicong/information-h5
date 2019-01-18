@@ -46,7 +46,11 @@
                     <div class="center_bottom">{{$formatDate(item.receivingTime/1000,3)}}</div>
                 </div>
                 <div class="right">
-                    <div>{{item.amount}}</div>
+                    <div>
+                        {{item.amount}}
+                        <span v-if="item.assetType==2">元</span>
+                        <span v-if="item.assetType==1">TRX</span>
+                    </div>
                     <div v-if="item.best==1">手气最佳</div>
                 </div>
             </li>

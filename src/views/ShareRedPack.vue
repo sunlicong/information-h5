@@ -57,14 +57,14 @@ export default {
 				this.isStatus = true;
 				this.$ui.Indicator.close();
 				if(response.data.data.type ==1){
-					var title = this.$store.state.user.nick +'发了一个拼手气红.包，由波场区块链生成，公平公正';
+					var title = this.$store.state.user.nick +'发了一个拼手气红 包，由波场区块链生成，公平公正';
 				}else{
-					var title = this.$store.state.user.nick +'发了一个红.包';
+					var title = this.$store.state.user.nick +'发了一个红 包';
 				}
 				if(response.data.data.assetType ==1){
-					var desc = response.data.data.description || '恭喜发财，大吉大利！'
+					var desc = '来大鱼，用微信收发TRX红 包，无手续费，0秒到账！马上支持更多币种！'
 				}else{
-					var desc = response.data.data.description || '恭喜发财，大吉大利！'
+					var desc = '来大鱼，发一个区块链生成的拼手气红 包，公平公正！'
 				}
 				this.$weChat.init({
 					link:window.location.href,

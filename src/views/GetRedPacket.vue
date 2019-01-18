@@ -55,7 +55,7 @@
             <div class="title">区块信息</div>
             <div @click="copy()">
                 <span class="key">交易ID：</span>
-                <span class="value">{{message.txId}}</span>
+                <span class="value">{{txId}}</span>
                 <img src="~@/assets/image/copy.png" class="copy"/>
             </div>
             <div>
@@ -74,7 +74,8 @@ export default {
             redpackId:this.$route.query.redpackId || 60,
             message:{},
             list:[],
-            isStatus:false
+            isStatus:false,
+            txId:''
         }
     },
     mounted() {
@@ -110,6 +111,10 @@ export default {
                 this.$ui.Indicator.close();
                 this.getRedpackList();
                 this.isStatus = true;
+                var data = response.data.data
+                var txId = data.txId.slice(0,6) + '...'+data.txId.slice(data.txId.length-6,data.txId.length);
+                this.txId = txId
+
 			}).catch((response) => {
                 this.$ui.Indicator.close();
                 this.getRedpackList();

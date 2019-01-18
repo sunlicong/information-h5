@@ -1,28 +1,8 @@
 <template>
   <div>
-    <!-- <div class="top">
-      <img src="~@/assets/image/bg_wallet.png" class="top_bg">
-      <div class="top_content">
-        <div class="balance one_line">
-          <div>{{$formatMoney(num,1)}}</div>
-          <span class="yuan">TRX</span>
-        </div>
-      </div>
-      <div class="top_bottom" @click="goBonus()">
-        <div class="left">
-          <div class="margin-left-20">待提取分红</div>
-        </div>
-        <div class="right">
-          <div class="right_text">
-            <div class="balance_num">{{$formatMoney(pedingDrawAmount,1)}}TRX</div>
-          </div>
-          <img class="arrow" src="~@/assets/image/icon_next.png">
-        </div>
-      </div>
-    </div>-->
     <div class="h-220">
-      <div class="fs-70 ml-30">{{ num }}</div>
-      <div class="fs-36">≈￥{{ rmbTotalAmount }}</div>
+      <div class="fs-70 ml-30">{{ $formatMoney(num,2) }}</div>
+      <div class="fs-36">≈￥{{ $formatMoney(rmbTotalAmount,1) }}</div>
     </div>
 
     <div v-if="list.length==0" class="non">
@@ -65,9 +45,9 @@ export default {
     return {
       loading: false,
       next: 0,
-      num: 0, // trx 资产总额
-      pedingDrawAmount: 0, // 待提取的人民币收益
-      rmbTotalAmount: 0, // 人民币余额
+      num: '0.00000', // trx 资产总额
+      // pedingDrawAmount: 0, // 待提取的人民币收益
+      rmbTotalAmount: '0.00', // 人民币余额
       list: [],
       formType: this.$route.query.formType // 1-本地钱包  2-云钱包
     };
@@ -132,7 +112,7 @@ export default {
           if (response.data.status) {
             this.list = this.list.concat(response.data.data.data);
             this.num = response.data.data.totalAmount;
-            this.pedingDrawAmount = response.data.data.pedingDrawAmount;
+            // this.pedingDrawAmount = response.data.data.pedingDrawAmount;
             this.rmbTotalAmount = response.data.data.rmbTotalAmount;
             this.next = response.data.data.next;
           }

@@ -11,7 +11,7 @@
     </div>-->
     <div class="h-220">
       <div class="h-98">
-        <div class="fs-70">{{ num ? num : '0.00' }}</div>
+        <div class="fs-70">{{ formType == 1 ? $formatMoney(num,2) : $formatMoney(num,1) }}</div>
         <div class="fs-36-m ml-10">{{ formType == 1 ? 'Fcoin' : '元' }}</div>
       </div>
       <div v-if="formType == 2" class="h-50"></div>

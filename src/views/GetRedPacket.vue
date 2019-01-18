@@ -16,7 +16,7 @@
             <div class="hint" v-if="message.status==1">已存入云钱包，可直接提现</div>
             <div class="hint" v-if="message.status==2&&message.sendUser">未领取的红包，已返还至云钱包</div>
             <div class="bottom">
-                <div @click="transmit('WalletItemTrx')">
+                <div @click="transmit('Wallet')">
                     <img src="~@/assets/image/bottom_packet1.png" class="bottom_packet1"/>
                     <span>去提现</span>
                 </div>

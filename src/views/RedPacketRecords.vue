@@ -43,7 +43,7 @@
         </div>
         <div class="get_list" v-if="type === 'get'">
             <ul>
-                <li v-for="(item,index) in getList.recordDetailVoList" :key="index">
+                <li v-for="item in getList.recordDetailVoList" @click="goDetail(item.redpackId)" :key="item.redpackId">
                     <img class="userAvantar" :src="item.photo" alt="">
                     <div class="info">
                         <div class="top">
@@ -60,7 +60,7 @@
         </div>
         <div class="send_list" v-if="type === 'send'">
             <ul>
-                <li v-for="(item, index) in sendList.recordDetailVoList" :key="index">
+                <li v-for="item in sendList.recordDetailVoList" @click="goDetail(item.redpackId)" :key="item.redpackId">
                     <div class="top">
                         <span v-if="item.type === 1">拼手气红包</span>
                         <span v-if="item.type === 2">普通红包</span>
@@ -121,6 +121,9 @@ export default {
         changeType (type) {
             this.type = type
             this.getUser()
+        },
+        goDetail (id) {
+            this.$router.push({path: '/GetRedPacket', query: {redpackId: id}});
         }
     }
 }

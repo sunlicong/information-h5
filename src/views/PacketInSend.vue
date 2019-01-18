@@ -1,7 +1,7 @@
 <template>
     <div class="PacketInSend">
         <ul>
-            <li v-for="(item,index) in packetList" :key="index">
+            <li v-for="item in packetList" @click="goDetail(item.redpackId)" :key="item.redpackId">
                 <div class="top">
                     <span v-if="item.type === 1">拼手气红包</span>
                     <span v-if="item.type === 2">普通红包</span>
@@ -38,6 +38,9 @@ export default {
                 console.log(res.data.data)
                 this.packetList = res.data.data
             })
+        },
+        goDetail (id) {
+            this.$router.push({path: '/GetRedPacket', query: {redpackId: id}});
         }
     }
 }

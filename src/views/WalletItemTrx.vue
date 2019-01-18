@@ -1,28 +1,8 @@
 <template>
   <div>
-    <!-- <div class="top">
-      <img src="~@/assets/image/bg_wallet.png" class="top_bg">
-      <div class="top_content">
-        <div class="balance one_line">
-          <div>{{$formatMoney(num,1)}}</div>
-          <span class="yuan">TRX</span>
-        </div>
-      </div>
-      <div class="top_bottom" @click="goBonus()">
-        <div class="left">
-          <div class="margin-left-20">待提取分红</div>
-        </div>
-        <div class="right">
-          <div class="right_text">
-            <div class="balance_num">{{$formatMoney(pedingDrawAmount,1)}}TRX</div>
-          </div>
-          <img class="arrow" src="~@/assets/image/icon_next.png">
-        </div>
-      </div>
-    </div>-->
     <div class="h-220">
-      <div class="fs-70 ml-30">{{ '0.00000' }}</div>
-      <div class="fs-36">≈￥100</div>
+      <div class="fs-70 ml-30">{{ $formatMoney(num,2) }}</div>
+      <div class="fs-36">≈￥{{ $formatMoney(rmbTotalAmount,1) }}</div>
     </div>
 
     <div v-if="list.length==0" class="non">
@@ -38,7 +18,7 @@
         <div class="right">
           <div
             class="num"
-          >{{item.type==2||item.type==5||item.type==18||item.type==20||item.type==21||item.type==22||item.type==24?'-':'+'}}{{item.count}}TRX</div>
+          >{{item.type==2||item.type==5||item.type==18||item.type==20||item.type==21||item.type==22||item.type==24||item.type==28||(formType==1&&item.type==32)||(formType==2&&item.type==31)?'-':'+'}}{{item.count}}TRX</div>
         </div>
       </div>
     </mu-load-more>
@@ -60,16 +40,19 @@
 <script>
 export default {
   name: "WalletItemTrx",
+
   data() {
     return {
       loading: false,
       next: 0,
-      num: 0,
-      pedingDrawAmount: 0,
+      num: '0.00000', // trx 资产总额
+      // pedingDrawAmount: 0, // 待提取的人民币收益
+      rmbTotalAmount: '0.00', // 人民币余额
       list: [],
       formType: this.$route.query.formType // 1-本地钱包  2-云钱包
     };
   },
+
   mounted() {
     if (this.formType == 2) {
       document.title = "云钱包TRX";
@@ -80,13 +63,17 @@ export default {
     });
     this.requestData();
   },
+
   methods: {
     /**
-     * 云钱包转入
+     * 转入云钱包
      */
     onCloudInClick: function(event) {
       this.$router.push({
-        path: "/WalletCloudInOrOut"
+        path: "/WalletCloudInOrOut",
+        query: {
+          cloudType: 1
+        }
       });
     },
 
@@ -95,7 +82,10 @@ export default {
      */
     onCloudOutClick: function(event) {
       this.$router.push({
-        path: "/WalletCloudInOrOut"
+        path: "/WalletCloudInOrOut",
+        query: {
+          cloudType: 2
+        }
       });
     },
 
@@ -113,7 +103,7 @@ export default {
         url: "/blockchain/v1/wallet/queryTRXBillList",
         data: {
           next: this.next,
-          walletType: this.formType,  // 1-本地  2-云
+          walletType: this.formType // 1-本地  2-云
         }
       })
         .then(response => {
@@ -122,7 +112,8 @@ export default {
           if (response.data.status) {
             this.list = this.list.concat(response.data.data.data);
             this.num = response.data.data.totalAmount;
-            this.pedingDrawAmount = response.data.data.pedingDrawAmount;
+            // this.pedingDrawAmount = response.data.data.pedingDrawAmount;
+            this.rmbTotalAmount = response.data.data.rmbTotalAmount;
             this.next = response.data.data.next;
           }
         })
@@ -205,6 +196,21 @@ export default {
         case 22:
         case 24:
           name = "购买糖果卡";
+          break;
+        case 28:
+          name = "发红包";
+          break;
+        case 29:
+          name = "领红包";
+          break;
+        case 30:
+          name = "红包退还";
+          break;
+        case 31:
+          name = "云钱包转出";
+          break;
+        case 32:
+          name = "转入云钱包";
           break;
       }
       return name;

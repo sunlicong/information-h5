@@ -294,6 +294,7 @@ router.beforeEach((to, from, next) => {
         document.title = to.meta.pageTitle
     }
     if (!viewPort().isWeixin || viewPort().isMiniprogram) {
+        setCookie('_token', to.query.token || '')
         next()
     } else if (!getCookie('_token') && to.path != '/Author') {
         setCookie('inviter', to.query.inviter || '')

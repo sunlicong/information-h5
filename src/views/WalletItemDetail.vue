@@ -8,15 +8,14 @@
           <span class="yuan">{{formType==1?'点钻':'元'}}</span>
         </div>
       </div>
-    </div> -->
-
+    </div>-->
     <div class="h-220">
       <div class="h-98">
-        <div class="fs-70">{{ num ? num : '0.00' }}</div>
+        <div class="fs-70">{{ formType == 1 ? $formatMoney(num,2) : $formatMoney(num,1) }}</div>
         <div class="fs-36-m ml-10">{{ formType == 1 ? 'Fcoin' : '元' }}</div>
       </div>
       <div v-if="formType == 2" class="h-50"></div>
-      <div v-else class="fs-36">≈￥100</div>
+      <div v-else-if="formType == 1" class="fs-36">~</div>
     </div>
 
     <div v-if="list.length==0" class="non">
@@ -32,7 +31,7 @@
         <div class="right">
           <div
             class="num"
-          >{{item.type==2||item.type==5||item.type==18||item.type==20||item.type==21||item.type==22||item.type==24?'-':'+'}}{{item.count}}{{formType==1?'点钻':'元'}}</div>
+          >{{item.type==2||item.type==5||item.type==18||item.type==20||item.type==21||item.type==22||item.type==24||item.type==28?'-':'+'}}{{item.count}}{{formType==1?'点钻':'元'}}</div>
         </div>
       </div>
     </mu-load-more>
@@ -57,13 +56,13 @@ export default {
     };
   },
   mounted() {
-    if(this.$route.query.formType == 1){
-      document.title = "点钻"
+    if (this.$route.query.formType == 1) {
+      document.title = "点钻";
     }
     this.$ui.Indicator.open({
-        text: "加载中...",
-        spinnerType: "snake"
-      });
+      text: "加载中...",
+      spinnerType: "snake"
+    });
     this.requestData();
   },
   methods: {
@@ -92,7 +91,7 @@ export default {
           this.$ui.Indicator.close();
           if (response.data.status) {
             this.list = this.list.concat(response.data.data.data);
-            this.num = response.data.data.totalAmount
+            this.num = response.data.data.totalAmount;
             this.next = response.data.data.next;
           }
         })
@@ -168,6 +167,15 @@ export default {
         case 24:
           name = "购买糖果卡";
           break;
+        case 28:
+          name = "发红包";
+          break;
+        case 29:
+          name = "领红包";
+          break;
+        case 30:
+          name = "红包退还";
+          break;
       }
       return name;
     }
@@ -176,7 +184,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
 .ml-10 {
   margin-left: 10px;
 }
@@ -240,8 +247,6 @@ export default {
   left: 0;
   background-color: #d2d2d2;
 }
-
-
 
 .top {
   width: 100%;

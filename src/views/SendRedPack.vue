@@ -64,7 +64,8 @@
         <div class="cloud">云钱包</div>
       </div>
       <div class="item" v-for="item in list" @click="selectAsset(item)">
-        <div class="name">{{item.assetName}}</div>
+        <div v-if="currentPayType.type=='TRX'" class="name">TRX</div>
+        <div v-if="currentPayType.type=='RMB'" class="name">人民币</div>
         <div class="local">{{item.localAmount}}</div>
         <div class="cloud">{{item.cloudAmount}}</div>
       </div>
@@ -206,10 +207,10 @@ export default {
      * 校验
      */
     checkSubmit() {
-      if (this.money < 1) {
-        this.$ui.Toast("红包总金额不能小于1");
-        return;
-      }
+      // if (this.money < 1) {
+      //   this.$ui.Toast("红包总金额不能小于1");
+      //   return;
+      // }
       if (this.redCount < 1) {
         this.$ui.Toast("请输入红包个数");
         return;
@@ -282,7 +283,26 @@ export default {
             if (response.data.data.payChannel == 1) {
               this.shareRedPack(response.data.data.redPacketId);
             } else if (response.data.data.payChannel == 2) {
-              this.onBridgeReady(response.data.data);
+              if (typeof WeixinJSBridge == "undefined") {
+                if (document.addEventListener) {
+                  document.addEventListener(
+                    "WeixinJSBridgeReady",
+                    () => {
+                      this.onBridgeReady(response.data.data);
+                    },
+                    false
+                  );
+                } else if (document.attachEvent) {
+                  document.attachEvent("WeixinJSBridgeReady", () => {
+                    this.onBridgeReady(response.data.data);
+                  });
+                  document.attachEvent("onWeixinJSBridgeReady", () => {
+                    this.onBridgeReady(response.data.data);
+                  });
+                }
+              } else {
+                this.onBridgeReady(response.data.data);
+              }
             }
           }
         })
@@ -318,10 +338,7 @@ export default {
      * 成功后进分享
      */
     shareRedPack(id) {
-      this.$router.push({
-        path: "/ShareRedPack",
-        query: { redpackId: id }
-      });
+       window.location.href =  location.protocol + "//" + window.location.host+"/dayu/ShareRedPack?redpackId="+id;
     },
     /**
      * 红包记录

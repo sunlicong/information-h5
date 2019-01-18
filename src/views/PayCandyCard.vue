@@ -317,20 +317,22 @@ export default {
           this.$ui.Indicator.close();
           this.popupPayVisible = false;
           if (response.data.status) {
-            // if (typeof WeixinJSBridge == "undefined") {
-            //   if (document.addEventListener) {
-            //     document.addEventListener(
-            //       "WeixinJSBridgeReady",
-            //       onBridgeReady,
-            //       false
-            //     );
-            //   } else if (document.attachEvent) {
-            //     document.attachEvent("WeixinJSBridgeReady", onBridgeReady);
-            //     document.attachEvent("onWeixinJSBridgeReady", onBridgeReady);
-            //   }
-            // } else {
+            if (typeof WeixinJSBridge == "undefined") {
+              if (document.addEventListener) {
+                document.addEventListener(
+                  "WeixinJSBridgeReady",
+                  ()=>{
+                    this.onBridgeReady(response.data.data);
+                  },
+                  false
+                );
+              } else if (document.attachEvent) {
+                document.attachEvent("WeixinJSBridgeReady", onBridgeReady);
+                document.attachEvent("onWeixinJSBridgeReady", onBridgeReady);
+              }
+            } else {
               this.onBridgeReady(response.data.data);
-            // }
+            }
           }
         })
         .catch(response => {

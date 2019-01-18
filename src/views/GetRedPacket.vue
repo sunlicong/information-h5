@@ -9,24 +9,22 @@
             <div class="packet_text">{{message.description}}</div>
             <div class="money"  v-if="message.status==1">
                 <span>{{message.giveOutAmount}}</span>
-                <span v-if="message.assetType==1">糖果</span>
                 <span v-if="message.assetType==2">元</span>
-                <span v-if="message.assetType==3">点钻</span>
-                <span v-if="message.assetType==4">TRX</span>
+                <span v-if="message.assetType==1">TRX</span>
             </div>
             <div class="run_out" v-if="message.status==2||message.status==3">{{message.receive}}</div>
             <div class="hint" v-if="message.status==1">已存入云钱包，可直接提现</div>
             <div class="hint" v-if="message.status==2&&message.sendUser">未领取的红包，已返还至云钱包</div>
             <div class="bottom">
-                <div @click="transmit('/WalletItemTrx')">
+                <div @click="transmit('WalletItemTrx')">
                     <img src="~@/assets/image/bottom_packet1.png" class="bottom_packet1"/>
                     <span>去提现</span>
                 </div>
-                <div @click="transmit('/SendRedPack')">
+                <div @click="transmit('SendRedPack')">
                     <img src="~@/assets/image/bottom_packet2.png" class="bottom_packet2"/>
                     <span>去发红包</span>
                 </div>
-                <div @click="transmit('/ShareRedPack?redpackId='+redpackId)" v-if="message.sendUser">
+                <div @click="transmit('ShareRedPack')" v-if="message.sendUser">
                     <img src="~@/assets/image/bottom_packet3.png" class="bottom_packet3"/>
                     <span>继续转发</span>
                 </div>
@@ -34,10 +32,8 @@
         </div>
         <div class="draw">
             已领取{{message.receiveCount}}/{{message.count}}个，共<span class="span">{{message.amount}}</span>
-            <span v-if="message.assetType==1">糖果</span>
             <span v-if="message.assetType==2">元</span>
-            <span v-if="message.assetType==3">点钻</span>
-            <span v-if="message.assetType==4">TRX</span>
+            <span v-if="message.assetType==1">TRX</span>
         </div>
         <ul class="packet">
             <li v-for="(item,index) in list" :key="index" v-if="message.type==1">
@@ -90,9 +86,12 @@ export default {
 	},
     methods:{
         transmit(url){
-            this.$router.push({
-                path: url
-            });
+            if(url == 'ShareRedPack'){
+                window.location.href =  location.protocol + "//" + window.location.host+"/dayu/ShareRedPack?redpackId="+this.redpackId
+            }else{
+                window.location.href =  location.protocol + "//" + window.location.host+"/dayu/"+url
+            }
+            
         },
         copy(){
             this.$copyText(this.message.txId);

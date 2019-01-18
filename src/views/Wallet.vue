@@ -128,6 +128,8 @@
         <img src="~@/assets/image/arrows_right.png" class="s-12-21 ml-20">
       </div>
     </div>
+
+    <div class="h-120-no"></div>
   </div>
 </template>
 
@@ -144,7 +146,7 @@ export default {
       candy: {}, // 糖果
       trx: {}, // trx 资产
       cloudTrx: {}, // trx 云资产
-      cloudTotal: "0.00", // 云钱包     amount -- 数量    rmbAmount -- 对应人民币数量
+      cloudTotal: {"rmbAmount" : "￥0.00"}, // 云钱包     amount -- 数量    rmbAmount -- 对应人民币数量
       currentItem: 1, // 1-本地钱包  2-云钱包
       border_ff: "border-4-ff",
       border_00: "border-4-00",
@@ -525,5 +527,11 @@ export default {
 .s-12-21 {
   width: 12px;
   height: 21px;
+}
+
+.h-120-no {
+  width: 100%;
+  height: 120px;
+  background: transparent;
 }
 </style>

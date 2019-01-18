@@ -128,6 +128,8 @@
         <img src="~@/assets/image/arrows_right.png" class="s-12-21 ml-20">
       </div>
     </div>
+
+    <div class="h-120-no"></div>
   </div>
 </template>
 
@@ -525,5 +527,11 @@ export default {
 .s-12-21 {
   width: 12px;
   height: 21px;
+}
+
+.h-120-no {
+  width: 100%;
+  height: 120px;
+  background: transparent;
 }
 </style>

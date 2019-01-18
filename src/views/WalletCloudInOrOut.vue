@@ -72,7 +72,7 @@ export default {
      */
     onCloudInClick: function(event) {
       if (this.money) {
-        if (Number(this.money) > Number(this.cloudTrx)) {
+        if (Number(this.money) > Number(this.trx)) {
           this.$ui.Toast({
             message: "可转入余额不足",
             position: "middle",

@@ -64,8 +64,8 @@
         <div class="cloud">云钱包</div>
       </div>
       <div class="item" v-for="item in list" @click="selectAsset(item)">
-        <div v-if="currentPayType.type=='TRX'" class="name">TRX</div>
-        <div v-if="currentPayType.type=='RMB'" class="name">人民币</div>
+        <div v-if="item.type=='TRX'" class="name">TRX</div>
+        <div v-if="item.type=='RMB'" class="name">人民币</div>
         <div class="local">{{item.localAmount}}</div>
         <div class="cloud">{{item.cloudAmount}}</div>
       </div>

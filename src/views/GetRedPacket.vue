@@ -8,7 +8,7 @@
             </div>
             <div class="packet_text">{{message.description}}</div>
             <div class="money"  v-if="message.status==1">
-                <span>{{message.receive}}</span>
+                <span>{{message.receiving}}</span>
                 <span v-if="message.assetType==2">元</span>
                 <span v-if="message.assetType==1">TRX</span>
             </div>

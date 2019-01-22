@@ -17,11 +17,11 @@
             </div>
             <ul class="money">
                 <li class="trx">
-                    <strong>{{getList.tRXAmountSum}}</strong>
+                    <strong>{{tRXAmountSum}}</strong>
                     <b>TRX</b>
                 </li>
                 <li class="rmb">
-                    <strong>{{getList.amountSum}}</strong>
+                    <strong>{{amountSum}}</strong>
                     <b>元</b>
                 </li>
             </ul>
@@ -84,7 +84,9 @@ export default {
         return {
             type: 'get',
             getList: '',
-            sendList: ''
+            sendList: '',
+            tRXAmountSum: '',
+            amountSum: ''
         }
     },
     mounted () {
@@ -104,8 +106,9 @@ export default {
                 method: 'get'
             })
             .then(res => {
-                console.log(res.data.data)
                 this.getList = res.data.data
+                this.amountSum = res.data.data.amountSum
+                this.tRXAmountSum = res.data.data.tRXAmountSum
             })
         },
         sendPacketList () {
@@ -114,8 +117,9 @@ export default {
                 method: 'get'
             })
             .then(res => {
-                console.log(res.data.data)
                 this.sendList = res.data.data
+                this.amountSum = res.data.data.amountSum
+                this.tRXAmountSum = res.data.data.tRXAmountSum
             })
         },
         changeType (type) {

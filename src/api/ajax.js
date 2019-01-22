@@ -51,7 +51,7 @@ axios.interceptors.response.use(
                         })
                         .then(action => {})
                 }
-            } else if (response.data.code != 30101 && response.data.code != 30105 && response.data.code != 50003 && response.data.code != 30117 && response.data.code != 30120) {
+            } else if (response.data.code != 30101 && response.data.code != 30105 && response.data.code != 50003 && response.data.code != 30117 && response.data.code != 30118 && response.data.code != 30120) {
                 Toast(response.data.msg)
             }
         }

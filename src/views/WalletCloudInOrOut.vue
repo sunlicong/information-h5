@@ -29,8 +29,8 @@
     <div class="h-130 mt-2">
       <div v-if="cloudType == 1" class="fs-22">可转入金额：{{trx}} TRX</div>
       <div v-else-if="cloudType == 2" class="fs-22">可转出金额：{{cloudTrx}} TRX</div>
-      <div v-if="cloudType == 1" class="fs-22 mt-10">手续费：预计 0.04 TRX，以实际交易为准</div>
-      <div v-else-if="cloudType == 2" class="fs-22 mt-10">手续费：0.04 TRX，未激活地址需 0.1 TRX</div>
+      <div v-if="cloudType == 1" class="fs-22 mt-10">手续费：预计 0.004 TRX，以实际交易为准</div>
+      <div v-else-if="cloudType == 2" class="fs-22 mt-10">手续费：0.004 TRX，未激活地址需 0.1 TRX</div>
     </div>
 
     <!-- 按钮 -->
@@ -79,9 +79,9 @@ export default {
             position: "middle",
             duration: 1500
           });
-        } else if (Number(this.money) == 0) {
+        } else if (Number(this.money) < 1) {
           this.$ui.Toast({
-            message: "请输入大于 0 的金额",
+            message: "请输入大于 1 的金额",
             position: "middle",
             duration: 1500
           });
@@ -166,7 +166,7 @@ export default {
                   position: "middle",
                   duration: 1500
                 });
-              } else if (response.data.code == 30117) {
+              } else if (response.data.code == 30118) {
                 this.$ui.MessageBox({
                   title: "云钱包转出",
                   message: "云钱包 TRX 余额不足本次手续费，请修改转出金额"

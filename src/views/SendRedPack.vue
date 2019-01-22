@@ -5,7 +5,10 @@
         <span>资产</span>
       </div>
       <div class="right">
-        <span>{{currentPayType.assetName}}</span>
+        <div>
+          <span v-if="currentPayType.type=='TRX'">TRX</span>
+          <span v-if="currentPayType.type=='RMB'">CNY</span>
+        </div>
         <img class="arrow" src="~@/assets/image/arrows_right.png">
       </div>
     </div>

@@ -71,7 +71,7 @@
       <!-- 钱 -->
       <div class="s-300-120">
         <div class="qian-box">
-          <div class="fs-32">{{ currentItem == 1 ? trx.amount : cloudTrx.amount }}</div>
+          <div class="fs-32">{{ currentItem == 1 ? Number(trx.amount) : Number(cloudTrx.amount) }}</div>
           <div class="fs-24">{{ currentItem == 1 ? trx.rmbAmount : cloudTrx.rmbAmount }}</div>
         </div>
         <img src="~@/assets/image/arrows_right.png" class="s-12-21 ml-20">
@@ -87,8 +87,8 @@
       </div>
       <!-- 钱 -->
       <div class="s-300-120">
-        <div class="qian-box">
-          <div class="fs-32">{{ token.amount }}</div>
+        <div class="qian-box-r">
+          <div class="fs-32">{{ Number(token.amount) }}</div>
           <div class="fs-24">{{ token.rmbAmount }}</div>
         </div>
         <img src="~@/assets/image/arrows_right.png" class="s-12-21 ml-20">
@@ -121,9 +121,9 @@
       </div>
       <!-- 钱 -->
       <div class="s-300-120">
-        <div class="qian-box">
-          <div class="fs-32">{{ candy.amount }}</div>
-          <div class="fs-24">{{ candy.rmbAmount }}</div>
+        <div class="qian-box-r">
+          <div class="fs-32">{{ Number(candy.amount) }}</div>
+          <div class="fs-24">~</div>
         </div>
         <img src="~@/assets/image/arrows_right.png" class="s-12-21 ml-20">
       </div>
@@ -516,6 +516,16 @@ export default {
   align-items: center;
   justify-content: center;
 }
+
+.qian-box-r {
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+
 
 .fs-24 {
   font-family: PingFangSC-Regular;

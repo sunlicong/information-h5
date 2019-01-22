@@ -2,14 +2,15 @@
   <div>
     <!-- 转出金额 -->
     <div class="h-150">
-      <div class="fs-28">转出金额</div>
+      <div v-if="cloudType == 1" class="fs-28">转入金额</div>
+      <div v-else-if="cloudType == 2" class="fs-28">转出金额</div>
       <div class="h-30 mt-15">
         <div class="fs-22">TRX</div>
         <!-- 云钱包转出 -->
         <input
           v-if="cloudType == 1"
           type="number"
-          placeholder="最小转入金额为 10 TRX"
+          placeholder="最小转入金额为 1"
           v-model="money"
           class="input-style ml-10"
         >
@@ -27,9 +28,9 @@
     <!-- 可提现金额、手续费 -->
     <div class="h-130 mt-2">
       <div v-if="cloudType == 1" class="fs-22">可转入金额：{{trx}} TRX</div>
-      <div v-else-if="cloudType == 2" class="fs-22">可提现金额：{{cloudTrx}} TRX</div>
+      <div v-else-if="cloudType == 2" class="fs-22">可转出金额：{{cloudTrx}} TRX</div>
       <div v-if="cloudType == 1" class="fs-22 mt-10">手续费：预计 0.04 TRX，以实际交易为准</div>
-      <div v-else-if="cloudType == 2" class="fs-22 mt-10">手续费：0.04 TRX，未激活地址需 0.1 TRX 手续费</div>
+      <div v-else-if="cloudType == 2" class="fs-22 mt-10">手续费：0.04 TRX，未激活地址需 0.1 TRX</div>
     </div>
 
     <!-- 按钮 -->
@@ -50,8 +51,8 @@ export default {
     return {
       money: "", // 输入的金额
       cloudType: this.$route.query.cloudType, // 1-转入云钱包  2-云钱包转出
-      cloudTrx: "0.00000", // 可提现金额
-      trx: '0.00000', // 可转入金额
+      cloudTrx: 0, // 可提现金额
+      trx: 0, // 可转入金额
 
     };
   },
@@ -201,8 +202,8 @@ export default {
         .then(response => {
           this.$ui.Indicator.close();
           if (response.data.status) {
-            this.cloudTrx = response.data.data.cloudTrx.amount;
-            this.trx = response.data.data.trx.amount;
+            this.cloudTrx = Number(response.data.data.cloudTrx.amount);
+            this.trx = Number(response.data.data.trx.amount);
           }
         })
         .catch(response => {

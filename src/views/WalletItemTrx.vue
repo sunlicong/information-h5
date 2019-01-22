@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="h-220">
-      <div class="fs-70 ml-30">{{ $formatMoney(num,2) }}</div>
+      <div class="fs-70 ml-30">{{ num }}</div>
       <div class="fs-36">≈￥{{ $formatMoney(rmbTotalAmount,1) }}</div>
     </div>
 
@@ -45,7 +45,7 @@ export default {
     return {
       loading: false,
       next: 0,
-      num: '0.00000', // trx 资产总额
+      num: 0, // trx 资产总额
       // pedingDrawAmount: 0, // 待提取的人民币收益
       rmbTotalAmount: '0.00', // 人民币余额
       list: [],

@@ -395,7 +395,7 @@ export default {
 .s-330-130 {
   width: 330px;
   height: 130px;
-  border-radius: 10px;
+  border-radius: 16px;
   background-image: url(~@/assets/image/bg_wallet_card.png);
   background-repeat: no-repeat;
   background-position: center;
@@ -404,11 +404,11 @@ export default {
 }
 
 .border-4-00 {
-  border: 4px solid #0000;
+  border: 2px solid #0000;
 }
 
 .border-4-ff {
-  border: 4px solid #fff;
+  border: 2px solid #d0d5ff;
 }
 
 .fs-28-r {

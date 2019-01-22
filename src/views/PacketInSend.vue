@@ -10,7 +10,7 @@
                 </div>
                 <div class="bottom">
                     <span>{{item.createTime.slice(11,19)}}</span>
-                    <span>已领完{{item.receivedCounts}}</span>
+                    <span>{{item.receivedStatus}}{{item.receivedCounts}}</span>
                 </div>
             </li>
         </ul>

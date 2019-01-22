@@ -5,7 +5,10 @@
         <span>资产</span>
       </div>
       <div class="right">
-        <span>{{currentPayType.assetName}}</span>
+        <div>
+          <span v-if="currentPayType.type=='TRX'">TRX</span>
+          <span v-if="currentPayType.type=='RMB'">CNY</span>
+        </div>
         <img class="arrow" src="~@/assets/image/arrows_right.png">
       </div>
     </div>
@@ -57,7 +60,13 @@
       </div>
     </div>
     <!-- 顶部选择类型 -->
-    <mt-popup class="dialog_top_box" v-model="topTypePopupVisible" position="top">
+    <mt-popup class="dialog_top_box" v-model="topTypePopupVisible" position="bottom">
+      <div class="title_view">
+        <div class="left"></div>
+        <div class="title">选择币种</div>
+        <div class="right"></div>
+      </div>
+      <div class="line"></div>
       <div class="item_title">
         <div class="name">资产</div>
         <div class="local">本地钱包</div>
@@ -65,7 +74,7 @@
       </div>
       <div class="item" v-for="item in list" @click="selectAsset(item)">
         <div v-if="item.type=='TRX'" class="name">TRX</div>
-        <div v-if="item.type=='RMB'" class="name">人民币</div>
+        <div v-if="item.type=='RMB'" class="name">CNY</div>
         <div class="local">{{item.localAmount}}</div>
         <div class="cloud">{{item.cloudAmount}}</div>
       </div>
@@ -80,8 +89,14 @@
       <div class="line"></div>
       <div class="price_view">
         <div class="price">
-          <div v-if="currentPayType.type=='TRX'" class="trx">{{money?redType==1?money*redCount:money:0}}TRX</div>
-          <div v-if="currentPayType.type=='RMB'" class="trx">￥{{money?redType==1?money*redCount:money:0}}</div>
+          <div
+            v-if="currentPayType.type=='TRX'"
+            class="trx"
+          >{{money?redType==1?money*redCount:money:0}}TRX</div>
+          <div
+            v-if="currentPayType.type=='RMB'"
+            class="trx"
+          >￥{{money?redType==1?money*redCount:money:0}}</div>
         </div>
       </div>
       <div class="item">
@@ -100,18 +115,23 @@
           <img class="arrow" src="~@/assets/image/arrows_right.png">
         </div>
       </div>
-      <div v-if="!redType" class="item">
-        <div class="left">手续费</div>
-        <div v-if="currentPayType.type=='TRX'" class="right">交易将消耗TRX手续费，以实际交易为准</div>
-        <div
-          v-if="currentPayType.type=='RMB'"
-          class="right"
-        >拼手气红包由智能合约生成，需￥{{currentPayType.serviceCharge}}手续费</div>
+      <div v-if="redType">
+        <div class="charge">
+          <div class="left">手续费</div>
+          <div v-if="currentPayType.type=='TRX'&&walletTypeObj.name=='local'" class="right">交易将产生手续费，预计扣除{{currentPayType.localNormalCharge}}TRX</div>
+          <div v-if="currentPayType.type=='TRX'&&walletTypeObj.name=='cloud'" class="right">无手续费</div>
+          <div v-if="currentPayType.type=='RMB'" class="right">无手续费</div>
+        </div>
       </div>
-      <div
-        v-if="currentPayType.type=='TRX'"
-        class="text"
-      >拼手气红包由智能合约合成，将消耗{{currentPayType.serviceCharge}}TRX手续费</div>
+      <div v-if="!redType">
+        <div class="charge">
+          <div class="left">手续费</div>
+          <!-- <div v-if="currentPayType.type=='TRX'" class="right">交易将消耗TRX手续费，以实际交易为准</div> -->
+          <div v-if="currentPayType.type=='TRX'&&walletTypeObj.name=='local'"class="right marginT20">交易和调用拼手气红包智能合约将产生手续费，预计扣除{{currentPayType.localLuckCharge}}TRX</div>
+          <div v-if="currentPayType.type=='TRX'&&walletTypeObj.name=='cloud'" class="right marginT20">调用拼手气红包智能合约将产生手续费，预计扣除{{currentPayType.cloudLuckCharge}}TRX</div>
+          <div v-if="currentPayType.type=='RMB'" class="right">调用拼手气红包智能合约需￥{{currentPayType.localLuckCharge}}手续费</div>
+        </div>
+      </div>
       <mt-button class="pay" @click="doPayRedPacket()">确认支付</mt-button>
     </mt-popup>
     <!-- 选择支付方式 -->
@@ -150,7 +170,7 @@ export default {
   data() {
     return {
       money: "",
-      redCount: 1, //红包个数
+      redCount: "", //红包个数
       description: "",
       redType: 0, //红包类型 0拼手气 1普通
       topTypePopupVisible: false, //选择币种
@@ -207,10 +227,10 @@ export default {
      * 校验
      */
     checkSubmit() {
-      // if (this.money < 1) {
-      //   this.$ui.Toast("红包总金额不能小于1");
-      //   return;
-      // }
+      if (this.money < 1) {
+        this.$ui.Toast("红包总金额不能小于1");
+        return;
+      }
       if (this.redCount < 1) {
         this.$ui.Toast("请输入红包个数");
         return;
@@ -304,6 +324,24 @@ export default {
                 this.onBridgeReady(response.data.data);
               }
             }
+          } else if (response.data.code == 30120) {
+            this.popupPayVisible = false;
+            this.$ui
+              .MessageBox({
+                title: "余额不足",
+                message: "可用余额不足，马上充值TRX",
+                showCancelButton: true,
+                showConfirmButton: true,
+                confirmButtonText: "去充值",
+                cancelButtonText: "取消"
+              })
+              .then(action => {
+                if (action == "confirm") {
+                  this.$router.push({
+                    path: "/Recharge"
+                  });
+                }
+              });
           }
         })
         .catch(response => {
@@ -338,7 +376,7 @@ export default {
      * 成功后进分享
      */
     shareRedPack(id) {
-       window.location.href =  location.protocol + "//" + window.location.host+"/dayu/ShareRedPack?redpackId="+id;
+      window.location.href = location.protocol + "//" + window.location.host + "/dayu/ShareRedPack?redpackId=" + id;
     },
     /**
      * 红包记录
@@ -497,12 +535,46 @@ export default {
 }
 .dialog_top_box {
   width: 100%;
-  //   height: 288px;
   background: #ffffff;
+  .title_view {
+    width: 100%;
+    height: 108px;
+    display: flex;
+    align-items: center;
+    .left {
+      width: 100px;
+      margin-left: 30px;
+      font-size: 32px;
+      font-family: PingFangSC-Regular;
+      font-weight: 400;
+      color: #2a2e3f;
+      img {
+        width: 21px;
+        height: 31px;
+      }
+    }
+    .title {
+      flex: 1;
+      float: center;
+      font-size: 36px;
+      font-family: PingFangSC-Regular;
+      font-weight: 400;
+      color: #2a2e40;
+      text-align: center;
+    }
+    .right {
+      width: 100px;
+    }
+  }
+  .line {
+    width: 100%;
+    height: 1px;
+    background: #f4f4f4;
+  }
   .item_title {
     width: 100%;
     height: 88px;
-    border-top: 1px solid #cddbec;
+    border-top: 1px solid #f4f4f4;
     div {
       width: 33%;
       height: 88px;
@@ -536,6 +608,9 @@ export default {
   width: 100%;
   height: 667px;
   background: #ffffff;
+  .height120{
+    height: 120px;
+  }
   .title_view {
     width: 100%;
     height: 108px;
@@ -573,7 +648,7 @@ export default {
   }
   .price_view {
     width: 100%;
-    height: 110px;
+    height: 100px;
     text-align: center;
     .price {
       margin-top: 30px;
@@ -615,7 +690,7 @@ export default {
   }
   .item {
     width: 100%;
-    height: 80px;
+    min-height: 80px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -625,8 +700,11 @@ export default {
     color: #2a2e3f;
     .left {
       margin-left: 30px;
+      width: 180px;
     }
     .right {
+      flex: 1;
+      text-align: right;
       margin-right: 30px;
       .icon {
         width: 60px;
@@ -648,11 +726,36 @@ export default {
         height: 21px;
         margin-left: 12px;
       }
+      .marginT20{
+        margin-top: 20px;
+      }
+    }
+  }
+  .charge{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 28px;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: #2a2e3f;
+    .left {
+      margin-left: 30px;
+      margin-top: 20px;
+      width: 180px;
+    }
+    .right {
+      flex: 1;
+      text-align: right;
+      margin-right: 30px;
+      margin-top: 20px;
     }
   }
   .text {
     float: right;
+    text-align: right;
     margin-right: 30px;
+    width: 80%;
     font-size: 28px;
     font-family: PingFangSC-Regular;
     font-weight: 400;

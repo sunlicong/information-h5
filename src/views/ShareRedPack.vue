@@ -3,7 +3,7 @@
 		<img  :src="$url(coderUrl)" class="share_img"/>
 		<div class="bottom_btn">
 			<div @click="showShare(true)">分享给好友</div>
-			<div>长按上图</div>
+			<div>长按保存海报</div>
 		</div>
 		<mt-popup class="dialog_share_mode_box" v-model="isShowShareMode" position="top">
       		<img @click="showShare(false)" src="~@/assets/image/share_mode_img.png">

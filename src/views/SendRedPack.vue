@@ -12,7 +12,7 @@
     <div class="height98 marginT30">
       <div class="left">
         <div class="type">{{redType?'普':'拼'}}</div>
-        <span>总金额</span>
+        <span>{{redType?'单个金额':'总金额'}}</span>
       </div>
       <div class="right">
         <input type="number" placeholder="0" v-model="money">
@@ -39,7 +39,7 @@
     <div class="counts">
       <div class="countsName">总金额</div>
       <div class="countsMoney">
-        <span>{{money?money:0}}</span>
+        <span>{{money?redType==1?money*redCount:money:0}}</span>
         <span v-if="currentPayType.type=='TRX'">TRX</span>
         <span v-if="currentPayType.type=='RMB'">元</span>
       </div>
@@ -64,8 +64,8 @@
         <div class="cloud">云钱包</div>
       </div>
       <div class="item" v-for="item in list" @click="selectAsset(item)">
-        <div v-if="currentPayType.type=='TRX'" class="name">TRX</div>
-        <div v-if="currentPayType.type=='RMB'" class="name">人民币</div>
+        <div v-if="item.type=='TRX'" class="name">TRX</div>
+        <div v-if="item.type=='RMB'" class="name">人民币</div>
         <div class="local">{{item.localAmount}}</div>
         <div class="cloud">{{item.cloudAmount}}</div>
       </div>
@@ -80,8 +80,8 @@
       <div class="line"></div>
       <div class="price_view">
         <div class="price">
-          <div v-if="currentPayType.type=='TRX'" class="trx">{{money?money:0}}TRX</div>
-          <div v-if="currentPayType.type=='RMB'" class="trx">￥{{money?money:0}}</div>
+          <div v-if="currentPayType.type=='TRX'" class="trx">{{money?redType==1?money*redCount:money:0}}TRX</div>
+          <div v-if="currentPayType.type=='RMB'" class="trx">￥{{money?redType==1?money*redCount:money:0}}</div>
         </div>
       </div>
       <div class="item">

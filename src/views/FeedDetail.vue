@@ -601,11 +601,12 @@ export default {
 .content {
   margin-left: 30px;
   margin-right: 30px;
-  font-size: 32px;
+  font-size: 38px;
+  line-height: 53px;
   color: #051426;
   overflow: hidden;
   strong {
-    font-size: 36px;
+    font-size: 38px;
   }
 }
 .tip {

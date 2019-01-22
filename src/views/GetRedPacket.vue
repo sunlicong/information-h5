@@ -8,7 +8,7 @@
             </div>
             <div class="packet_text">{{message.description}}</div>
             <div class="money"  v-if="message.status==1">
-                <span>{{message.giveOutAmount}}</span>
+                <span>{{message.receiving}}</span>
                 <span v-if="message.assetType==2">元</span>
                 <span v-if="message.assetType==1">TRX</span>
             </div>
@@ -16,7 +16,7 @@
             <div class="hint" v-if="message.status==1">已存入云钱包，可直接提现</div>
             <div class="hint" v-if="message.status==2&&message.sendUser">未领取的红包，已返还至云钱包</div>
             <div class="bottom">
-                <div @click="transmit('WalletItemTrx')">
+                <div @click="transmit('Wallet')">
                     <img src="~@/assets/image/bottom_packet1.png" class="bottom_packet1"/>
                     <span>去提现</span>
                 </div>
@@ -46,7 +46,11 @@
                     <div class="center_bottom">{{$formatDate(item.receivingTime/1000,3)}}</div>
                 </div>
                 <div class="right">
-                    <div>{{item.amount}}</div>
+                    <div>
+                        {{item.amount}}
+                        <span v-if="item.assetType==2">元</span>
+                        <span v-if="item.assetType==1">TRX</span>
+                    </div>
                     <div v-if="item.best==1">手气最佳</div>
                 </div>
             </li>
@@ -55,7 +59,7 @@
             <div class="title">区块信息</div>
             <div @click="copy()">
                 <span class="key">交易ID：</span>
-                <span class="value">{{message.txId}}</span>
+                <span class="value">{{txId}}</span>
                 <img src="~@/assets/image/copy.png" class="copy"/>
             </div>
             <div>
@@ -74,7 +78,8 @@ export default {
             redpackId:this.$route.query.redpackId || 60,
             message:{},
             list:[],
-            isStatus:false
+            isStatus:false,
+            txId:''
         }
     },
     mounted() {
@@ -110,6 +115,10 @@ export default {
                 this.$ui.Indicator.close();
                 this.getRedpackList();
                 this.isStatus = true;
+                var data = response.data.data
+                var txId = data.txId.slice(0,6) + '...'+data.txId.slice(data.txId.length-6,data.txId.length);
+                this.txId = txId
+
 			}).catch((response) => {
                 this.$ui.Indicator.close();
                 this.getRedpackList();

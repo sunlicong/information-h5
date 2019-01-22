@@ -74,8 +74,8 @@ export default {
     display: flex;
     .feed_title {
       flex: 1;
-      line-height: 48px;
-      font-size: 34px;
+      line-height: 53px;
+      font-size: 38px;
       color: #051426;
     }
     img {
@@ -92,8 +92,8 @@ export default {
       margin-top: 30px;
       margin-right: 30px;
       span {
-        line-height: 48px;
-        font-size: 34px;
+        line-height: 53px;
+        font-size: 38px;
         color: #051426;
         padding-top: 7px;
       }

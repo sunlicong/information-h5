@@ -71,7 +71,7 @@
       <!-- 钱 -->
       <div class="s-300-120">
         <div class="qian-box">
-          <div class="fs-32">{{ currentItem == 1 ? trx.amount : cloudTrx.amount }}</div>
+          <div class="fs-32">{{ currentItem == 1 ? Number(trx.amount) : Number(cloudTrx.amount) }}</div>
           <div class="fs-24">{{ currentItem == 1 ? trx.rmbAmount : cloudTrx.rmbAmount }}</div>
         </div>
         <img src="~@/assets/image/arrows_right.png" class="s-12-21 ml-20">
@@ -87,8 +87,8 @@
       </div>
       <!-- 钱 -->
       <div class="s-300-120">
-        <div class="qian-box">
-          <div class="fs-32">{{ token.amount }}</div>
+        <div class="qian-box-r">
+          <div class="fs-32">{{ Number(token.amount) }}</div>
           <div class="fs-24">{{ token.rmbAmount }}</div>
         </div>
         <img src="~@/assets/image/arrows_right.png" class="s-12-21 ml-20">
@@ -121,9 +121,9 @@
       </div>
       <!-- 钱 -->
       <div class="s-300-120">
-        <div class="qian-box">
-          <div class="fs-32">{{ candy.amount }}</div>
-          <div class="fs-24">{{ candy.rmbAmount }}</div>
+        <div class="qian-box-r">
+          <div class="fs-32">{{ Number(candy.amount) }}</div>
+          <div class="fs-24">~</div>
         </div>
         <img src="~@/assets/image/arrows_right.png" class="s-12-21 ml-20">
       </div>
@@ -395,7 +395,7 @@ export default {
 .s-330-130 {
   width: 330px;
   height: 130px;
-  border-radius: 10px;
+  border-radius: 16px;
   background-image: url(~@/assets/image/bg_wallet_card.png);
   background-repeat: no-repeat;
   background-position: center;
@@ -404,11 +404,11 @@ export default {
 }
 
 .border-4-00 {
-  border: 4px solid #0000;
+  border: 2px solid #0000;
 }
 
 .border-4-ff {
-  border: 4px solid #fff;
+  border: 2px solid #d0d5ff;
 }
 
 .fs-28-r {
@@ -516,6 +516,16 @@ export default {
   align-items: center;
   justify-content: center;
 }
+
+.qian-box-r {
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+
 
 .fs-24 {
   font-family: PingFangSC-Regular;

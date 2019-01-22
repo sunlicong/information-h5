@@ -5,12 +5,12 @@
                 <div class="top">
                     <span v-if="item.type === 1">拼手气红包</span>
                     <span v-if="item.type === 2">普通红包</span>
-                    <span v-if="item.assetType === 1">{{item.amount}}TRX</span>
-                    <span v-if="item.assetType === 2">{{item.amount}}元</span>
+                    <span v-if="item.asset_type === 1">{{item.tRXAmountSum}}TRX</span>
+                    <span v-if="item.asset_type === 2">{{item.amountSum}}元</span>
                 </div>
                 <div class="bottom">
                     <span>{{item.createTime.slice(11,19)}}</span>
-                    <span>已领完{{item.receivedCounts}}</span>
+                    <span>{{item.receivedStatus}}{{item.receivedCounts}}</span>
                 </div>
             </li>
         </ul>

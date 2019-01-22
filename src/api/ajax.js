@@ -31,6 +31,7 @@ axios.interceptors.request.use(
      * 30101: 糖果不足
      * 30105: 余额不足
      * 50003: 文章不存在
+     * 30120: trx余额不足
      */
 axios.interceptors.response.use(
     response => {
@@ -50,7 +51,7 @@ axios.interceptors.response.use(
                         })
                         .then(action => {})
                 }
-            } else if (response.data.code != 30101 && response.data.code != 30105 && response.data.code != 50003 && response.data.code != 30117) {
+            } else if (response.data.code != 30101 && response.data.code != 30105 && response.data.code != 50003 && response.data.code != 30117 && response.data.code != 30120) {
                 Toast(response.data.msg)
             }
         }

@@ -19,10 +19,12 @@
                 <div @click="transmit('Wallet')">
                     <img src="~@/assets/image/bottom_packet1.png" class="bottom_packet1"/>
                     <span>去提现</span>
+                    <p class="gradual"></p>
                 </div>
                 <div @click="transmit('SendRedPack')">
                     <img src="~@/assets/image/bottom_packet2.png" class="bottom_packet2"/>
                     <span>去发红包</span>
+                    <p class="gradual"></p>
                 </div>
                 <div @click="transmit('ShareRedPack')" v-if="message.sendUser">
                     <img src="~@/assets/image/bottom_packet3.png" class="bottom_packet3"/>
@@ -75,7 +77,7 @@ export default {
     name:'GetRedPacket',
     data(){
         return {
-            redpackId:this.$route.query.redpackId || 60,
+            redpackId:this.$route.query.redpackId || 121,
             message:{},
             list:[],
             isStatus:false,
@@ -204,8 +206,9 @@ export default {
                padding: 11px 0 21px 0;
                flex: 1;
                display: flex;
-             justify-content: center;
+               justify-content: center;
                align-items: center;
+               position: relative;
                img{
                    height: 21px;
                    width: 21px;
@@ -216,6 +219,15 @@ export default {
                    color: #FFFFFF
                }
            }
+          .gradual{
+              position: absolute;
+              top: 11px;
+              right: 0;
+              width:2px;
+                height:49px;
+                opacity:0.6;
+                background:linear-gradient(180deg, rgba(209,65,57,1), rgba(255,255,255,1), rgba(209,65,57,1));
+          }
            .bottom_packet1{
                 height: 24px;
                 width: 24px;
@@ -234,6 +246,7 @@ export default {
         padding: 15px 28px;
         color: #A3AEBA;
         font-size: 28px;
+        background: #ffffff;
         .draw .span{
             color: #D14139;
         }
@@ -244,6 +257,7 @@ export default {
             padding: 20px 30px 30px 30px;
             border-bottom: 1px solid #F6F6F6;
             display: flex;
+            background: #ffffff;
              img{
                  width: 80px;
                  height: 80px;
@@ -259,6 +273,7 @@ export default {
                      
                      span:nth-child(1){
                         color: #051426;
+                        font-size: 32px;
                      }
                      span:nth-child(2){
                          width:27px;

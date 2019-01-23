@@ -56,20 +56,10 @@ export default {
 				this.coderUrl=response.data.data.coderUrl;
 				this.isStatus = true;
 				this.$ui.Indicator.close();
-				if(response.data.data.type ==1){
-					var title = this.$store.state.user.nick +'发了一个拼手气红 包，由波场区块链生成，公平公正';
-				}else{
-					var title = this.$store.state.user.nick +'发了一个红 包';
-				}
-				if(response.data.data.assetType ==1){
-					var desc = '来大鱼，用微信收发TRX红 包，无手续费，0秒到账！马上支持更多币种！'
-				}else{
-					var desc = '来大鱼，发一个区块链生成的拼手气红 包，公平公正！'
-				}
 				this.$weChat.init({
 					link:window.location.href,
-					title: title,
-					desc: desc,
+					title: '[红包]我给你发了一个新年红包',
+					desc: '快来体验，微信收发区块链生成的拼手气红包',
 					imgUrl:'https://img.16pic.com/00/60/03/16pic_6003354_s.jpg'
 				});
 			}).catch((response) => {

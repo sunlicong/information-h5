@@ -13,8 +13,8 @@
                 <span v-if="message.assetType==1">TRX</span>
             </div>
             <div class="run_out" v-if="message.status==2||message.status==3">{{message.receive}}</div>
-            <div class="hint" v-if="message.status==1">已存入云钱包，可直接提现</div>
-            <div class="hint" v-if="message.status==2&&message.sendUser">未领取的红包，已返还至云钱包</div>
+            <div class="hint" v-if="message.status==1">已存入{{message.assetType==1?'云':'本地'}}钱包，可直接提现</div>
+            <div class="hint" v-if="message.status==2&&message.sendUser">未领取的红包，已返还至{{message.assetType==1?'云':'本地'}}钱包</div>
             <div class="bottom">
                 <div @click="transmit('Wallet')">
                     <img src="~@/assets/image/bottom_packet1.png" class="bottom_packet1"/>

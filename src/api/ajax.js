@@ -2,7 +2,7 @@ import axios from 'axios'
 import qs from 'qs'
 import router from '../router'
 import { Toast, MessageBox } from 'mint-ui'
-import { setCookie, viewPort, getCookie, loginOut } from '../utils/common.js'
+import { setCookie, viewPort, getCookie, loginOut, wxSdk } from '../utils/common.js'
 import { apiUrl } from '../utils/config.js'
 
 /*
@@ -39,7 +39,9 @@ axios.interceptors.response.use(
             // 状态码持续完善
             if (response.data.code == 20002 || response.data.code == 11001 || response.data.code == 20003) {
                 loginOut()
-                if (viewPort().isWeixin) {
+                if(viewPort().isMiniprogram){
+                    wxSdk().miniProgram.navigateTo({url: '/pages/login/login'})
+                } else if (viewPort().isWeixin) {
                     setCookie('beforeLoginUrl', router.app.$route.fullPath)
                     router.push({ path: '/Author' })
                 } else {

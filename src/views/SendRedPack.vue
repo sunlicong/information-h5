@@ -59,7 +59,7 @@
         <div class="colorA3AEBA">红包记录</div>
       </div>
     </div>
-    <!-- 顶部选择类型 -->
+    <!-- 选择资产类型 -->
     <mt-popup class="dialog_top_box" v-model="topTypePopupVisible" position="bottom">
       <div class="title_view">
         <div class="left"></div>
@@ -75,8 +75,8 @@
       <div class="item" v-for="item in list" @click="selectAsset(item)">
         <div v-if="item.type=='TRX'" class="name">TRX</div>
         <div v-if="item.type=='RMB'" class="name">CNY</div>
-        <div class="local">{{item.localAmount}}</div>
-        <div class="cloud">{{item.cloudAmount}}</div>
+        <div class="local">{{item.localAmount?item.localAmount:'0.00'}}</div>
+        <div class="cloud">{{item.cloudAmount?item.cloudAmount:'0.00'}}</div>
       </div>
     </mt-popup>
     <!-- 确认支付弹框 -->
@@ -118,18 +118,21 @@
       <div v-if="redType">
         <div class="charge">
           <div class="left">手续费</div>
-          <div v-if="currentPayType.type=='TRX'&&walletTypeObj.name=='local'" class="right">交易将产生手续费，预计扣除{{currentPayType.localNormalCharge}}TRX</div>
-          <div v-if="currentPayType.type=='TRX'&&walletTypeObj.name=='cloud'" class="right">无手续费</div>
-          <div v-if="currentPayType.type=='RMB'" class="right">无手续费</div>
+          <div class="right">
+            <p v-if="currentPayType.type=='TRX'&&walletTypeObj.name=='local'">交易将产生手续费，预计扣除{{currentPayType.localNormalCharge}}TRX</p>
+            <p v-if="currentPayType.type=='TRX'&&walletTypeObj.name=='cloud'">无手续费</p>
+            <p v-if="currentPayType.type=='RMB'">无手续费</p>
+          </div>
         </div>
       </div>
       <div v-if="!redType">
         <div class="charge">
           <div class="left">手续费</div>
-          <!-- <div v-if="currentPayType.type=='TRX'" class="right">交易将消耗TRX手续费，以实际交易为准</div> -->
-          <div v-if="currentPayType.type=='TRX'&&walletTypeObj.name=='local'"class="right marginT20">交易和调用拼手气红包智能合约将产生手续费，预计扣除{{currentPayType.localLuckCharge}}TRX</div>
-          <div v-if="currentPayType.type=='TRX'&&walletTypeObj.name=='cloud'" class="right marginT20">调用拼手气红包智能合约将产生手续费，预计扣除{{currentPayType.cloudLuckCharge}}TRX</div>
-          <div v-if="currentPayType.type=='RMB'" class="right">调用拼手气红包智能合约需￥{{currentPayType.localLuckCharge}}手续费</div>
+          <div class="right marginT20">
+            <p v-if="currentPayType.type=='TRX'&&walletTypeObj.name=='local'">交易和调用拼手气红包智能合约将产生手续费，预计扣除{{currentPayType.localLuckCharge}}TRX</p>
+            <p v-if="currentPayType.type=='TRX'&&walletTypeObj.name=='cloud'">调用拼手气红包智能合约将产生手续费，预计扣除{{currentPayType.cloudLuckCharge}}TRX</p>
+            <p v-if="currentPayType.type=='RMB'">调用拼手气红包智能合约需￥{{currentPayType.localLuckCharge}}手续费</p>
+          </div>
         </div>
       </div>
       <mt-button class="pay" @click="doPayRedPacket()">确认支付</mt-button>
@@ -227,7 +230,7 @@ export default {
      * 校验
      */
     checkSubmit() {
-      if (this.money < 1) {
+      if (this.money < 0.01) {
         this.$ui.Toast("红包总金额不能小于1");
         return;
       }
@@ -239,10 +242,7 @@ export default {
         this.$ui.Toast("一次最多可发500个");
         return;
       }
-      if (
-        this.currentPayType.type == "RMB" &&
-        this.money / this.redCount < 0.01
-      ) {
+      if (this.currentPayType.type == "RMB" && this.money / this.redCount < 0.01) {
         this.$ui.Toast("单个红包不金额不可低于0.01元");
         return;
       }
@@ -423,6 +423,7 @@ export default {
   color: #051426;
   .left {
     margin-left: 20px;
+    width: 200px;
     display: flex;
     align-items: center;
     .type {
@@ -742,13 +743,17 @@ export default {
     .left {
       margin-left: 30px;
       margin-top: 20px;
-      width: 180px;
+      width: 150px;
     }
     .right {
       flex: 1;
-      text-align: right;
-      margin-right: 30px;
       margin-top: 20px;
+      margin-right: 20px; 
+      text-align: right;
+      p{
+        display: inline-block;
+        text-align: left;
+      }
     }
   }
   .text {

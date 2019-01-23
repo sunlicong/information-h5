@@ -59,7 +59,7 @@
         <div class="colorA3AEBA">红包记录</div>
       </div>
     </div>
-    <!-- 顶部选择类型 -->
+    <!-- 选择资产类型 -->
     <mt-popup class="dialog_top_box" v-model="topTypePopupVisible" position="bottom">
       <div class="title_view">
         <div class="left"></div>
@@ -75,8 +75,8 @@
       <div class="item" v-for="item in list" @click="selectAsset(item)">
         <div v-if="item.type=='TRX'" class="name">TRX</div>
         <div v-if="item.type=='RMB'" class="name">CNY</div>
-        <div class="local">{{item.localAmount}}</div>
-        <div class="cloud">{{item.cloudAmount}}</div>
+        <div class="local">{{item.localAmount?item.localAmount:'0.00'}}</div>
+        <div class="cloud">{{item.cloudAmount?item.cloudAmount:'0.00'}}</div>
       </div>
     </mt-popup>
     <!-- 确认支付弹框 -->

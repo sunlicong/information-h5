@@ -230,7 +230,7 @@ export default {
      * 校验
      */
     checkSubmit() {
-      if (this.money < 1) {
+      if (this.money < 0.01) {
         this.$ui.Toast("红包总金额不能小于1");
         return;
       }
@@ -242,10 +242,7 @@ export default {
         this.$ui.Toast("一次最多可发500个");
         return;
       }
-      if (
-        this.currentPayType.type == "RMB" &&
-        this.money / this.redCount < 0.01
-      ) {
+      if (this.currentPayType.type == "RMB" && this.money / this.redCount < 0.01) {
         this.$ui.Toast("单个红包不金额不可低于0.01元");
         return;
       }

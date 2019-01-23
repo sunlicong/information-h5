@@ -5,6 +5,25 @@
         <img :src="$url(banners.cover,'@!large')" @click.stop="goSkip(banners.wxLink)">
       </mt-swipe-item>
     </mt-swipe>
+    <div class="tabs">
+      <div class="tab">
+        <div class="tab_l">
+          <p class="text1">大鱼签到</p>
+          <p class="text2">赚20%奖励和10倍大奖</p>
+        </div>
+        <img class="icon" src="~@/assets/image/icon_index_signin.png">
+      </div>
+      <div class="line">
+        <div></div>
+      </div>
+      <div class="tab">
+        <div class="tab_l">
+          <p class="text1">发红包</p>
+          <p class="text2">微信收发TRX包</p>
+        </div>
+        <img class="icon" src="~@/assets/image/icon_index_redpack.png">
+      </div>
+    </div>
     <ul ref="feeds" class="ul_box">
       <mu-load-more @refresh="refresh" :refreshing="refreshing" :loading="loading" @load="loadMore">
         <HomeFeedItem v-for="(item,index) in feeds" :key="index" :feed="item"></HomeFeedItem>
@@ -197,6 +216,51 @@ export default {
 }
 .family() {
   font-family: PingFangSC-Medium;
+}
+.tabs{
+  width: 100%;
+  height: 150px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  .tab{
+    width: 49%;
+    float: left;
+    display: flex;
+    .tab_l{
+      flex: 1;
+      margin-left: 30px;
+      .text1{
+        font-size:38px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(5,20,38,1);
+        line-height:53px;
+      }
+      .text2{
+        font-size:24px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(163,174,186,1);
+        line-height:33px;
+      }
+    }
+    .icon{
+      margin-right: 13px;
+      width: 76px;
+      height: 76px;
+    }
+  }
+  .line{
+    float: left;
+    width: 1%;
+    text-align: center;
+    div{
+      width: 2px;
+      height:81px;
+      background: #EDEDED;
+    }
+  }
 }
 .ul_box {
   margin-top: 10px;

@@ -280,6 +280,14 @@ const router = new Router({
             }
         },
         {
+            path: '/SignIn',
+            name: 'SignIn',
+            component: resolve => require(['@/views/SignIn'], resolve),
+            meta: {
+                pageTitle: '大鱼签到'
+            }
+        },
+        {
             path: '/Test',
             name: 'Test',
             component: resolve => require(['@/views/Test'], resolve),

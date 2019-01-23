@@ -444,6 +444,7 @@ export default {
     align-items: center;
     input {
       border: 0;
+      width: 300px;
       text-align: right;
       margin-right: 10px;
     }

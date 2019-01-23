@@ -426,6 +426,7 @@ export default {
   color: #051426;
   .left {
     margin-left: 20px;
+    width: 200px;
     display: flex;
     align-items: center;
     .type {

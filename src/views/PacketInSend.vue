@@ -46,7 +46,11 @@ export default {
             })
         },
         goDetail (id) {
-            this.$router.push({path: '/GetRedPacket', query: {redpackId: id}});
+            if(this.$viewPort().isMiniprogram){
+				this.$wxSdk().miniProgram.navigateTo({url: '/pages/getRedPacket/getRedPacket?redpackId=' + id})
+			} else {
+                this.$router.push({path: '/GetRedPacket', query: {redpackId: id}});
+            }
         }
     }
 }

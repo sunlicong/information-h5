@@ -23,7 +23,7 @@
       <div>暂时还没有数据哦～</div>
     </div>
     <mu-load-more :loading="loading" @load="loadMore">
-      <div class="height-120" v-for="item in list">
+      <div class="height-120" v-for="item in list" :key='item.time'>
         <div class="left">
           <div class="title">{{getTypeName(item.type)}}{{item.status==50?'中':''}}</div>
           <div class="time">{{$formatDate(item.time/1000,3)}}</div>
@@ -63,11 +63,13 @@ export default {
       text: "加载中...",
       spinnerType: "snake"
     });
+    this.list = [];
     this.requestData();
   },
   methods: {
     loadMore() {
       if (this.next == -1) return;
+      if (this.list.length == 0) return;
       this.loading = true;
       this.requestData();
     },

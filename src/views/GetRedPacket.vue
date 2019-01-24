@@ -108,8 +108,8 @@ export default {
     created() {
         this.setShareInfo();
         if (this.$store.state.awardTokenAmount) {
-        this.showPointsPop = true;
-        this.awardTokenAmount = this.$store.state.awardTokenAmount;
+            this.showPointsPop = true;
+            this.awardTokenAmount = this.$store.state.awardTokenAmount;
         }
     },
     methods:{
@@ -402,6 +402,11 @@ export default {
         width: 25px;
         height: 25px;
         margin-left: 10px;
+    }
+    .dialog_share_mode_box {
+        background: none;
+        width: 705px;
+        height: 1027px;
     }
 </style>
 

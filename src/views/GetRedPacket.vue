@@ -229,8 +229,8 @@ export default {
                 background:linear-gradient(180deg, rgba(209,65,57,1), rgba(255,255,255,1), rgba(209,65,57,1));
           }
            .bottom_packet1{
-                height: 24px;
-                width: 24px;
+                height: 26px;
+                width: 31px;
            }
             .bottom_packet2{
                 height: 25px;

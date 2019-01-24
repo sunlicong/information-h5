@@ -196,14 +196,7 @@ export default {
         },
         setShareInfo(success) {
             this.$weChat.init({
-                link: window.location.href + "&inviter=" + this.$store.state.user.uid,
-                title: "送你大鱼股份，天天有分红，快来领取！",
-                desc: "来大鱼，看资讯、领股份、天天分红！",
-                imgUrl: location.protocol + "//" + window.location.host + require("../assets/image/share_index_card.png"),
-                success: success || function() {}
-            });
-            this.$weChat.init({
-                link:window.location.href,
+                link:window.location.href + "&inviter=" + this.$store.state.user.uid,
                 title: '[红包]我给你发了一个新年红包',
                 desc: '快来体验，微信收发区块链生成的拼手气红包',
                 imgUrl:'https://img.16pic.com/00/60/03/16pic_6003354_s.jpg',

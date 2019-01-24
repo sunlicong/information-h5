@@ -18,7 +18,7 @@
         <span>{{redType?'单个金额':'总金额'}}</span>
       </div>
       <div class="right">
-        <input type="number" placeholder="0" v-model="money">
+        <input type="number" placeholder="0" v-model="money" @keydown="handleInput">
         <span v-if="currentPayType.type=='TRX'">TRX</span>
         <span v-if="currentPayType.type=='RMB'">元</span>
       </div>
@@ -225,6 +225,14 @@ export default {
           this.$ui.Indicator.close();
         });
     },
+    handleInput(e){
+      // 通过正则过滤小数点后两位
+      if(this.currentPayType.type=='TRX'){
+        e.target.value = (e.target.value.match(/^\d*(\.?\d{0,2})/g)[0]) || null
+      } else if(this.currentPayType.type=='RMB'){
+        e.target.value = (e.target.value.match(/^\d*(\.?\d{0,1})/g)[0]) || null
+      }
+    },
     /**
      * 校验
      */
@@ -270,6 +278,7 @@ export default {
      * 选择资产
      */
     selectAsset(item) {
+      this.money = '';
       this.currentPayType = item;
       this.walletTypeObj = item.payList[0];
       this.topTypePopupVisible = false;

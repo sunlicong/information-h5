@@ -69,15 +69,29 @@
                 <span class="value">{{message.refBlock}}</span>
             </div>
         </div>
+        <NewPointsDlg wx:if="showPointsPop" :show="showPointsPop" :pints="awardTokenAmount" @share="share"></NewPointsDlg>
+        <SharePointsDlg :show="sharePointsPop" :pints="5"></SharePointsDlg>
+        <mt-popup class="dialog_share_mode_box" v-model="isShowShareMode" position="top">
+        <img @click="hiddenShareDialog()" src="~@/assets/image/share_mode_img.png">
+        </mt-popup>
     </div>
 </template>
 <script>
-
+import SharePointsDlg from "@/components/SharePointsDlg.vue";
+import NewPointsDlg from "@/components/NewPointsDlg.vue";
 export default {
     name:'GetRedPacket',
+    components: {
+        NewPointsDlg,
+        SharePointsDlg
+    },
     data(){
         return {
             redpackId:this.$route.query.redpackId || 121,
+            isShowShareMode: false, //分享弹框
+            showPointsPop: false, // 注册奖励弹框
+            awardTokenAmount: 0, // 奖励金额
+            sharePointsPop: false, //分享成功获得奖励弹框
             message:{},
             list:[],
             isStatus:false,
@@ -90,7 +104,14 @@ export default {
 			spinnerType: "snake"
       	});
 	    this.receiveRedpack();
-	},
+    },
+    created() {
+        this.setShareInfo();
+        if (this.$store.state.awardTokenAmount) {
+            this.showPointsPop = true;
+            this.awardTokenAmount = this.$store.state.awardTokenAmount;
+        }
+    },
     methods:{
         transmit(url){
             if(url == 'ShareRedPack'){
@@ -142,6 +163,46 @@ export default {
           		this.$ui.Indicator.close();
 			});
         },
+        /**
+         * 分享
+         */
+        share() {
+            this.showPointsPop = false;
+            this.isShowShareMode = true;
+            this.setShareInfo(() => {
+                this.isShowShareMode = false;
+                this.setShareInfo();
+                this.getShareGetDb()
+            });
+        },
+        /**
+         * 分享成功获取 分享db
+         */
+        getShareGetDb(){
+            this.$axios({
+                method: "get",
+                url: "/blockchain/v1/user/shareGetDb"
+            }).then(response => {
+                if (response.data.status) {
+                this.sharePointsPop = true;
+                }
+            });
+        },
+        /**
+         * 隐藏分享蒙层
+         */
+        hiddenShareDialog() {
+            this.isShowShareMode = false;
+        },
+        setShareInfo(success) {
+            this.$weChat.init({
+                link:window.location.href + "&inviter=" + this.$store.state.user.uid,
+                title: '[红包]我给你发了一个新年红包',
+                desc: '快来体验，微信收发区块链生成的拼手气红包',
+                imgUrl:'https://img.16pic.com/00/60/03/16pic_6003354_s.jpg',
+                success: success || function() {}
+            });
+        }
     }
 }
 </script>
@@ -334,6 +395,11 @@ export default {
         width: 25px;
         height: 25px;
         margin-left: 10px;
+    }
+    .dialog_share_mode_box {
+        background: none;
+        width: 705px;
+        height: 1027px;
     }
 </style>
 

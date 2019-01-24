@@ -62,7 +62,7 @@ export default {
         background-color: #fff;
         ul {
             margin: 0 .4rem;
-            padding: .25rem 0;
+            // padding: .25rem 0;
             li {
                 height: 130px;
                 border-bottom: 1px solid #fafafa;

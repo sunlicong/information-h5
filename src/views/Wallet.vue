@@ -4,29 +4,27 @@
     <div class="h-374">
       <img src="~@/assets/image/bg_wallet.png" class="h-374-abs">
       <div class="h-374-abs">
-        <div class="fs-28 mt-46 ml-30">总资产折合（CNY）</div>
+        <div class="fs-28 op-8 mt-46 ml-30">总资产折合（CNY）</div>
         <div class="h-72 mt-14">
           <div class="fs-28 ml-30">￥</div>
           <div class="fs-72 ml-12">{{ userTotal }}</div>
         </div>
         <div class="h-130 mt-33">
           <!-- 本地钱包 -->
-          <div
-            v-bind:class="[s_330_130, currentItem == 1 ? border_ff : border_00]"
-            @click="onQianBaoClick(1)"
-          >
-            <div class="fs-28-r ml-20 mt-16">本地钱包</div>
-            <div class="fs-28-r ml-20 mt-9">￥{{ localTotal }}</div>
+          <div class="s-330-130-rela" @click="onQianBaoClick(1)">
+            <div v-bind:class="[s_330_130, currentItem == 1 ? border_ff : border_00]"></div>
+            <div class="s-330-130-trans">
+              <div class="fs-28-r ml-20 mt-16">本地钱包</div>
+              <div class="fs-28-r ml-20 mt-9">￥{{ localTotal }}</div>
+            </div>
           </div>
           <!-- 云钱包 -->
-          <div
-            v-bind:class="[s_330_130, currentItem == 2 ? border_ff : border_00]"
-            @click="onQianBaoClick(2)"
-          >
-            <div class="fs-28-r ml-20 mt-16">云钱包</div>
-            <div
-              class="fs-28-r ml-20 mt-9"
-            >{{ cloudTotal.rmbAmount }}</div>
+          <div class="s-330-130-rela" @click="onQianBaoClick(2)">
+            <div v-bind:class="[s_330_130, currentItem == 2 ? border_ff : border_00]"></div>
+            <div class="s-330-130-trans">
+              <div class="fs-28-r ml-20 mt-16">云钱包</div>
+              <div class="fs-28-r ml-20 mt-9">{{ cloudTotal.rmbAmount }}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -70,7 +68,7 @@
       </div>
       <!-- 钱 -->
       <div class="s-300-120">
-        <div class="qian-box">
+        <div class="qian-box-r">
           <div class="fs-32">{{ currentItem == 1 ? Number(trx.amount) : Number(cloudTrx.amount) }}</div>
           <div class="fs-24">{{ currentItem == 1 ? trx.rmbAmount : cloudTrx.rmbAmount }}</div>
         </div>
@@ -104,7 +102,7 @@
       </div>
       <!-- 钱 -->
       <div class="s-300-120">
-        <div class="qian-box">
+        <div class="qian-box-r">
           <div class="fs-32">{{ rmb.amount }}</div>
           <div class="fs-24">{{ rmb.rmbAmount }}</div>
         </div>
@@ -146,7 +144,7 @@ export default {
       candy: {}, // 糖果
       trx: {}, // trx 资产
       cloudTrx: {}, // trx 云资产
-      cloudTotal: {"rmbAmount" : "￥0.00"}, // 云钱包     amount -- 数量    rmbAmount -- 对应人民币数量
+      cloudTotal: { rmbAmount: "￥0.00" }, // 云钱包     amount -- 数量    rmbAmount -- 对应人民币数量
       currentItem: 1, // 1-本地钱包  2-云钱包
       border_ff: "border-4-ff",
       border_00: "border-4-00",
@@ -310,6 +308,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.s-330-130-rela {
+  width: 330px;
+  height: 130px;
+  position: relative;
+}
+
 .h-374 {
   width: 100%;
   height: 374px;
@@ -331,6 +335,10 @@ export default {
   font-family: PingFangSC-Medium;
   font-size: 28px;
   color: white;
+}
+
+.op-8 {
+  opacity: 0.8;
 }
 
 .mt-1 {
@@ -401,6 +409,19 @@ export default {
   background-position: center;
   background-size: cover;
   box-sizing: border-box;
+  opacity: 0.6;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.s-330-130-trans {
+  width: 330px;
+  height: 130px;
+  background: transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .border-4-00 {
@@ -509,14 +530,6 @@ export default {
   line-height: 45px;
 }
 
-.qian-box {
-  height: 120px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
 .qian-box-r {
   height: 120px;
   display: flex;
@@ -524,8 +537,6 @@ export default {
   align-items: flex-end;
   justify-content: center;
 }
-
-
 
 .fs-24 {
   font-family: PingFangSC-Regular;

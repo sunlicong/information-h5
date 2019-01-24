@@ -4,8 +4,8 @@
     <div class="h-150">
       <div v-if="cloudType == 1" class="fs-28">转入金额</div>
       <div v-else-if="cloudType == 2" class="fs-28">转出金额</div>
-      <div class="h-30 mt-15">
-        <div class="fs-22">TRX</div>
+      <div class="h-56 mt-10">
+        <div class="fs-40">TRX</div>
         <!-- 云钱包转出 -->
         <input
           v-if="cloudType == 1"
@@ -52,8 +52,7 @@ export default {
       money: "", // 输入的金额
       cloudType: this.$route.query.cloudType, // 1-转入云钱包  2-云钱包转出
       cloudTrx: 0, // 可提现金额
-      trx: 0, // 可转入金额
-
+      trx: 0 // 可转入金额
     };
   },
 
@@ -81,7 +80,7 @@ export default {
           });
         } else if (Number(this.money) < 1) {
           this.$ui.Toast({
-            message: "请输入大于 1 的金额",
+            message: "最小转入金额为 1",
             position: "middle",
             duration: 1500
           });
@@ -107,6 +106,7 @@ export default {
                   position: "middle",
                   duration: 1500
                 });
+                this.$router.go(-1);
               } else if (response.data.code == 30117) {
                 this.$ui.MessageBox({
                   title: "转入云钱包",
@@ -166,6 +166,7 @@ export default {
                   position: "middle",
                   duration: 1500
                 });
+                this.$router.go(-1);
               } else if (response.data.code == 30118) {
                 this.$ui.MessageBox({
                   title: "云钱包转出",
@@ -217,7 +218,7 @@ export default {
 <style lang="less" scoped>
 .h-150 {
   width: 100%;
-  height: 150px;
+  height: 140px;
   background-color: #fff;
   display: flex;
   flex-direction: column;
@@ -233,9 +234,10 @@ export default {
   line-height: 40px;
 }
 
-.h-30 {
-  height: 30px;
+.h-56 {
+  height: 56px;
   display: flex;
+  align-items: center;
 }
 
 .mt-2 {
@@ -258,17 +260,35 @@ export default {
   margin-left: 10px;
 }
 
+.fs-40 {
+  font-family: PingFangSC-Regular;
+  font-size: 40px;
+  color: #051426;
+  line-height: 56px;
+}
+
+.fs-28 {
+  font-family: PingFangSC-Regular;
+  font-size: 28px;
+  color: #051426;
+  line-height: 40px;
+}
+
 .fs-22 {
   font-family: PingFangSC-Regular;
-  font-size: 22px;
+  font-size: 24px;
   color: #051426;
-  line-height: 30px;
+  line-height: 33px;
 }
 
 .input-style {
   border: 0;
   width: 400px;
-  height: 30px;
+  height: 40px;
+  font-family: PingFangSC-Regular;
+  font-size: 28px;
+  color: #051426;
+  line-height: 40px;
 }
 
 .h-130 {

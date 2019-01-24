@@ -42,14 +42,14 @@ export default {
 	},
 	methods:{
 		getRedEnvelopeShare(){
-			var link = location.protocol + "//" + window.location.host+"/dayu/GetRedPacket?redpackId="+this.redpackId
+			var link = location.protocol + "//" + window.location.host+"/dayu/GetRedPacket?redpackId="+this.redpackId + "&inviter=" + this.$store.state.user.uid
 			this.$axios({
 				method:'get',
 				url:'/blockchain/v1/share/redEnvelopeShare',
 				data:{
 					type:1,
 					pathUrlChat:link,
-					pathUrlApplet:'/pages/getRedPacket/getRedPacket?redpackId='+this.redpackId,
+					pathUrlApplet:'/pages/getRedPacket/getRedPacket?redpackId='+this.redpackId + "&inviter=" + this.$store.state.user.uid,
 					redpackId:this.redpackId
 				},
 			}).then((response) => {
@@ -57,7 +57,7 @@ export default {
 				this.isStatus = true;
 				this.$ui.Indicator.close();
 				this.$weChat.init({
-					link:window.location.href,
+					link:window.location.href + "&inviter=" + this.$store.state.user.uid,
 					title: '[红包]我给你发了一个新年红包',
 					desc: '快来体验，微信收发区块链生成的拼手气红包',
 					imgUrl:'https://img.16pic.com/00/60/03/16pic_6003354_s.jpg'

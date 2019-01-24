@@ -1,5 +1,5 @@
 <template>
-  <mt-popup class="dialog_box" v-model="show">
+  <mt-popup class="dialog_box" v-model="showPop">
     <div class="close_view">
       <img class="close" src="~@/assets/image/icon_dialog_close.png" @click="closeDialog()">
     </div>
@@ -19,7 +19,9 @@ export default {
   name: "NewPointsDlg",
   props: ["show","pints"],
   data() {
-    return {};
+    return {
+      showPop: this.show
+    };
   },
   mounted() {
     this.$store.commit('setAwardTokenAmount', 0)
@@ -30,7 +32,7 @@ export default {
         
       },
       closeDialog(){
-        this.show = false
+        this.showPop = false
       }
   }
 };

@@ -69,7 +69,7 @@
                 <span class="value">{{message.refBlock}}</span>
             </div>
         </div>
-        <NewPointsDlg :show="showPointsPop" :pints="awardTokenAmount" @share="share"></NewPointsDlg>
+        <NewPointsDlg wx:if="showPointsPop" :show="showPointsPop" :pints="awardTokenAmount" @share="share"></NewPointsDlg>
         <SharePointsDlg :show="sharePointsPop" :pints="5"></SharePointsDlg>
         <mt-popup class="dialog_share_mode_box" v-model="isShowShareMode" position="top">
         <img @click="hiddenShareDialog()" src="~@/assets/image/share_mode_img.png">

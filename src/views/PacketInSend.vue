@@ -64,6 +64,7 @@ export default {
             margin: 0 .4rem;
             padding: .25rem 0;
             li {
+                height: 130px;
                 border-bottom: 1px solid #fafafa;
             }
             div {

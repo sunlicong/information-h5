@@ -45,6 +45,16 @@
         <div class="text2">开宝箱得617元</div>
       </div>
     </div>
+    <!-- 选择份数 -->
+    <mt-popup class="selsect_num_dialog" v-model="SelectPopVisible" position="bottom">
+      <div class="title_view">参与签到，赚20%奖励，更有机会得10倍大奖</div>
+      <div class="card">
+        <div class="item">1份</div>
+        <div class="item">10份</div>
+        <div class="item">100份</div>
+        <div class="item">500份</div>
+      </div>
+    </mt-popup>
   </div>
 </template>
 <script>
@@ -254,6 +264,31 @@ export default {
       font-weight: 400;
       color: rgba(253, 81, 69, 1);
       line-height: 33px;
+    }
+  }
+}
+.selsect_num_dialog {
+  width: 100%;
+  background: #ffffff;
+  .title_view {
+    width: 100%;
+    height: 80px;
+    line-height: 80px;
+    font-size: 24px;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: #051426;
+    text-align: center;
+  }
+  .card{
+    margin-top: 20px;
+    width: 100px;
+    height: 108px;
+    display: flex;
+    .item{
+      width:158px;
+      height:108px;
+      border:1px solid #CFD0D0;
     }
   }
 }

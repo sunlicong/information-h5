@@ -20,7 +20,7 @@
         <div class="text5">当前签到份数达到200之后，你将获得20%奖励</div>
       </div>
     </div>
-    <mt-button @click="signin()" class="btn">立即签到</mt-button>
+    <mt-button @click="SelectPopVisible=!SelectPopVisible" class="btn">立即签到</mt-button>
     <div class="tabs">
       <div class="tab">
         <div class="tab_l">
@@ -49,11 +49,12 @@
     <mt-popup class="selsect_num_dialog" v-model="SelectPopVisible" position="bottom">
       <div class="title_view">参与签到，赚20%奖励，更有机会得10倍大奖</div>
       <div class="card">
-        <div class="item">1份</div>
-        <div class="item">10份</div>
-        <div class="item">100份</div>
-        <div class="item">500份</div>
+        <div class="item" :class="[count==1?'border':'border-none']" @click="count=1">1份</div>
+        <div class="item" :class="[count==10?'border':'border-none']" @click="count=10">10份</div>
+        <div class="item" :class="[count==100?'border':'border-none']" @click="count=100">100份</div>
+        <div class="item" :class="[count==500?'border':'border-none']" @click="count=500">500份</div>
       </div>
+      <mt-button @click="signIn()" class="sign">支付{{singlePrice*count}}元参与签到</mt-button>
     </mt-popup>
   </div>
 </template>
@@ -61,10 +62,18 @@
 export default {
   name: "SignIn",
   data() {
-    return {};
+    return {
+      SelectPopVisible: false,
+      singlePrice: 1,//单价
+      count: 1,//份数
+    };
   },
   created() {},
-  methods: {}
+  methods: {
+    signIn(){
+
+    }
+  }
 };
 </script>
 <style lang="less" scoped>
@@ -280,16 +289,42 @@ export default {
     color: #051426;
     text-align: center;
   }
-  .card{
+  .card {
     margin-top: 20px;
-    width: 100px;
+    width: 100%;
     height: 108px;
     display: flex;
-    .item{
-      width:158px;
-      height:108px;
-      border:1px solid #CFD0D0;
+    padding-left: 10px;
+    .border{
+      background: #FFEBEA;
+      border: 1px solid #FD5145;
     }
+    .border-none{
+      background: #ffffff;
+      border: 1px solid #cfd0d0;
+    }
+    .item {
+      margin-left: 20px;
+      width: 158px;
+      height: 108px;
+      line-height: 108px;
+      text-align: center;
+      font-size: 32px;
+      font-family: PingFangSC-Medium;
+      font-weight: 500;
+      color: #1f2c3c;
+    }
+  }
+  .sign {
+    margin: 50px 30px 30px 30px;
+    width: 690px;
+    height: 98px;
+    line-height: 98px;
+    background: #fd5145;
+    border-radius: 8px;
+    font-family: PingFangSC-Regular;
+    font-size: 32px;
+    color: #fff;
   }
 }
 </style>

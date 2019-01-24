@@ -288,6 +288,22 @@ const router = new Router({
             }
         },
         {
+            path: '/SignInRaders',
+            name: 'SignInRaders',
+            component: resolve => require(['@/views/SignInRaders'], resolve),
+            meta: {
+                pageTitle: '大鱼签到攻略'
+            }
+        },
+        {
+            path: '/MyRecord',
+            name: 'MyRecord',
+            component: resolve => require(['@/views/MyRecord'], resolve),
+            meta: {
+                pageTitle: '我的战绩'
+            }
+        },
+        {
             path: '/Test',
             name: 'Test',
             component: resolve => require(['@/views/Test'], resolve),

@@ -260,10 +260,11 @@ export default {
         padding: .4rem 0;
         ul>li {
             width: 100%;
-            height: 1.73rem;
+            height: 130px;
             display: flex;
             flex-flow: row nowrap;
             align-items: center;
+            border-bottom: 1px solid #fafafa;
             .userAvantar {
                 width: 1rem;
                 height: 1rem;
@@ -307,6 +308,10 @@ export default {
         ul {
             margin: 0 .4rem;
             padding: .25rem 0;
+            li {
+                height: 130px;
+                border-bottom: 1px solid #fafafa;
+            }
             div {
                 display: flex;
                 flex-flow: row nowrap;

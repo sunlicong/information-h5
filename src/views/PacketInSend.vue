@@ -63,6 +63,9 @@ export default {
         ul {
             margin: 0 .4rem;
             padding: .25rem 0;
+            li {
+                border-bottom: 1px solid #fafafa;
+            }
             div {
                 display: flex;
                 flex-flow: row nowrap;

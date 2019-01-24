@@ -48,7 +48,8 @@
       </div>
     </div>
     <mt-button class="button" @click="checkSubmit()">塞钱进钱包</mt-button>
-    <div class="tip">24小时未领取的红包，将返还到云钱包内</div>
+    <div v-if="currentPayType.type=='TRX'" class="tip">24小时未领取的红包，将返还到云钱包内</div>
+    <div v-if="currentPayType.type=='RMB'" class="tip">发出红包内的24小时内，未领取的红包发起退款</div>
     <div class="tab">
       <div class="item">
         <img class="icon" src="~@/assets/image/icon_tab_redpack.png">
@@ -63,7 +64,7 @@
     <mt-popup class="dialog_top_box" v-model="topTypePopupVisible" position="bottom">
       <div class="title_view">
         <div class="left"></div>
-        <div class="title">选择币种</div>
+        <div class="title">选择资产</div>
         <div class="right"></div>
       </div>
       <div class="line"></div>
@@ -103,7 +104,7 @@
         <div class="left">订单信息</div>
         <div class="right">发{{redType?'普通':'拼手气'}}红包</div>
       </div>
-      <div class="item bordertb" @click="selectPayTypePop=true">
+      <div class="item bordertb" @click="currentPayType.type!='RMB'?selectPayTypePop=true:selectPayTypePop=false">
         <div class="left">支付方式</div>
         <div class="right">
           <img class="icon" :src="walletTypeObj.pic" alt>
@@ -112,16 +113,14 @@
             v-if="currentPayType.type!='RMB'"
             class="type"
           >{{walletTypeObj.name=="local"?"本地钱包":"云钱包"}}</span>
-          <img class="arrow" src="~@/assets/image/arrows_right.png">
+          <img v-if="currentPayType.type!='RMB'" class="arrow" src="~@/assets/image/arrows_right.png">
         </div>
       </div>
       <div v-if="redType">
         <div class="charge">
-          <div class="left">手续费</div>
+          <div v-if="currentPayType.type=='TRX'&&walletTypeObj.name=='local'" class="left">手续费</div>
           <div class="right">
             <p v-if="currentPayType.type=='TRX'&&walletTypeObj.name=='local'">交易将产生手续费，预计扣除{{currentPayType.localNormalCharge}}TRX</p>
-            <p v-if="currentPayType.type=='TRX'&&walletTypeObj.name=='cloud'">无手续费</p>
-            <p v-if="currentPayType.type=='RMB'">无手续费</p>
           </div>
         </div>
       </div>
@@ -230,20 +229,39 @@ export default {
      * 校验
      */
     checkSubmit() {
-      if (this.money < 0.01) {
-        this.$ui.Toast("红包总金额不能小于1");
-        return;
+      if(!this.currentPayType.type){
+        return
+      }
+      if(this.currentPayType.type=='TRX'){
+        //TRX拼手气红包最小总金额为1；
+        if (!this.redType && this.money < 1) {
+          this.$ui.Toast("红包总金额最小为1");
+          return;
+        }
+        //TRX普通红包单个最小金额为0.001
+        if(this.redType && this.money < 0.001){
+          this.$ui.Toast("单个红包金额最小为0.001");
+          return;
+        }
+      }
+      if(this.currentPayType.type=='RMB'){
+        //人民币拼手气红包最小总金额为1
+        if (!this.redType && this.money < 1) {
+          this.$ui.Toast("红包总金额最小为1");
+          return;
+        }
+        //人民币普通红包单个最小金额为0.01
+        if(this.redType && this.money < 0.01){
+          this.$ui.Toast("单个红包金额最小为0.01");
+          return;
+        }
       }
       if (this.redCount < 1) {
         this.$ui.Toast("请输入红包个数");
         return;
       }
-      if (this.redCount > 500) {
-        this.$ui.Toast("一次最多可发500个");
-        return;
-      }
-      if (this.currentPayType.type == "RMB" && this.money / this.redCount < 0.01) {
-        this.$ui.Toast("单个红包不金额不可低于0.01元");
+      if (this.redCount > 100) {
+        this.$ui.Toast("红包个数最多为100个");
         return;
       }
       this.popupPayVisible = true;
@@ -326,22 +344,42 @@ export default {
             }
           } else if (response.data.code == 30120) {
             this.popupPayVisible = false;
-            this.$ui
-              .MessageBox({
-                title: "余额不足",
-                message: "可用余额不足，马上充值TRX",
-                showCancelButton: true,
-                showConfirmButton: true,
-                confirmButtonText: "去充值",
-                cancelButtonText: "取消"
-              })
-              .then(action => {
-                if (action == "confirm") {
-                  this.$router.push({
-                    path: "/Recharge"
-                  });
-                }
-              });
+            if(this.walletTypeObj.name == "local"){
+              this.$ui.MessageBox({
+                  title: "余额不足",
+                  message: "可用余额不足，马上充值TRX",
+                  showCancelButton: true,
+                  showConfirmButton: true,
+                  confirmButtonText: "去充值",
+                  cancelButtonText: "取消"
+                })
+                .then(action => {
+                  if (action == "confirm") {
+                    this.$router.push({
+                      path: "/Recharge"
+                    });
+                  }
+                });
+            } else {
+              this.$ui.MessageBox({
+                  title: "余额不足",
+                  message: "云钱包可用余额不足，马上转入TRX",
+                  showCancelButton: true,
+                  showConfirmButton: true,
+                  confirmButtonText: "去转入",
+                  cancelButtonText: "取消"
+                })
+                .then(action => {
+                  if (action == "confirm") {
+                    this.$router.push({
+                      path: "/WalletCloudInOrOut",
+                      query: {
+                        cloudType: 1
+                      }
+                    });
+                  }
+                });
+            }
           }
         })
         .catch(response => {
@@ -376,6 +414,7 @@ export default {
      * 成功后进分享
      */
     shareRedPack(id) {
+      this.$ui.Toast("红包生成中");
       window.location.href = location.protocol + "//" + window.location.host + "/dayu/ShareRedPack?redpackId=" + id;
     },
     /**

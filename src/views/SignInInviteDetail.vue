@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="top">
-      <div class="text1">已获奖励（元）</div>
+      <div class="text1">邀请奖励（元）</div>
       <div class="text2">0.77</div>
-      <div class="text3">签到份数 198，已奖励1/198</div>
+      <div class="text3">xxx邀请份数 198</div>
     </div>
     <div class="message">
       <div class="title">区块信息</div>
@@ -21,7 +21,7 @@
 </template>
 <script>
 export default {
-  name: "SignInDetail",
+  name: "SignInInviteDetail",
   data() {
     return {};
   },

@@ -312,6 +312,22 @@ const router = new Router({
             }
         },
         {
+            path: '/SignInBoxDetail',
+            name: 'SignInBoxDetail',
+            component: resolve => require(['@/views/SignInBoxDetail'], resolve),
+            meta: {
+                pageTitle: '开宝箱详情'
+            }
+        },
+        {
+            path: '/SignInInviteDetail',
+            name: 'SignInInviteDetail',
+            component: resolve => require(['@/views/SignInInviteDetail'], resolve),
+            meta: {
+                pageTitle: '邀请详情'
+            }
+        },
+        {
             path: '/Test',
             name: 'Test',
             component: resolve => require(['@/views/Test'], resolve),

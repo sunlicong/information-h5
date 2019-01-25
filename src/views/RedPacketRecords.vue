@@ -74,6 +74,10 @@
                 </li>
             </ul>
         </div>
+        <div class="non" v-if="(type === 'get' && getList.recordDetailVoList.length === 0) || (type === 'send' && sendList.recordDetailVoList.length === 0)">
+            <img src="~@/assets/image/img_non.png">
+            <div>暂时还没有数据哦～</div>
+        </div>
     </div>
 </template>
 
@@ -83,8 +87,12 @@ export default {
     data () {
         return {
             type: 'get',
-            getList: '',
-            sendList: '',
+            getList: {
+                recordDetailVoList: []
+            },
+            sendList: {
+                recordDetailVoList: []
+            },
             tRXAmountSum: '',
             amountSum: ''
         }
@@ -139,13 +147,13 @@ export default {
 
 <style lang="less" scoped>
 .RedPacketRecords {
-    background-color: #fff;
     .TabBar>ul {
         width: 100%;
         height: 1.3rem;
         display: flex;
         flex-flow: row nowrap;
         align-items: center;
+        background-color: #fff;
         li {
             width: 50%;
             height: 100%;
@@ -256,30 +264,32 @@ export default {
         }
     }
     .get_list {
-        margin: 0 .4rem;
-        padding: .4rem 0;
+        background-color: #fff;
         ul>li {
-            width: 100%;
+            padding: 0 .4rem;
             height: 130px;
             display: flex;
             flex-flow: row nowrap;
             align-items: center;
-            border-bottom: 1px solid #fafafa;
+            border-bottom: 2px solid #f6f6f6;
             .userAvantar {
-                width: 1rem;
-                height: 1rem;
+                width: 80px;
+                height: 80px;
                 border-radius: 50%;
             }
             .info {
+                height: 90px;
                 flex: 1;
                 display: flex;
                 flex-flow: column nowrap;
                 .top {
+                    height: 45px;
+                    margin-bottom: 5px;
                     display: flex;
                     flex-flow: row nowrap;
                     justify-content: space-between;
                     span {
-                        font-size: .43rem;
+                        font-size: 32px;
                         color: #051426;
                         b {
                             width:27px;
@@ -296,8 +306,14 @@ export default {
                         }
                     }
                 }
+                .bottom {
+                    span {
+                        font-size: 28px;
+                        color: #A3AEBA;
+                    }
+                }
                 .top,.bottom {
-                    height: .6rem;
+                    height: 40px;
                     margin-left: .1rem;
                     align-items: center;
                 }
@@ -305,12 +321,15 @@ export default {
         }
     }
     .send_list {
+        background-color: #fff;
         ul {
-            margin: 0 .4rem;
-            padding: .25rem 0;
             li {
                 height: 130px;
-                border-bottom: 1px solid #fafafa;
+                padding: 0 .4rem;
+                display: flex;
+                flex-flow: column nowrap;
+                justify-content: center;
+                border-bottom: 2px solid #f6f6f6;
             }
             div {
                 display: flex;
@@ -318,14 +337,28 @@ export default {
                 justify-content: space-between;
             }
             .top {
-                font-size: .43rem;
+                height: 45px;
+                margin-bottom: 5px;
+                font-size: 32px;
                 color: #051426;
             }
             .bottom {
-                margin-top: .1rem;
-                font-size: .37rem;
+                height: 40px;
+                font-size: 28px;
                 color: #A3AEBA;
             }
+        }
+    }
+    .non {
+        margin-top: 110px;
+        text-align: center;
+        font-size: 28px;
+        font-family: PingFangSC-Regular;
+        font-weight: 400;
+        color: #9b9b9b;
+        img {
+            width: 290px;
+            height: 396px;
         }
     }
 }

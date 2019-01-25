@@ -38,7 +38,7 @@
 
     <!-- 提现功能开发中 -->
     <div class="h-100" v-if="formType == 2">
-      <div class="fs-36-m">提现功能开发中</div>
+      <div class="fs-36-m">提现春节后上线</div>
     </div>
   </div>
 </template>

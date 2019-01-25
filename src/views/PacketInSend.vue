@@ -61,10 +61,13 @@ export default {
     .PacketInSend_list {
         background-color: #fff;
         ul {
-            margin: 0 .4rem;
-            padding: .25rem 0;
             li {
-                border-bottom: 1px solid #fafafa;
+                padding: 0 .4rem;
+                height: 130px;
+                display: flex;
+                flex-flow: column nowrap;
+                justify-content: center;
+                border-bottom: 2px solid #f6f6f6;
             }
             div {
                 display: flex;
@@ -72,12 +75,14 @@ export default {
                 justify-content: space-between;
             }
             .top {
-                font-size: .43rem;
+                height: 45px;
+                margin-bottom: 5px;
+                font-size: 32px;
                 color: #051426;
             }
             .bottom {
-                margin-top: .1rem;
-                font-size: .37rem;
+                height: 40px;
+                font-size: 28px;
                 color: #A3AEBA;
             }
         }

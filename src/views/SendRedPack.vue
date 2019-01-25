@@ -325,6 +325,7 @@ export default {
       })
         .then(response => {
           this.$ui.Indicator.close();
+          this.popupPayVisible = false;
           if (response.data.status) {
             //1:TRX  2微信支付
             if (response.data.data.payChannel == 1) {
@@ -352,7 +353,6 @@ export default {
               }
             }
           } else if (response.data.code == 30120) {
-            this.popupPayVisible = false;
             if(this.walletTypeObj.name == "local"){
               this.$ui.MessageBox({
                   title: "余额不足",
@@ -423,8 +423,16 @@ export default {
      * 成功后进分享
      */
     shareRedPack(id) {
-      this.$ui.Toast("红包生成中");
-      window.location.href = location.protocol + "//" + window.location.host + "/dayu/ShareRedPack?redpackId=" + id;
+      this.$ui.Toast({
+        message: '红包生成中',
+        duration: 2000
+      });
+      this.money =  "";
+      this.redCount =  "";
+      this.description = "";
+      setTimeout(() => {
+        window.location.href = location.protocol + "//" + window.location.host + "/dayu/ShareRedPack?redpackId=" + id;
+      }, 2000);
     },
     /**
      * 红包记录

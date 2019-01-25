@@ -304,6 +304,14 @@ const router = new Router({
             }
         },
         {
+            path: '/SignInDetail',
+            name: 'SignInDetail',
+            component: resolve => require(['@/views/SignInDetail'], resolve),
+            meta: {
+                pageTitle: '签到详情'
+            }
+        },
+        {
             path: '/Test',
             name: 'Test',
             component: resolve => require(['@/views/Test'], resolve),

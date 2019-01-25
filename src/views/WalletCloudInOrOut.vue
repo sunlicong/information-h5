@@ -239,7 +239,7 @@ export default {
 .h-56 {
   height: 56px;
   display: flex;
-  align-items: baseline;
+  align-items: center;
 }
 
 .mt-2 {
@@ -262,13 +262,6 @@ export default {
   margin-left: 10px;
 }
 
-.fs-40 {
-  font-family: PingFangSC-Regular;
-  font-size: 40px;
-  color: #051426;
-  line-height: 56px;
-}
-
 .fs-28 {
   font-family: PingFangSC-Regular;
   font-size: 28px;
@@ -283,6 +276,13 @@ export default {
   line-height: 33px;
 }
 
+.fs-40 {
+  font-family: PingFangSC-Regular;
+  font-size: 40px;
+  color: #051426;
+  line-height: 40px;
+}
+
 .input-style {
   border: 0;
   width: 400px;
@@ -290,14 +290,6 @@ export default {
   font-family: PingFangSC-Regular;
   font-size: 40px;
   color: #051426;
-  line-height: 56px;
-}
-
-input::-webkit-input-placeholder {
-  font-family: PingFangSC-Regular;
-  font-size: 28px;
-  color: #051426;
-  line-height: 56px;
 }
 
 .h-130 {

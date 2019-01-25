@@ -61,13 +61,13 @@ export default {
     .PacketInSend_list {
         background-color: #fff;
         ul {
-            margin: 0 .4rem;
             li {
+                padding: 0 .4rem;
                 height: 130px;
                 display: flex;
                 flex-flow: column nowrap;
                 justify-content: center;
-                border-bottom: 1px solid #f6f6f6;
+                border-bottom: 2px solid #f6f6f6;
             }
             div {
                 display: flex;

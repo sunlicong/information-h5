@@ -74,6 +74,10 @@
                 </li>
             </ul>
         </div>
+        <div class="non" v-if="(type === 'get' && getList.recordDetailVoList.length === 0) || (type === 'send' && sendList.recordDetailVoList.length === 0)">
+            <img src="~@/assets/image/img_non.png">
+            <div>暂时还没有数据哦～</div>
+        </div>
     </div>
 </template>
 
@@ -83,8 +87,12 @@ export default {
     data () {
         return {
             type: 'get',
-            getList: '',
-            sendList: '',
+            getList: {
+                recordDetailVoList: []
+            },
+            sendList: {
+                recordDetailVoList: []
+            },
             tRXAmountSum: '',
             amountSum: ''
         }
@@ -256,14 +264,13 @@ export default {
         }
     }
     .get_list {
-        margin: 0 .4rem;
         ul>li {
-            width: 100%;
+            padding: 0 .4rem;
             height: 130px;
             display: flex;
             flex-flow: row nowrap;
             align-items: center;
-            border-bottom: 1px solid #f6f6f6;
+            border-bottom: 2px solid #f6f6f6;
             .userAvantar {
                 width: 80px;
                 height: 80px;
@@ -314,13 +321,13 @@ export default {
     }
     .send_list {
         ul {
-            margin: 0 .4rem;
             li {
                 height: 130px;
+                padding: 0 .4rem;
                 display: flex;
                 flex-flow: column nowrap;
                 justify-content: center;
-                border-bottom: 1px solid #f6f6f6;
+                border-bottom: 2px solid #f6f6f6;
             }
             div {
                 display: flex;
@@ -338,6 +345,18 @@ export default {
                 font-size: 28px;
                 color: #A3AEBA;
             }
+        }
+    }
+    .non {
+        margin-top: 110px;
+        text-align: center;
+        font-size: 28px;
+        font-family: PingFangSC-Regular;
+        font-weight: 400;
+        color: #9b9b9b;
+        img {
+            width: 290px;
+            height: 396px;
         }
     }
 }

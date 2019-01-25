@@ -216,6 +216,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
+
 .h-150 {
   width: 100%;
   height: 140px;
@@ -286,9 +288,16 @@ export default {
   width: 400px;
   height: 40px;
   font-family: PingFangSC-Regular;
+  font-size: 40px;
+  color: #051426;
+  line-height: 56px;
+}
+
+input::-webkit-input-placeholder {
+  font-family: PingFangSC-Regular;
   font-size: 28px;
   color: #051426;
-  line-height: 40px;
+  line-height: 56px;
 }
 
 .h-130 {

@@ -257,29 +257,31 @@ export default {
     }
     .get_list {
         margin: 0 .4rem;
-        padding: .4rem 0;
         ul>li {
             width: 100%;
             height: 130px;
             display: flex;
             flex-flow: row nowrap;
             align-items: center;
-            border-bottom: 1px solid #fafafa;
+            border-bottom: 1px solid #f6f6f6;
             .userAvantar {
-                width: 1rem;
-                height: 1rem;
+                width: 80px;
+                height: 80px;
                 border-radius: 50%;
             }
             .info {
+                height: 90px;
                 flex: 1;
                 display: flex;
                 flex-flow: column nowrap;
                 .top {
+                    height: 45px;
+                    margin-bottom: 5px;
                     display: flex;
                     flex-flow: row nowrap;
                     justify-content: space-between;
                     span {
-                        font-size: .43rem;
+                        font-size: 32px;
                         color: #051426;
                         b {
                             width:27px;
@@ -296,8 +298,14 @@ export default {
                         }
                     }
                 }
+                .bottom {
+                    span {
+                        font-size: 28px;
+                        color: #A3AEBA;
+                    }
+                }
                 .top,.bottom {
-                    height: .6rem;
+                    height: 40px;
                     margin-left: .1rem;
                     align-items: center;
                 }
@@ -307,10 +315,12 @@ export default {
     .send_list {
         ul {
             margin: 0 .4rem;
-            padding: .25rem 0;
             li {
                 height: 130px;
-                border-bottom: 1px solid #fafafa;
+                display: flex;
+                flex-flow: column nowrap;
+                justify-content: center;
+                border-bottom: 1px solid #f6f6f6;
             }
             div {
                 display: flex;
@@ -318,12 +328,14 @@ export default {
                 justify-content: space-between;
             }
             .top {
-                font-size: .43rem;
+                height: 45px;
+                margin-bottom: 5px;
+                font-size: 32px;
                 color: #051426;
             }
             .bottom {
-                margin-top: .1rem;
-                font-size: .37rem;
+                height: 40px;
+                font-size: 28px;
                 color: #A3AEBA;
             }
         }

@@ -27,4 +27,5 @@ export default {
   background-image: url(~@/assets/image/bg_sign_raders.png);
   background-size:100% 100%;
 }
+
 </style>

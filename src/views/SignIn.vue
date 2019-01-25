@@ -56,6 +56,32 @@
       </div>
       <mt-button @click="signIn()" class="sign">支付{{singlePrice*count}}元参与签到</mt-button>
     </mt-popup>
+    <!-- 确认支付弹框 -->
+    <mt-popup class="dialog_box" v-model="popupPayVisible" position="bottom">
+      <div class="title_view">
+        <div class="left" @click="popupPayVisible=!popupPayVisible">取消</div>
+        <div class="title">确认支付</div>
+        <div class="right"></div>
+      </div>
+      <div class="line"></div>
+      <div class="price_view">
+        <div class="price">￥{{singlePrice*count}}</div>
+        <div class="tip">实时读取交易价格，以最终支付金额为准</div>
+      </div>
+      <div class="item">
+        <div class="left">订单信息</div>
+        <div class="right">参与签到</div>
+      </div>
+      <div class="item bordertb">
+        <div class="left">支付方式</div>
+        <div class="right">
+          <img class="icon" src="~@/assets/image/icon_wx.png" alt>
+          <span>微信支付</span>
+        </div>
+      </div>
+      <mt-button class="pay" @click="doPay()">确认支付</mt-button>
+    </mt-popup>
+    <!-- 选择支付方式 -->
   </div>
 </template>
 <script>
@@ -64,6 +90,7 @@ export default {
   data() {
     return {
       SelectPopVisible: false,
+      popupPayVisible: false,
       singlePrice: 1,//单价
       count: 1,//份数
     };
@@ -71,7 +98,8 @@ export default {
   created() {},
   methods: {
     signIn(){
-
+      this.SelectPopVisible = false
+      this.popupPayVisible = true
     }
   }
 };
@@ -325,6 +353,106 @@ export default {
     font-family: PingFangSC-Regular;
     font-size: 32px;
     color: #fff;
+  }
+}
+.dialog_box {
+  width: 100%;
+  height: 667px;
+  background: #ffffff;
+  .title_view {
+    width: 100%;
+    height: 108px;
+    display: flex;
+    align-items: center;
+    .left {
+      width: 100px;
+      margin-left: 30px;
+      font-size: 32px;
+      font-family: PingFangSC-Regular;
+      font-weight: 400;
+      color: #2a2e3f;
+      img {
+        width: 21px;
+        height: 31px;
+      }
+    }
+    .title {
+      flex: 1;
+      float: center;
+      font-size: 36px;
+      font-family: PingFangSC-Regular;
+      font-weight: 400;
+      color: #2a2e40;
+      text-align: center;
+    }
+    .right {
+      width: 100px;
+    }
+  }
+  .line {
+    width: 100%;
+    height: 2px;
+    background: #dedede;
+  }
+  .price_view {
+    width: 100%;
+    height: 180px;
+    text-align: center;
+    .price {
+      margin-top: 30px;
+      height: 90px;
+      font-size: 64px;
+      font-family: PingFangSC-Regular;
+      font-weight: 400;
+      color: #2a2e3f;
+      line-height: 90px;
+      text-align: center;
+    }
+    .tip {
+      margin-top: 10px;
+      font-size: 24px;
+      font-family: PingFangSC-Regular;
+      font-weight: 400;
+      color: #a3aeba;
+      line-height: 33px;
+    }
+  }
+  .item {
+    width: 100%;
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #dedede;
+    align-items: center;
+    .left {
+      margin-left: 30px;
+    }
+    .right {
+      margin-right: 30px;
+      .icon {
+        width: 60px;
+        height: 60px;
+        margin-right: 15px;
+      }
+      .arrow {
+        width: 12px;
+        height: 21px;
+        margin-left: 12px;
+      }
+    }
+  }
+  .pay {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100px;
+    background: #0794fc;
+    text-align: center;
+    font-size: 36px;
+    font-family: PingFangSC-Medium;
+    font-weight: 500;
+    color: #ffffff;
+    line-height: 100px;
   }
 }
 </style>

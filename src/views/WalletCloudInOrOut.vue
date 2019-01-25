@@ -239,7 +239,7 @@ export default {
 .h-56 {
   height: 56px;
   display: flex;
-  align-items: center;
+  align-items: baseline;
 }
 
 .mt-2 {
@@ -286,7 +286,7 @@ export default {
 .input-style {
   border: 0;
   width: 400px;
-  height: 40px;
+  height: 56px;
   font-family: PingFangSC-Regular;
   font-size: 40px;
   color: #051426;

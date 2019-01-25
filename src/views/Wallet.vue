@@ -81,7 +81,7 @@
       <!-- 图标 -->
       <div class="s-200-120">
         <img src="~@/assets/image/icon_db.png" class="s-50">
-        <div class="fs-32 ml-20">Fcion</div>
+        <div class="fs-32 ml-20">点钻</div>
       </div>
       <!-- 钱 -->
       <div class="s-300-120">

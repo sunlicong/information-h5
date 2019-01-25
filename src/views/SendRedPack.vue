@@ -228,9 +228,9 @@ export default {
     handleInput(e){
       // 通过正则过滤小数点后两位
       if(this.currentPayType.type=='TRX'){
-        e.target.value = (e.target.value.match(/^\d*(\.?\d{0,2})/g)[0]) || null
+        e.target.value = e.target.value.toString().match(/^\d+(?:\.\d{0,2})?/)
       } else if(this.currentPayType.type=='RMB'){
-        e.target.value = (e.target.value.match(/^\d*(\.?\d{0,1})/g)[0]) || null
+        e.target.value = e.target.value.toString().match(/^\d+(?:\.\d{0,1})?/)
       }
     },
     /**

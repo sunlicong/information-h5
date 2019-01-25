@@ -67,7 +67,7 @@ export default {
                 display: flex;
                 flex-flow: column nowrap;
                 justify-content: center;
-                border-bottom: 1px solid #fafafa;
+                border-bottom: 1px solid #f6f6f6;
             }
             div {
                 display: flex;

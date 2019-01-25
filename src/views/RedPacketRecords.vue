@@ -263,7 +263,7 @@ export default {
             display: flex;
             flex-flow: row nowrap;
             align-items: center;
-            border-bottom: 1px solid #fafafa;
+            border-bottom: 1px solid #f6f6f6;
             .userAvantar {
                 width: 80px;
                 height: 80px;
@@ -320,7 +320,7 @@ export default {
                 display: flex;
                 flex-flow: column nowrap;
                 justify-content: center;
-                border-bottom: 1px solid #fafafa;
+                border-bottom: 1px solid #f6f6f6;
             }
             div {
                 display: flex;

@@ -147,13 +147,13 @@ export default {
 
 <style lang="less" scoped>
 .RedPacketRecords {
-    background-color: #fff;
     .TabBar>ul {
         width: 100%;
         height: 1.3rem;
         display: flex;
         flex-flow: row nowrap;
         align-items: center;
+        background-color: #fff;
         li {
             width: 50%;
             height: 100%;
@@ -264,6 +264,7 @@ export default {
         }
     }
     .get_list {
+        background-color: #fff;
         ul>li {
             padding: 0 .4rem;
             height: 130px;
@@ -320,6 +321,7 @@ export default {
         }
     }
     .send_list {
+        background-color: #fff;
         ul {
             li {
                 height: 130px;

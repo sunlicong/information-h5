@@ -13,7 +13,7 @@ axios.defaults.baseURL = apiUrl
 axios.interceptors.request.use(
         config => {
             config.headers = {
-                'Authorization': getCookie('_token') || '1v2aa6fbd5c9c00695c7182b162be2528093c8c7a504b6eac12c8a55812fdf044a0a0cb36a84db951f716f9ff06069d4f1',
+                'Authorization': getCookie('_token') || '1v2aa6fbd5c9c00695c7182b162be252808cea7eb7b7f39929e5babd079697b2a076fd1c8ba454fceaf5b525c4f65fdd35',
                 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
             }
             if (config.method == 'post') {

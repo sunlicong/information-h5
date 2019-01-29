@@ -73,6 +73,14 @@
                 <span class="value">{{message.refBlock}}</span>
             </div>
         </div>
+         <div class="shade" v-if="isPopup">
+            <div class="box_img">
+                <img src="~@/assets/image/icon_close.png" class="icon_close" @click="close"/>
+                <img src="~@/assets/image/RMB.png" class="image" v-if="message.assetType==2"/>
+                <img src="~@/assets/image/TRX.png" class="image"  v-if="message.assetType==1"/>
+                <div class="shade_btn" @click="shadeBtn"></div>
+            </div>
+        </div>
         <NewPointsDlg wx:if="showPointsPop" :show="showPointsPop" :pints="awardTokenAmount" @share="share"></NewPointsDlg>
         <SharePointsDlg :show="sharePointsPop" :pints="5"></SharePointsDlg>
         <mt-popup class="dialog_share_mode_box" v-model="isShowShareMode" position="top">
@@ -99,7 +107,8 @@ export default {
             message:{},
             list:[],
             isStatus:false,
-            txId:''
+            txId:'',
+            isPopup:false
         }
     },
     mounted() {
@@ -112,8 +121,8 @@ export default {
     created() {
         this.setShareInfo();
         if (this.$store.state.awardTokenAmount) {
-            this.showPointsPop = true;
-            this.awardTokenAmount = this.$store.state.awardTokenAmount;
+            // this.showPointsPop = true;
+            // this.awardTokenAmount = this.$store.state.awardTokenAmount;
         }
     },
     methods:{
@@ -145,11 +154,29 @@ export default {
                 var data = response.data.data
                 var txId = data.txId.slice(0,6) + '...'+data.txId.slice(data.txId.length-6,data.txId.length);
                 this.txId = txId
+                this.setPopup(response.data.data);
 
 			}).catch((response) => {
                 this.$ui.Indicator.close();
                 this.getRedpackList();
 			});
+        },
+        setPopup(data){
+            if(data.redpackAlertRule == 1){
+                if((data.receiveStatus == 0) || (data.receiveStatus == 1&&data.assetType ==2) || (data.receiveStatus == 2&&data.assetType ==1)){
+                  this.isPopup=true
+                }
+            }else if(data.redpackAlertRule == 2){
+                if((data.sendStatus == 0) || (data.sendStatus == 1&&data.assetType ==2) || (data.sendStatus == 2&&data.assetType ==1)){
+                     this.isPopup=true
+                }
+            }
+        },
+        close(){
+            this.isPopup=false
+        },
+        shadeBtn(){
+           window.location.href =  location.protocol + "//" + window.location.host+"/dayu/SendRedPack"
         },
         getRedpackList(){
             this.$axios({
@@ -406,6 +433,39 @@ export default {
         width: 705px;
         height: 1027px;
     }
+    .shade{
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center
+}
+.box_img{
+  position: relative;
+}
+.icon_close{
+    width: 52px;
+    height: 52px;
+    display: block;
+    position: relative;
+    left:580px;
+    top: 0;
+}
+
+.image{
+    width: 645px;
+}
+.shade_btn{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom:30px;
+    height: 100px;
+}
 </style>
 
 

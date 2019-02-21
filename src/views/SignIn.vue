@@ -4,19 +4,23 @@
       <img src="~@/assets/image/bg_sign_in.png" class="top_bg">
       <div class="top_content">
         <div class="top_content_menu">
-          <div class="slide">
-            <img src="~@/assets/image/icon_help_search.png">
-            <span>王*签到14份</span>
-          </div>
+          <swiper class="swiper" :options="swiperOption" v-if="carouselList.length>1">
+            <swiper-slide v-for="(item, index) in carouselList" :key="index">
+              <div class="slide">
+                <img :src="item.photo">
+                <span>{{item.nick}}签到{{item.checkInCount}}份</span>
+              </div>
+            </swiper-slide>
+          </swiper>
           <div class="help" @click="raiders()">
             <div>攻略</div>
             <img src="~@/assets/image/icon_help_search.png">
           </div>
         </div>
         <div class="text1">明日上午10点开宝箱金额（元）</div>
-        <div class="text2">168.00</div>
+        <div class="text2">{{boxMoney}}</div>
         <div class="text3">10:00签到的人获得宝箱</div>
-        <div class="text4">当前签到份数168</div>
+        <div class="text4">当前签到份数{{currentSignCount}}</div>
         <div class="text5">当前签到份数达到200之后，你将获得20%奖励</div>
       </div>
     </div>
@@ -85,21 +89,81 @@
   </div>
 </template>
 <script>
+import "swiper/dist/css/swiper.css";
+import { swiper, swiperSlide } from "vue-awesome-swiper";
 export default {
   name: "SignIn",
+  components: {
+    swiper,
+    swiperSlide
+  },
   data() {
     return {
       SelectPopVisible: false,
       popupPayVisible: false,
-      singlePrice: 1,//单价
-      count: 1,//份数
+      boxMoney: 0, //宝箱金额
+      currentSignCount: 0, //当前签到数
+      canLeaveCount: 0, //还有多少份可以离开
+      boxWinnerPhoto: "", //中奖者头像
+      boxWinnerNick: "", //中奖者昵称
+      boxWinnerAmount: 0, //中奖金额
+      singlePrice: 1, //单价
+      count: 1, //份数
+      carouselList: [],//签到轮播
+      swiperOption: {
+        direction: "vertical",
+        //设置自动播放速度
+        autoplay: {
+          delay: 3000
+        },
+        //开启无限循环
+        loop: true
+      }
     };
   },
-  created() {},
+  created() {
+    this.requestData();
+    this.requestCarouselList();
+  },
   methods: {
-    signIn(){
-      this.SelectPopVisible = false
-      this.popupPayVisible = true
+    signIn() {
+      this.SelectPopVisible = false;
+      this.popupPayVisible = true;
+    },
+    requestData() {
+      this.$ui.Indicator.open({
+        text: "加载中...",
+        spinnerType: "snake"
+      });
+      this.$axios({
+        method: "get",
+        url: "/blockchain/v1/checkin/detail"
+      })
+        .then(response => {
+          this.$ui.Indicator.close();
+          if (response.data.status) {
+            this.boxMoney = response.data.data.boxMoney;
+          }
+        })
+        .catch(response => {
+          this.$ui.Indicator.close();
+        });
+    },
+    /**
+     * 签到轮播条
+     */
+    requestCarouselList(){
+      this.$axios({
+        method: "get",
+        url: "/blockchain/v1/checkin/carouselList"
+      })
+        .then(response => {
+          this.$ui.Indicator.close();
+          if (response.data.status) {
+            this.carouselList = response.data.data;
+          }
+        })
+        .catch(response => {});
     }
   }
 };
@@ -124,25 +188,29 @@ export default {
       flex-direction: row;
       justify-content: space-between;
       margin-top: 20px;
-      .slide {
+      .swiper {
         margin-left: 30px;
+        min-width: 200px;
         height: 60px;
-        line-height: 60px;
-        background: #000000;
-        border-radius: 30px;
-        opacity: 0.7;
-        font-size: 28px;
-        color: #fff;
-        letter-spacing: 0;
-        text-align: center;
-        padding-left: 12px;
-        padding-right: 22px;
-        img {
-          margin-right: 15px;
-          width: 44px;
-          height: 44px;
-          border-radius: 22px;
-          background: #f4f4f4;
+        .slide {
+          height: 60px;
+          line-height: 60px;
+          background: #000000;
+          border-radius: 30px;
+          opacity: 0.7;
+          font-size: 28px;
+          color: #fff;
+          letter-spacing: 0;
+          text-align: left;
+          padding-left: 12px;
+          padding-right: 22px;
+          img {
+            margin-right: 15px;
+            width: 44px;
+            height: 44px;
+            border-radius: 22px;
+            background: #f4f4f4;
+          }
         }
       }
       .help {
@@ -323,11 +391,11 @@ export default {
     height: 108px;
     display: flex;
     padding-left: 10px;
-    .border{
-      background: #FFEBEA;
-      border: 1px solid #FD5145;
+    .border {
+      background: #ffebea;
+      border: 1px solid #fd5145;
     }
-    .border-none{
+    .border-none {
       background: #ffffff;
       border: 1px solid #cfd0d0;
     }

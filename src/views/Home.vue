@@ -6,7 +6,7 @@
       </mt-swipe-item>
     </mt-swipe>
     <div class="tabs">
-      <div class="tab">
+      <div class="tab" @click="goSignIn()">
         <div class="tab_l">
           <p class="text1">大鱼签到</p>
           <p class="text2">赚20%奖励和10倍大奖</p>
@@ -16,7 +16,7 @@
       <div class="line">
         <div></div>
       </div>
-      <div class="tab">
+      <div class="tab" @click="goSendRedPack()">
         <div class="tab_l">
           <p class="text1">发红包</p>
           <p class="text2">微信收发TRX包</p>
@@ -94,6 +94,16 @@ export default {
     goMining() {
       this.$router.push({
         path: "/MyMining"
+      });
+    },
+    goSignIn(){
+      this.$router.push({
+        path: "/SignIn"
+      });
+    },
+    goSendRedPack(){
+      this.$router.push({
+        path: "/SendRedPack"
       });
     },
     //下拉刷新

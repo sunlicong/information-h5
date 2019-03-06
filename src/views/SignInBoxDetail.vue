@@ -2,7 +2,7 @@
   <div>
     <div class="top">
       <div class="text1">开宝箱奖励（元）</div>
-      <div class="text2">0.77</div>
+      <div class="text2">{{boxRewardAmount}}</div>
       <div class="text3">10:00签到</div>
     </div>
     <div class="message">
@@ -24,6 +24,8 @@ export default {
   name: "SignInBoxDetail",
   data() {
     return {
+      logId: this.$route.query.logId,
+      boxRewardAmount: 0,
       txId: "0xoa99…ff62d2",
       refBlock: "5602661"
     };
@@ -33,7 +35,35 @@ export default {
     copy() {
       this.$copyText(this.txId);
       this.$ui.Toast("复制成功");
-    }
+    },
+    /**
+     * 邀请奖励 type=33
+     * 开宝箱奖励 type=34
+     * 签到详情 type=35
+     */
+    requestData() {
+      this.$ui.Indicator.open({
+        text: "加载中...",
+        spinnerType: "snake"
+      });
+      this.$axios({
+        method: "get",
+        url: "/blockchain/v1/checkin/log/detail",
+        data: {
+          logId: this.logId,
+          type: 34,
+        }
+      })
+        .then(response => {
+          this.$ui.Indicator.close();
+          if (response.data.status) {
+            this.boxRewardAmount = response.data.data.boxRewardAmount;
+          }
+        })
+        .catch(response => {
+          this.$ui.Indicator.close();
+        });
+    },
   }
 };
 </script>

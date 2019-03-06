@@ -2,31 +2,37 @@
   <div>
     <div class="top_card">
       <div class="text1">已获奖励（元）</div>
-      <div class="text2">2345.00</div>
-      <div class="text3">累计签到份数 198</div>
+      <div class="text2">{{totalAmount}}</div>
+      <div class="text3">累计签到份数 {{totalCheckinCount}}</div>
       <div class="top_card_b">
         <div class="item">
           <div class="item_text1">开宝箱奖励（元）</div>
-          <div class="item_text2">7,973.00</div>
+          <div class="item_text2">{{lotteryAmount}}</div>
         </div>
         <div class="item">
           <div class="item_text1">邀请奖励（元）</div>
-          <div class="item_text2">7,973.00</div>
+          <div class="item_text2">{{inviteRewardsAmount}}</div>
         </div>
       </div>
     </div>
     <div>
       <div class="list_title">战绩明细</div>
-      <div class="list" v-for="item in 4">
+      <div v-if="BillList.length==0" class="non">
+        <img src="~@/assets/image/img_non.png">
+        <div>暂时还没有数据哦～</div>
+      </div>
+      <mu-load-more :loading="loading" @load="loadMore">
+      <div class="list" v-for="item in BillList" @click="goDetail(item.operationType,item.logId)">
         <div class="left">
-          <div>签到156份奖励</div>
-          <div>17:54:50</div>
+          <div>{{item.description}}</div>
+          <div>{{$formatDate(item.createTime/1000,3)}}</div>
         </div>
         <div class="right">
-          <div>+1.5TRX</div>
-          <div>已领奖励1/16</div>
+          <div>+ {{item.amount}}</div>
+          <div>已领奖励{{item.awardedCount}}/{{item.totalRewardCount}}</div>
         </div>
       </div>
+      </mu-load-more>
     </div>
   </div>
 </template>
@@ -34,10 +40,101 @@
 export default {
   name: "MyRecord",
   data() {
-    return {};
+    return {
+      totalCheckinCount: 0,//累计签到份数
+      lotteryAmount: 0,//开宝箱奖励
+      inviteRewardsAmount: 0,//邀请奖励
+      totalAmount: 0,//所有奖励
+      loading: false,
+      next: 0,
+      BillList: []//战绩
+    };
   },
-  created() {},
-  methods: {}
+  created() {
+    this.requestData()
+    this.queryBillList()
+  },
+  methods: {
+    requestData() {
+      this.$ui.Indicator.open({
+        text: "加载中...",
+        spinnerType: "snake"
+      });
+      this.$axios({
+        method: "get",
+        url: "/blockchain/v1/checkin/queryStatisticDatas"
+      })
+        .then(response => {
+          this.$ui.Indicator.close();
+          if (response.data.status) {
+            this.totalCheckinCount = response.data.data.totalCheckinCount;
+            this.lotteryAmount = response.data.data.lotteryAmount;
+            this.inviteRewardsAmount = response.data.data.inviteRewardsAmount;
+            this.totalAmount = response.data.data.totalAmount;
+          }
+        })
+        .catch(response => {
+          this.$ui.Indicator.close();
+        });
+    },
+    loadMore() {
+      if (this.next == -1) return;
+      this.loading = true;
+      this.requestData();
+    },
+    /**
+     * 战绩列表
+     */
+    queryBillList(){
+      this.$axios({
+        method: "get",
+        url: "/blockchain/v1/checkin/queryBillList",
+        data: {
+          next: this.next,
+          limit: 20
+        }
+      })
+        .then(response => {
+          this.loading = false;
+          this.$ui.Indicator.close();
+          if (response.data.status) {
+            this.BillList = this.BillList.concat(response.data.data.data);
+            this.next = response.data.data.next;
+          }
+        })
+        .catch(response => {
+          this.loading = false;
+          this.$ui.Indicator.close();
+        });
+    },
+    /**
+     * 跳转
+     */
+    goDetail(type,id){
+      if(type == 33){//邀请
+        this.$router.push({
+            path: "/SignInInviteDetail",
+            query: {
+              logId: id
+            }
+          });
+      } else if(type == 34){//宝箱
+        this.$router.push({
+            path: "/SignInBoxDetail",
+            query: {
+              logId: id
+            }
+          });
+      } else if(type == 35){//签到
+        this.$router.push({
+            path: "/SignInDetail",
+            query: {
+              logId: id
+            }
+          });
+      }
+    }
+  }
 };
 </script>
 <style lang="less" scoped>
@@ -147,6 +244,18 @@ export default {
       color:#A3AEBA;
       line-height:33px;
     }
+  }
+}
+.non {
+  margin-top: 110px;
+  text-align: center;
+  font-size: 28px;
+  font-family: PingFangSC-Regular;
+  font-weight: 400;
+  color: #9b9b9b;
+  img {
+    width: 290px;
+    height: 396px;
   }
 }
 </style>

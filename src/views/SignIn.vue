@@ -12,7 +12,7 @@
               </div>
             </swiper-slide>
           </swiper>
-          <div class="help" @click="raiders()">
+          <div class="help" @click="onClick('raiders')">
             <div>攻略</div>
             <img src="~@/assets/image/icon_help_search.png">
           </div>
@@ -33,7 +33,7 @@
         </div>
         <img class="icon" src="~@/assets/image/icon_index_signin.png">
       </div>
-      <div class="tab">
+      <div class="tab" @click="onClick('record')">
         <div class="tab_l">
           <p class="text1">我的战绩</p>
           <p class="text2">累计签到100份</p>
@@ -41,12 +41,12 @@
         <img class="icon" src="~@/assets/image/icon_index_signin.png">
       </div>
     </div>
-    <div class="situation">
+    <div v-if="boxWinnerNick" class="situation">
       <div class="title">今日签到战况</div>
       <div class="card">
-        <img class="icon" src="~@/assets/image/icon_index_signin.png">
-        <div class="text1">一羞10:00签到</div>
-        <div class="text2">开宝箱得617元</div>
+        <img class="icon" :src="boxWinnerPhoto">
+        <div class="text1">{{boxWinnerNick}}签到</div>
+        <div class="text2">开宝箱得{{boxWinnerAmount}}元</div>
       </div>
     </div>
     <!-- 选择份数 -->
@@ -58,7 +58,7 @@
         <div class="item" :class="[count==100?'border':'border-none']" @click="count=100">100份</div>
         <div class="item" :class="[count==500?'border':'border-none']" @click="count=500">500份</div>
       </div>
-      <mt-button @click="signIn()" class="sign">支付{{singlePrice*count}}元参与签到</mt-button>
+      <mt-button @click="signIn()" class="sign">支付{{checkinPrePrice*count}}元参与签到</mt-button>
     </mt-popup>
     <!-- 确认支付弹框 -->
     <mt-popup class="dialog_box" v-model="popupPayVisible" position="bottom">
@@ -69,7 +69,7 @@
       </div>
       <div class="line"></div>
       <div class="price_view">
-        <div class="price">￥{{singlePrice*count}}</div>
+        <div class="price">￥{{checkinPrePrice*count}}</div>
         <div class="tip">实时读取交易价格，以最终支付金额为准</div>
       </div>
       <div class="item">
@@ -107,7 +107,7 @@ export default {
       boxWinnerPhoto: "", //中奖者头像
       boxWinnerNick: "", //中奖者昵称
       boxWinnerAmount: 0, //中奖金额
-      singlePrice: 1, //单价
+      checkinPrePrice: 1, //单价
       count: 1, //份数
       carouselList: [],//签到轮播
       swiperOption: {
@@ -126,6 +126,22 @@ export default {
     this.requestCarouselList();
   },
   methods: {
+    onClick(type) {
+      switch (type) {
+        case "record":
+          this.$router.push({
+            path: "/MyRecord"
+          });
+          break;
+        case "raiders":
+          this.$router.push({
+            path: "/SignInRaders"
+          });
+          break;
+        default:
+          break;
+      }
+    },
     signIn() {
       this.SelectPopVisible = false;
       this.popupPayVisible = true;
@@ -143,6 +159,7 @@ export default {
           this.$ui.Indicator.close();
           if (response.data.status) {
             this.boxMoney = response.data.data.boxMoney;
+            this.checkinPrePrice = response.data.data.checkinPrePrice;
           }
         })
         .catch(response => {
@@ -164,6 +181,70 @@ export default {
           }
         })
         .catch(response => {});
+    },
+    /**
+     * 微信支付
+     */
+    doPay(){
+      this.$ui.Indicator.open({
+        text: "加载中...",
+        spinnerType: "snake"
+      });
+      this.$axios({
+        method: "get",
+        url: "/blockchain/v1/wxpay/doPaySign",
+        data: {
+          count: this.count
+        }
+      })
+        .then(response => {
+          this.$ui.Indicator.close();
+          this.popupPayVisible = false;
+          if (response.data.status) {
+            if (typeof WeixinJSBridge == "undefined") {
+              if (document.addEventListener) {
+                document.addEventListener(
+                  "WeixinJSBridgeReady",
+                  ()=>{
+                    this.onBridgeReady(response.data.data);
+                  },
+                  false
+                );
+              } else if (document.attachEvent) {
+                document.attachEvent("WeixinJSBridgeReady", onBridgeReady);
+                document.attachEvent("onWeixinJSBridgeReady", onBridgeReady);
+              }
+            } else {
+              this.onBridgeReady(response.data.data);
+            }
+          }
+        })
+        .catch(response => {
+          this.popupPayVisible = false;
+          this.$ui.Indicator.close();
+        });
+    },
+    onBridgeReady(data) {
+      var that = this;
+      WeixinJSBridge.invoke(
+        "getBrandWCPayRequest",
+        {
+          appId: data.appId, //公众号名称，由商户传入
+          timeStamp: data.timeStamp, //时间戳，自1970年以来的秒数
+          nonceStr: data.nonceStr, //随机串
+          package: data.package,
+          signType: data.signType, //微信签名方式：
+          paySign: data.paySign //微信签名
+        },
+        function(res) {
+          if (res.err_msg == "get_brand_wcpay_request:ok") {
+            // 使用以上方式判断前端返回,微信团队郑重提示：
+            //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+            that.$ui.Toast("签到成功");
+            that.requestData();
+          }
+        }
+      );
     }
   }
 };
@@ -195,9 +276,8 @@ export default {
         .slide {
           height: 60px;
           line-height: 60px;
-          background: #000000;
+          background: #00000070;
           border-radius: 30px;
-          opacity: 0.7;
           font-size: 28px;
           color: #fff;
           letter-spacing: 0;

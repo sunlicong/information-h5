@@ -2,8 +2,8 @@
   <div>
     <div class="top">
       <div class="text1">邀请奖励（元）</div>
-      <div class="text2">0.77</div>
-      <div class="text3">xxx邀请份数 198</div>
+      <div class="text2">{{inviteRewardAmount}}</div>
+      <div class="text3">邀请份数 {{inviteCount}}</div>
     </div>
     <div class="message">
       <div class="title">区块信息</div>
@@ -24,16 +24,50 @@ export default {
   name: "SignInInviteDetail",
   data() {
     return {
+      logId: this.$route.query.logId,
+      inviteRewardAmount: 0,//	邀请奖励金额
+      inviteCount: 0,//邀请份数
       txId: "0xoa99…ff62d2",
       refBlock: "5602661"
     };
   },
-  mounted() {},
+  created() {
+    this.requestData()
+  },
   methods: {
     copy() {
       this.$copyText(this.txId);
       this.$ui.Toast("复制成功");
-    }
+    },
+    /**
+     * 邀请奖励 type=33
+     * 开宝箱奖励 type=34
+     * 签到详情 type=35
+     */
+    requestData() {
+      this.$ui.Indicator.open({
+        text: "加载中...",
+        spinnerType: "snake"
+      });
+      this.$axios({
+        method: "get",
+        url: "/blockchain/v1/checkin/log/detail",
+        data: {
+          logId: this.logId,
+          type: 33,
+        }
+      })
+        .then(response => {
+          this.$ui.Indicator.close();
+          if (response.data.status) {
+            this.inviteRewardAmount = response.data.data.inviteRewardAmount;
+            this.inviteCount = response.data.data.inviteCount;
+          }
+        })
+        .catch(response => {
+          this.$ui.Indicator.close();
+        });
+    },
   }
 };
 </script>
